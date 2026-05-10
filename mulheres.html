@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CLIC Mulheres · Oficina Servidoras no Comando Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2ECE1;
+    --paper-2:#E8DFCE;
+    --ink:#141210;
+    --ink-2:#3A342B;
+    --red:#B3321A;
+    --red-hi:#E8805F;
+    --green:#3E4A2A;
+    --rule:rgba(20,18,16,.16);
+    --grid: rgba(20,18,16,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased}
+  body{
+    background-image:linear-gradient(to right, var(--grid) 1px, transparent 1px);
+    background-size: calc(100%/12) 100%;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.3;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode:multiply;
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* NAV */
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:28px 40px;border-bottom:1px solid var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    position:relative;z-index:10;background:var(--paper);
+  }
+  nav .meta{display:flex;gap:28px;color:var(--ink-2);flex-wrap:wrap}
+  nav .meta span::before{content:"→ ";color:var(--red)}
+  nav .meta .active{color:var(--red)}
+  .wordmark{font-family:'Fraunces',serif;font-weight:400;font-style:italic;font-size:22px;letter-spacing:-.02em}
+  .wordmark b{font-style:normal;font-weight:600;letter-spacing:.3em;font-size:14px;margin-right:6px;vertical-align:1px}
+
+  /* HERO */
+  .intro{padding:80px 40px 60px;max-width:1400px;margin:0 auto;position:relative}
+  .breadcrumb{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-2);margin-bottom:48px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  }
+  .breadcrumb a{color:var(--ink-2)}
+  .breadcrumb a:hover{color:var(--red)}
+  .breadcrumb .sep,.breadcrumb .current{color:var(--red)}
+
+  .intro .kicker{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--red);margin-bottom:32px;display:flex;align-items:center;gap:14px;
+  }
+  .intro .kicker::before{content:"";width:48px;height:1px;background:var(--red)}
+
+  .intro h1{
+    font-family:'Fraunces',serif;font-weight:300;
+    font-size:clamp(48px,8vw,128px);line-height:.9;letter-spacing:-.045em;
+    max-width:1200px;
+  }
+  .intro h1 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+
+  .hero-split{
+    margin-top:56px;display:grid;grid-template-columns:1.5fr 1fr;gap:80px;align-items:start;
+    border-top:1px solid var(--rule);padding-top:40px;
+  }
+  .hero-split .lede p{font-size:19px;line-height:1.55;color:var(--ink-2);font-weight:300;margin-bottom:14px}
+  .hero-split .lede strong{color:var(--ink);font-weight:500}
+  .hero-card{
+    border:1px solid var(--ink);padding:28px;background:rgba(255,255,255,.35);
+  }
+  .hero-card .card-k{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--red);margin-bottom:16px;
+  }
+  .hero-card .big{
+    font-family:'Fraunces',serif;font-weight:300;font-size:88px;line-height:.85;color:var(--ink);letter-spacing:-.04em;
+  }
+  .hero-card .big em{font-style:italic;color:var(--red);font-size:.45em;vertical-align:20px;font-variation-settings:"WONK" 1}
+  .hero-card .big-lbl{
+    margin-top:14px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;line-height:1.5;color:var(--ink);font-weight:500;
+  }
+  .hero-card .big-sub{font-size:12px;color:var(--ink-2);margin-top:4px;line-height:1.4;font-family:'IBM Plex Mono',monospace;letter-spacing:.05em}
+
+  .meta-bar{
+    margin-top:48px;padding:18px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    display:flex;gap:48px;flex-wrap:wrap;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  }
+  .meta-bar span b{color:var(--red);margin-right:8px}
+
+  /* SECTION BASE */
+  .section{max-width:1400px;margin:0 auto;padding:100px 40px;border-bottom:1px solid var(--rule);position:relative}
+  .section-head{display:grid;grid-template-columns:120px 1fr;gap:32px;margin-bottom:60px;align-items:start}
+  .section-roman{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:80px;color:var(--red);
+    line-height:.8;letter-spacing:-.04em;font-variation-settings:"WONK" 1;
+  }
+  .section-head .sub{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-2);margin-bottom:16px;
+  }
+  .section-head h2{
+    font-family:'Fraunces',serif;font-weight:300;font-size:clamp(40px,5.5vw,76px);
+    line-height:.96;letter-spacing:-.035em;margin-bottom:20px;
+  }
+  .section-head h2 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .section-head p{font-size:17px;line-height:1.55;color:var(--ink-2);max-width:760px;font-weight:300}
+
+  /* MANIFESTO / BARREIRAS */
+  .barriers{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:2px solid var(--ink)}
+  .barrier{
+    padding:36px 32px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    display:flex;flex-direction:column;gap:12px;background:rgba(255,255,255,.2);transition:background .3s;
+  }
+  .barrier:nth-child(even){border-right:none}
+  .barrier:hover{background:rgba(255,255,255,.5)}
+  .barrier-n{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:44px;line-height:.85;color:var(--red);
+    letter-spacing:-.03em;font-variation-settings:"WONK" 1;
+  }
+  .barrier h4{
+    font-family:'Fraunces',serif;font-weight:400;font-size:26px;letter-spacing:-.015em;line-height:1.1;
+  }
+  .barrier h4 em{font-style:italic;color:var(--red)}
+  .barrier p{font-size:14px;line-height:1.6;color:var(--ink-2);max-width:520px}
+  .barrier .src{
+    margin-top:auto;padding-top:12px;border-top:1px dashed var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--ink-2);
+  }
+
+  .pullquote{
+    margin:64px 0 0;padding:48px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
+    text-align:center;
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:clamp(28px,3.5vw,48px);
+    line-height:1.2;letter-spacing:-.02em;
+  }
+  .pullquote b{font-style:normal;font-weight:400;color:var(--red)}
+  .pullquote::before,.pullquote::after{content:"❝";color:var(--red);font-size:.5em;margin:0 14px;vertical-align:14px}
+  .pullquote::after{content:"❞"}
+
+  /* NÚMEROS (estilo igual dados.html) */
+  .numbers-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+  .num-cell{
+    padding:36px 24px;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:12px;min-height:260px;
+  }
+  .num-cell:last-child{border-right:none}
+  .num-cell.dark{background:var(--ink);color:var(--paper)}
+  .num-cell.dark .num-lbl{color:#E8805F}
+  .num-cell.dark .num-src{color:rgba(242,236,225,.6);border-color:rgba(242,236,225,.25)}
+  .num-lbl{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);
+  }
+  .num-big{
+    font-family:'Fraunces',serif;font-weight:300;font-size:clamp(60px,7vw,96px);line-height:.85;
+    letter-spacing:-.045em;color:inherit;
+  }
+  .num-big em{font-style:italic;color:var(--red);font-size:.45em;font-variation-settings:"WONK" 1}
+  .num-cell.dark .num-big em{color:#E8805F}
+  .num-desc{font-size:13.5px;line-height:1.5;font-weight:400}
+  .num-src{
+    margin-top:auto;padding-top:14px;border-top:1px dashed var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--ink-2);line-height:1.5;
+  }
+
+  /* OFICINA - BLOCOS */
+  .workshop{background:var(--ink);color:var(--paper);margin:0 -40px;padding:100px 80px;position:relative;overflow:hidden}
+  .workshop::before{
+    content:"";position:absolute;inset:0;opacity:.08;
+    background-image:linear-gradient(to right, var(--paper) 1px, transparent 1px),linear-gradient(to bottom, var(--paper) 1px, transparent 1px);
+    background-size:60px 60px;
+  }
+  .workshop-inner{max-width:1300px;margin:0 auto;position:relative;z-index:2}
+  .workshop .section-head h2{color:var(--paper)}
+  .workshop .section-head h2 em{color:#E8805F}
+  .workshop .section-head .sub{color:rgba(242,236,225,.5)}
+  .workshop .section-head p{color:rgba(242,236,225,.75)}
+  .workshop .section-roman{color:#E8805F}
+
+  .blocks{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(242,236,225,.25);margin-top:20px}
+  .block{
+    padding:32px 24px;border-right:1px solid rgba(242,236,225,.25);display:flex;flex-direction:column;gap:16px;min-height:360px;
+    transition:background .3s;
+  }
+  .block:last-child{border-right:none}
+  .block:hover{background:rgba(232,128,95,.06)}
+  .block-n{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#E8805F}
+  .block h4{font-family:'Fraunces',serif;font-weight:400;font-size:26px;line-height:1.1;letter-spacing:-.015em}
+  .block h4 em{font-style:italic;color:#E8805F;font-variation-settings:"WONK" 1}
+  .block p{font-size:13.5px;line-height:1.55;color:rgba(242,236,225,.78)}
+  .block .block-foot{
+    margin-top:auto;padding-top:12px;border-top:1px dashed rgba(242,236,225,.2);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.55);
+  }
+
+  /* MÉTODO PTCF */
+  .ptcf{
+    margin-top:64px;padding:40px;border:1px solid rgba(242,236,225,.3);background:rgba(242,236,225,.04);
+    display:grid;grid-template-columns:1fr 2fr;gap:60px;align-items:start;
+  }
+  .ptcf-side .ptcf-k{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#E8805F;margin-bottom:14px;
+  }
+  .ptcf-side h3{font-family:'Fraunces',serif;font-weight:300;font-size:42px;letter-spacing:-.02em;line-height:.98;margin-bottom:16px;color:var(--paper)}
+  .ptcf-side h3 em{font-style:italic;color:#E8805F;font-variation-settings:"WONK" 1}
+  .ptcf-side p{font-size:14px;line-height:1.6;color:rgba(242,236,225,.7)}
+  .ptcf-list{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .ptcf-item{
+    padding:18px 14px;border:1px solid rgba(242,236,225,.25);background:rgba(242,236,225,.02);
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .ptcf-letter{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:44px;line-height:.8;color:#E8805F;letter-spacing:-.02em;
+    font-variation-settings:"WONK" 1;
+  }
+  .ptcf-item b{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--paper);font-weight:500}
+  .ptcf-item p{font-size:11.5px;line-height:1.45;color:rgba(242,236,225,.68)}
+
+  /* O QUE SE CONSTRÓI */
+  .built-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:20px}
+  .built{
+    border:1px solid var(--rule);padding:28px;background:rgba(255,255,255,.3);
+    display:flex;flex-direction:column;gap:14px;min-height:300px;transition:all .2s;
+  }
+  .built:hover{border-color:var(--red);background:rgba(255,255,255,.5)}
+  .built-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+  .built h4{font-family:'Fraunces',serif;font-weight:400;font-size:26px;letter-spacing:-.015em;line-height:1.1}
+  .built h4 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .built p{font-size:14px;line-height:1.55;color:var(--ink-2)}
+  .built .built-foot{
+    margin-top:auto;padding-top:12px;border-top:1px dashed var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);
+  }
+
+  /* HONESTIDADE */
+  .honesty{
+    margin-top:60px;padding:48px;border:2px solid var(--ink);background:var(--paper-2);
+    position:relative;
+  }
+  .honesty::before{
+    content:"";position:absolute;top:-1px;left:-1px;right:-1px;height:6px;
+    background:repeating-linear-gradient(135deg,var(--red) 0 8px,transparent 8px 16px);
+  }
+  .honesty-head{display:flex;align-items:baseline;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+  .honesty-head .hk{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);
+    border:1px solid var(--red);padding:4px 10px;
+  }
+  .honesty h3{font-family:'Fraunces',serif;font-weight:300;font-size:40px;letter-spacing:-.02em;line-height:1;color:var(--ink)}
+  .honesty h3 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .honesty .hbody{font-size:15px;line-height:1.65;color:var(--ink);margin-bottom:28px;max-width:900px}
+  .honesty .hbody strong{font-weight:600}
+  .hrows{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;border-top:1px solid var(--rule);padding-top:28px}
+  .hrow b{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--red);margin-bottom:10px}
+  .hrow h5{font-family:'Fraunces',serif;font-weight:400;font-size:19px;letter-spacing:-.01em;line-height:1.2;margin-bottom:10px}
+  .hrow p{font-size:13.5px;line-height:1.55;color:var(--ink-2)}
+
+  /* ASCENDA / SUELI */
+  .platform{
+    max-width:1400px;margin:0 auto;padding:100px 40px;border-bottom:1px solid var(--rule);
+    display:grid;grid-template-columns:1.2fr 1fr;gap:80px;align-items:center;
+  }
+  .platform-txt .pk{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:14px;display:flex;align-items:center;gap:12px}
+  .platform-txt .pk::before{content:"";width:40px;height:1px;background:var(--red)}
+  .platform-txt h3{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(36px,5vw,68px);line-height:.96;letter-spacing:-.035em;margin-bottom:24px}
+  .platform-txt h3 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .platform-txt p{font-size:16px;line-height:1.6;color:var(--ink-2);margin-bottom:14px}
+  .platform-txt p strong{color:var(--ink);font-weight:500}
+
+  .sueli-card{
+    border:1px solid var(--ink);padding:36px 32px;background:rgba(255,255,255,.35);position:relative;
+  }
+  .sueli-card::after{
+    content:"SUELI";position:absolute;top:-12px;right:24px;background:var(--paper);padding:0 12px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.3em;color:var(--red);font-weight:500;
+  }
+  .sueli-card .sk{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+  .sueli-card blockquote{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:26px;line-height:1.25;letter-spacing:-.015em;color:var(--ink);
+    margin-bottom:20px;
+  }
+  .sueli-card .sueli-note{font-size:13px;line-height:1.55;color:var(--ink-2);border-top:1px dashed var(--rule);padding-top:16px}
+  .sueli-card .sueli-note b{color:var(--red);font-weight:500}
+
+  /* PILOTO VALIDADO */
+  .piloto{background:var(--ink);color:var(--paper);margin:0 -40px;padding:80px 80px;position:relative;overflow:hidden}
+  .piloto-inner{max-width:1400px;margin:0 auto}
+  .piloto-head{display:grid;grid-template-columns:120px 1fr auto;gap:32px;align-items:start;margin-bottom:40px}
+  .piloto-head .section-roman{color:#E8805F}
+  .piloto-head h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(36px,4.5vw,64px);line-height:.98;letter-spacing:-.03em;color:var(--paper)}
+  .piloto-head h2 em{font-style:italic;color:#E8805F;font-variation-settings:"WONK" 1}
+  .piloto-head .sub{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,236,225,.5);margin-bottom:14px}
+  .piloto-stamp{
+    border:2px solid #E8805F;color:#E8805F;padding:12px 18px;transform:rotate(-4deg);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;line-height:1.3;text-align:center;
+    align-self:center;
+  }
+  .piloto-stamp::before,.piloto-stamp::after{content:"✶";display:block;font-size:9px}
+
+  .piloto-nums{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid rgba(242,236,225,.25);border-bottom:1px solid rgba(242,236,225,.25)}
+  .piloto-num{padding:28px 20px;border-right:1px solid rgba(242,236,225,.2);display:flex;flex-direction:column;gap:10px}
+  .piloto-num:last-child{border-right:none}
+  .piloto-num .pk{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#E8805F}
+  .piloto-num .big{font-family:'Fraunces',serif;font-weight:300;font-size:72px;line-height:.8;color:var(--paper);letter-spacing:-.045em}
+  .piloto-num .big em{font-style:italic;color:#E8805F;font-size:.45em;vertical-align:16px;font-variation-settings:"WONK" 1}
+  .piloto-num .lbl{font-size:13px;line-height:1.5;color:rgba(242,236,225,.75)}
+
+  /* CONTRATAÇÃO */
+  .formats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--ink);margin-top:20px}
+  .format{
+    padding:36px 32px;border-right:1px solid var(--ink);display:flex;flex-direction:column;gap:16px;min-height:320px;
+    background:rgba(255,255,255,.25);transition:all .3s;
+  }
+  .format:last-child{border-right:none}
+  .format:hover{background:var(--ink);color:var(--paper)}
+  .format:hover .format-n{color:var(--paper)}
+  .format:hover .format-meta{border-color:rgba(242,236,225,.3);color:rgba(242,236,225,.7)}
+  .format-n{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:64px;line-height:.8;color:var(--red);letter-spacing:-.04em;
+    font-variation-settings:"WONK" 1;
+  }
+  .format h4{font-family:'Fraunces',serif;font-weight:400;font-size:26px;letter-spacing:-.015em;margin-top:8px}
+  .format h4 em{font-style:italic;color:var(--red)}
+  .format:hover h4 em{color:#E8805F}
+  .format p{font-size:14px;line-height:1.55}
+  .format .format-meta{
+    margin-top:auto;padding-top:14px;border-top:1px dashed var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);transition:all .3s;
+  }
+
+  /* CTA */
+  .cta{padding:120px 40px;text-align:center;max-width:1300px;margin:0 auto;position:relative;overflow:hidden}
+  .cta::before{
+    content:"MULHERES";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:clamp(240px,30vw,420px);
+    color:var(--red);opacity:.05;letter-spacing:-.05em;pointer-events:none;z-index:0;font-variation-settings:"WONK" 1;
+  }
+  .cta-inner{position:relative;z-index:2}
+  .cta-k{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);
+    margin-bottom:28px;display:flex;align-items:center;justify-content:center;gap:12px;
+  }
+  .cta-k::before,.cta-k::after{content:"";width:40px;height:1px;background:var(--red)}
+  .cta h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(44px,6vw,88px);line-height:.98;letter-spacing:-.035em;max-width:900px;margin:0 auto}
+  .cta h2 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .buttons{margin-top:48px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:14px;padding:20px 36px;
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.15em;text-transform:uppercase;
+    text-decoration:none;border:1px solid var(--ink);transition:all .2s;cursor:pointer;
+  }
+  .btn.primary{background:var(--ink);color:var(--paper)}
+  .btn.primary:hover{background:var(--red);border-color:var(--red)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{background:var(--ink);color:var(--paper)}
+  .btn .dot{width:6px;height:6px;border-radius:50%;background:var(--red)}
+  .btn.primary .dot{background:var(--paper)}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:var(--paper);padding:48px 40px 28px}
+  .foot-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:24px}
+  .foot-inner .wm{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:32px;letter-spacing:-.02em}
+  .foot-inner .wm span{color:#E8805F}
+  .foot-inner .meta{color:rgba(242,236,225,.6);display:flex;gap:24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;flex-wrap:wrap}
+  .foot-inner .meta span::before{content:"→ ";color:#E8805F}
+  .foot-bottom{
+    max-width:1400px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(242,236,225,.2);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.5);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width:900px){
+    nav{padding:20px 24px;flex-direction:column;gap:12px;align-items:flex-start}
+    nav .meta{gap:14px;font-size:10px}
+    .intro,.section,.cta,.platform{padding-left:24px;padding-right:24px}
+    .hero-split{grid-template-columns:1fr;gap:40px}
+    .section-head{grid-template-columns:1fr;gap:16px}
+    .section-roman{font-size:56px}
+    .barriers{grid-template-columns:1fr}
+    .barrier{border-right:none}
+    .numbers-grid{grid-template-columns:1fr 1fr}
+    .num-cell{border-bottom:1px solid var(--rule);min-height:auto}
+    .num-cell:nth-child(even){border-right:none}
+    .workshop{margin:0 -24px;padding:60px 24px}
+    .blocks{grid-template-columns:1fr}
+    .block{border-right:none;border-bottom:1px solid rgba(242,236,225,.25);min-height:auto}
+    .block:last-child{border-bottom:none}
+    .ptcf{grid-template-columns:1fr;padding:24px;gap:24px}
+    .ptcf-list{grid-template-columns:1fr 1fr}
+    .built-grid{grid-template-columns:1fr}
+    .honesty{padding:28px}
+    .hrows{grid-template-columns:1fr;gap:20px}
+    .platform{grid-template-columns:1fr;gap:40px}
+    .piloto{margin:0 -24px;padding:60px 24px}
+    .piloto-head{grid-template-columns:1fr}
+    .piloto-stamp{justify-self:start;transform:none}
+    .piloto-nums{grid-template-columns:1fr 1fr}
+    .piloto-num{border-bottom:1px solid rgba(242,236,225,.2)}
+    .piloto-num:nth-child(even){border-right:none}
+    .formats-grid{grid-template-columns:1fr}
+    .format{border-right:none;border-bottom:1px solid var(--ink);min-height:auto}
+    .format:last-child{border-bottom:none}
+    .meta-bar{gap:16px}
+    .pullquote{padding:28px 16px}
+  }
+  .fadeup{opacity:0;transform:translateY(20px);animation:fu 1s .1s forwards cubic-bezier(.2,.7,.2,1)}
+  @keyframes fu{to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wordmark"><a href="index.html"><b>◉ CLIC</b> <em>— Centro de letramento digital</em></a></div>
+  <div class="meta">
+    <span><a href="index.html#manifesto">Manifesto</a></span>
+    <span class="active"><a href="produtos.html" style="color:inherit">Produtos</a></span>
+    <span><a href="dados.html">Dados</a></span>
+    <span><a href="index.html#contato">Contato</a></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="intro">
+  <div class="breadcrumb fadeup">
+    <a href="index.html">Início</a>
+    <span class="sep">/</span>
+    <a href="produtos.html">Produtos</a>
+    <span class="sep">/</span>
+    <span class="current">CLIC Mulheres · Edição I · MMXXVI</span>
+  </div>
+
+  <div class="kicker fadeup">Produto 02 · Piloto validado · MMXXV</div>
+
+  <h1 class="fadeup">
+    Servidoras<br>
+    <em>no comando</em><br>
+    digital.
+  </h1>
+
+  <div class="hero-split">
+    <div class="lede">
+      <p><strong>CLIC Mulheres</strong> é a oficina que tira servidoras públicas da posição de <strong>usuárias de sistemas</strong> e coloca no lugar de <strong>autoras de tecnologia</strong>. Em um ciclo curto, cada participante sai construindo seu próprio assistente de IA e um aplicativo funcional — sem precisar programar uma linha de código.</p>
+      <p>Não é "curso de ferramenta". É um exercício de <strong>ruptura identitária</strong> — baseado em letramento digital crítico, engenharia de prompt estruturada (método PTCF) e construção assistida de sistemas (<em>vibe coding</em>). E parte de uma leitura clara: a sub-representação feminina em tech não é falta de qualificação — é barreira estrutural.</p>
+    </div>
+    <div class="hero-card">
+      <div class="card-k">→ Estágio do produto</div>
+      <div class="big">04<em>ofc</em></div>
+      <div class="big-lbl">Oficinas realizadas em piloto</div>
+      <div class="big-sub">com alta adesão · público feminino · soluções reais desenvolvidas pelas participantes</div>
+    </div>
+  </div>
+
+  <div class="meta-bar">
+    <span><b>Formato base</b> 80 min presencial ou remoto</span>
+    <span><b>Método</b> PTCF + Limites</span>
+    <span><b>Stack</b> IA generativa + no-code</span>
+    <span><b>Entrega</b> assistente + aplicativo funcional por participante</span>
+  </div>
+</section>
+
+<!-- I. BARREIRAS ESTRUTURAIS -->
+<section class="section" id="barreiras">
+  <div class="section-head">
+    <div class="section-roman">I.</div>
+    <div>
+      <div class="sub">Contexto · as barreiras têm nome</div>
+      <h2>A tecnologia foi <em>construída</em> para excluí-las. E continua sendo.</h2>
+      <p>Não é mérito, não é esforço, não é talento. A sub-representação feminina em tecnologia e em cargos de liderança no Estado é sustentada por barreiras estruturais — históricas, simbólicas, materiais — que a literatura acadêmica já nomeou com precisão.</p>
+    </div>
+  </div>
+
+  <div class="barriers">
+    <div class="barrier">
+      <div class="barrier-n">i.</div>
+      <h4>Efeito <em>Matilda</em></h4>
+      <p>O apagamento sistemático das contribuições de cientistas e inventoras. Ada Lovelace — primeira pessoa programadora da história. As seis programadoras do ENIAC — cujos feitos foram tratados como trivialidade por décadas.</p>
+      <div class="src">Rossiter · Social Studies of Science · 1993</div>
+    </div>
+    <div class="barrier">
+      <div class="barrier-n">ii.</div>
+      <h4>Teto de vidro <em>&</em> degrau quebrado</h4>
+      <p>Pra cada 100 homens promovidos a gerente em funções técnicas, só 52 mulheres recebem a mesma promoção. As que passam enfrentam a barreira transparente que impede chegar ao comando estratégico.</p>
+      <div class="src">McKinsey · Broken Rung · 2021</div>
+    </div>
+    <div class="barrier">
+      <div class="barrier-n">iii.</div>
+      <h4>Síndrome do impostor <em>com recorte de raça</em></h4>
+      <p>79% das mulheres em tech relatam sintomas. Mas o número sobe para <strong>83% entre mulheres negras</strong>, contra 39% das brancas — reflexo da acumulação de opressões de gênero e raça no ambiente tecnológico.</p>
+      <div class="src">Unisociesc · TCC sobre SI em TI · 2022</div>
+    </div>
+    <div class="barrier">
+      <div class="barrier-n">iv.</div>
+      <h4>Segregação <em>interna</em> na TI</h4>
+      <p>Mesmo dentro de tech, mulheres são direcionadas a UX/design (áreas "colaborativas") e afastadas de IA, Cloud e DevOps — as áreas que decidem como a tecnologia pública vai ser construída.</p>
+      <div class="src">Dados de mercado global de tecnologia</div>
+    </div>
+    <div class="barrier">
+      <div class="barrier-n">v.</div>
+      <h4>Economia do <em>cuidado</em></h4>
+      <p>O mercado cobra produtividade linear de corpos que vivem realidades não lineares. Licença-maternidade, trabalho doméstico não remunerado e falta de redes de apoio produzem lacunas de currículo que são penalizadas — não reconhecidas.</p>
+      <div class="src">Revista Brasileira de Pós-Graduação · 2024</div>
+    </div>
+    <div class="barrier">
+      <div class="barrier-n">vi.</div>
+      <h4>Viés <em>algorítmico</em></h4>
+      <p>Com apenas ~26% de participação feminina no desenvolvimento de IA, os modelos são treinados em dados que replicam machismo e racismo estrutural. A discriminação não some — é automatizada.</p>
+      <div class="src">Caso Amazon (recruitment AI) · documentação pública</div>
+    </div>
+  </div>
+
+  <div class="pullquote">
+    Diversidade não é <b>pauta social</b>. É <b>requisito técnico</b> para que a IA funcione direito no serviço público.
+  </div>
+</section>
+
+<!-- II. NÚMEROS -->
+<section class="section" id="numeros">
+  <div class="section-head">
+    <div class="section-roman">II.</div>
+    <div>
+      <div class="sub">Retrato · dados de mercado e política pública</div>
+      <h2>Os números <em>que sustentam</em> a oficina.</h2>
+      <p>A página <a href="dados.html" style="color:var(--red);text-decoration:underline;text-underline-offset:3px">Dados</a> traz o retrato geral do analfabetismo digital no Estado. Aqui, o recorte é específico: o que os dados mostram sobre mulheres, tecnologia e liderança pública — o terreno exato onde a oficina CLIC Mulheres atua.</p>
+    </div>
+  </div>
+
+  <div class="numbers-grid">
+    <div class="num-cell dark">
+      <div class="num-lbl">→ Brasscom · 2023</div>
+      <div class="num-big">19<em>%</em></div>
+      <div class="num-desc">das profissionais de tecnologia no Brasil são mulheres.</div>
+      <div class="num-src">Relatório de Mercado de TI</div>
+    </div>
+    <div class="num-cell">
+      <div class="num-lbl">→ OCDE · 2022</div>
+      <div class="num-big">12<em>%</em></div>
+      <div class="num-desc">ocupam cargos de liderança em TI no setor público.</div>
+      <div class="num-src">Mulheres em Liderança · Setor Público</div>
+    </div>
+    <div class="num-cell">
+      <div class="num-lbl">→ Estudo Unisociesc · 2022</div>
+      <div class="num-big">83<em>%</em></div>
+      <div class="num-desc">das mulheres negras em TI relatam síndrome do impostor (vs. 39% das brancas).</div>
+      <div class="num-src">TCC sobre Síndrome do Impostor em TI</div>
+    </div>
+    <div class="num-cell">
+      <div class="num-lbl">→ Datafolha · 2022</div>
+      <div class="num-big">90<em>%</em></div>
+      <div class="num-desc">da população acredita que mais mulheres tornariam o serviço público melhor.</div>
+      <div class="num-src">Percepção sobre representatividade no setor público</div>
+    </div>
+  </div>
+
+  <div class="pullquote">
+    O letramento digital feminino deixou de ser pauta corporativa e virou <b>política de Estado</b> — Agenda Transversal Mulheres · PPA 2024-2027.
+  </div>
+</section>
+
+<!-- III. A OFICINA -->
+<section class="workshop" id="oficina">
+  <div class="workshop-inner">
+    <div class="section-head">
+      <div class="section-roman">III.</div>
+      <div>
+        <div class="sub">A oficina · quatro blocos, oitenta minutos</div>
+        <h2>Do medo de errar à <em>autoria tecnológica</em>.</h2>
+        <p>A oficina Servidoras no Comando Digital é desenhada em quatro blocos que fazem uma jornada completa: do diagnóstico do medo ao aplicativo funcionando. Nenhum bloco ensina só ferramenta — cada um ataca também uma camada da barreira estrutural.</p>
+      </div>
+    </div>
+
+    <div class="blocks">
+      <div class="block">
+        <div class="block-n">→ Bloco 01 · 20 min</div>
+        <h4>O <em>ponto de partida</em></h4>
+        <p>Diagnóstico coletivo de nível (nunca usei / perguntas simples / produzo conteúdo / já criei com IA). Desarme do medo. A IA apresentada como "nova estagiária": amplia o raciocínio, não o substitui — e não é mágica.</p>
+        <div class="block-foot">Nivela · desarma · situa</div>
+      </div>
+      <div class="block">
+        <div class="block-n">→ Bloco 02 · 25 min</div>
+        <h4><em>Autoria</em> tecnológica</h4>
+        <p>Engenharia de prompt com método PTCF + Limites. Aprendem que prompt ruim gera trabalho, prompt bom gera entrega. Constroem seu primeiro assistente de IA para uma dor real da rotina. Regras de ouro de dados no serviço público.</p>
+        <div class="block-foot">Ensina o método · primeiro entregável</div>
+      </div>
+      <div class="block">
+        <div class="block-n">→ Bloco 03 · 25 min</div>
+        <h4><em>Vibe coding</em></h4>
+        <p>Construção de aplicativo descrevendo em linguagem natural. O assistente de texto é o cérebro; o aplicativo, o painel de controle. Cada participante gera uma solução funcional do zero — e sai com link público.</p>
+        <div class="block-foot">Virada de chave · segundo entregável</div>
+      </div>
+      <div class="block">
+        <div class="block-n">→ Bloco 04 · 10 min</div>
+        <h4><em>Ascensão</em> coletiva</h4>
+        <p>Conexão com a rede ASCENDA, acesso à plataforma de continuidade, entrega do Certificado de Autora de Tecnologia. Não termina na sala — continua no grupo e na plataforma.</p>
+        <div class="block-foot">Fecha o arco · ativa a rede</div>
+      </div>
+    </div>
+
+    <!-- MÉTODO PTCF -->
+    <div class="ptcf">
+      <div class="ptcf-side">
+        <div class="ptcf-k">→ Método estruturado</div>
+        <h3>PTCF <em>+ Limites</em></h3>
+        <p>A espinha do método. Cinco campos que transformam prompt vago em instrução precisa — exatamente a disciplina que distingue quem usa IA de quem manda nela.</p>
+      </div>
+      <div class="ptcf-list">
+        <div class="ptcf-item"><div class="ptcf-letter">P</div><b>Persona</b><p>Quem a IA precisa ser para executar a tarefa.</p></div>
+        <div class="ptcf-item"><div class="ptcf-letter">T</div><b>Tarefa</b><p>O que exatamente precisa ser entregue.</p></div>
+        <div class="ptcf-item"><div class="ptcf-letter">C</div><b>Contexto</b><p>A realidade institucional em que a resposta será usada.</p></div>
+        <div class="ptcf-item"><div class="ptcf-letter">F</div><b>Formato</b><p>A estrutura concreta da entrega (tabela, texto, lista…).</p></div>
+        <div class="ptcf-item"><div class="ptcf-letter">L</div><b>Limites</b><p>O que a IA não deve fazer — inclusive em termos de dados sigilosos.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IV. O QUE SE CONSTRÓI -->
+<section class="section" id="construcao">
+  <div class="section-head">
+    <div class="section-roman">IV.</div>
+    <div>
+      <div class="sub">Entregáveis · o que cada participante leva pra casa</div>
+      <h2>Cada servidora sai com <em>duas</em> soluções funcionando.</h2>
+      <p>A oficina CLIC Mulheres é prática porque a virada identitária só acontece quando a pessoa sai da sala com algo que ela construiu. Não é prova de conceito abstrata — é solução aplicada a uma dor real do trabalho dela, no dia dela, no órgão dela.</p>
+    </div>
+  </div>
+
+  <div class="built-grid">
+    <div class="built">
+      <div class="built-tag">→ Entregável 01 · Assistente</div>
+      <h4>Um <em>assistente de IA</em> pessoal</h4>
+      <p>Construído com o método PTCF, voltado a uma dor real da rotina: organizar processos do SEI, redigir minutas padronizadas, resumir documentos extensos, preparar análises iniciais de pareceres.</p>
+      <div class="built-foot">Desenvolvido no Bloco 02</div>
+    </div>
+    <div class="built">
+      <div class="built-tag">→ Entregável 02 · Aplicativo</div>
+      <h4>Um <em>aplicativo funcional</em></h4>
+      <p>Interface funcional criada via vibe coding — painel de acompanhamento de prazos, ferramenta de triagem de demandas, sistema de apoio à decisão. Com link público e uso imediato.</p>
+      <div class="built-foot">Desenvolvido no Bloco 03</div>
+    </div>
+    <div class="built">
+      <div class="built-tag">→ Entregável 03 · Certificado</div>
+      <h4>Certificado de <em>autora de tecnologia</em></h4>
+      <p>Não é "participação": é autoria. Registra, na trajetória da servidora, a transição formal de usuária de sistemas para criadora de soluções tecnológicas no serviço público.</p>
+      <div class="built-foot">Entregue no Bloco 04</div>
+    </div>
+  </div>
+
+  <!-- HONESTIDADE -->
+  <div class="honesty">
+    <div class="honesty-head">
+      <span class="hk">→ Honestidade editorial</span>
+    </div>
+    <h3>O que <em>não</em> fazemos — e por que isso importa.</h3>
+    <p class="hbody">
+      Vibe coding e IA generativa são ferramentas novas, e o mercado está cheio de cursos que vendem como se fossem mágica. Não é. A oficina CLIC Mulheres só funciona porque <strong>assumimos os limites da tecnologia em voz alta</strong> — inclusive para as próprias servidoras. Três recortes que deixamos claros desde o primeiro minuto:
+    </p>
+    <div class="hrows">
+      <div class="hrow">
+        <b>→ O que se constrói é protótipo</b>
+        <h5>Sistema em 80 min é <em>prova de conceito</em>, não software de produção.</h5>
+        <p>O aplicativo gerado via vibe coding é um ponto de partida funcional para dialogar com a TI do órgão — não substitui análise de requisitos, homologação, LGPD aplicada, manutenção versionada. A servidora sai autora; a solução ainda precisa de engenharia.</p>
+      </div>
+      <div class="hrow">
+        <b>→ Soberania de dados</b>
+        <h5>Nenhum dado sensível vai para <em>IA aberta</em>.</h5>
+        <p>Regras de ouro explícitas desde o Bloco 02: nunca CPF, nunca processo sigiloso, nunca dado do cidadão em ferramenta aberta. Quando disponível, usar Copilot corporativo homologado. Ensinamos a distinção — e o risco de shadow IT.</p>
+      </div>
+      <div class="hrow">
+        <b>→ Tempo é começo</b>
+        <h5>80 min desarma barreira. Maturidade <em>exige continuidade</em>.</h5>
+        <p>A oficina abre a porta. A maturidade crítica — auditar alucinações, interrogar fontes, avaliar viés — é um caminho mais longo. Por isso existem a plataforma ASCENDA, a rede de continuidade e os ciclos estendidos que vêm depois.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- V. ASCENDA + SUELI -->
+<section class="platform">
+  <div class="platform-txt">
+    <div class="pk">Plataforma de continuidade</div>
+    <h3>ASCENDA — não termina quando a oficina termina.</h3>
+    <p>A plataforma ASCENDA sustenta o que a oficina abre. <strong>Cinco trilhas progressivas</strong> (autonomia digital, literacia de dados, engenharia de prompt, vibe coding, liderança digital), <strong>catálogo curado com 70+ ferramentas</strong> filtradas por categoria, gratuidade e controle de dados, <strong>diagnóstico inteligente</strong> que recomenda o próximo passo, <strong>rede</strong> via grupo de servidoras.</p>
+    <p>A plataforma é a resposta ao gap de tempo da oficina — onde 80 minutos desarma, a plataforma forma. E onde a formação acontece, a rede sustenta.</p>
+  </div>
+
+  <div class="sueli-card">
+    <div class="sk">→ A companheira da trilha</div>
+    <blockquote>Sueli — a assistente que acompanha cada servidora dentro da plataforma.</blockquote>
+    <div class="sueli-note">
+      <b>Por que Sueli?</b> O nome é uma homenagem ao pensamento crítico brasileiro sobre raça, gênero e conhecimento. A Sueli da plataforma não julga, não cobra, não apressa. Ela aponta trilha, sugere ferramenta, revisa prompt — e lembra, sempre, que o ponto de partida é legítimo, qualquer que seja.
+    </div>
+  </div>
+</section>
+
+<!-- VI. PILOTO -->
+<section class="piloto">
+  <div class="piloto-inner">
+    <div class="piloto-head">
+      <div class="section-roman">VI.</div>
+      <div>
+        <div class="sub">Piloto validado</div>
+        <h2>O que aconteceu <em>quando rodamos</em>.</h2>
+      </div>
+      <div class="piloto-stamp">
+        Validado<br>
+        MMXXV
+      </div>
+    </div>
+
+    <div class="piloto-nums">
+      <div class="piloto-num">
+        <div class="pk">→ Oficinas</div>
+        <div class="big">04</div>
+        <div class="lbl">ciclos realizados no piloto, com público exclusivamente feminino do serviço público</div>
+      </div>
+      <div class="piloto-num">
+        <div class="pk">→ Adesão</div>
+        <div class="big">alta<em>*</em></div>
+        <div class="lbl">participação ativa do início ao fim em todas as edições, com taxa mínima de desistência</div>
+      </div>
+      <div class="piloto-num">
+        <div class="pk">→ Entregáveis</div>
+        <div class="big">100<em>%</em></div>
+        <div class="lbl">das participantes saíram com assistente e aplicativo funcionando — soluções aplicadas ao trabalho real</div>
+      </div>
+      <div class="piloto-num">
+        <div class="pk">→ Maturidade</div>
+        <div class="big">pronto</div>
+        <div class="lbl">para escalar — método estruturado, plataforma no ar, rede ativa, facilitação experiente</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VII. CONTRATAÇÃO -->
+<section class="section" id="contratacao">
+  <div class="section-head">
+    <div class="section-roman">VII.</div>
+    <div>
+      <div class="sub">Como contratar · três formatos</div>
+      <h2>Três <em>modos</em> de trazer CLIC Mulheres para o seu órgão.</h2>
+      <p>Adaptados ao ritmo real das compras públicas e à maturidade da área que está contratando. Do primeiro contato com o método à instalação de capacidade permanente.</p>
+    </div>
+  </div>
+
+  <div class="formats-grid">
+    <div class="format">
+      <div class="format-n">01</div>
+      <h4>Oficina <em>avulsa</em></h4>
+      <p>Uma turma, 80 minutos, até 15 servidoras. Ideal para secretarias de mulheres, eventos institucionais, semanas temáticas, ativações pontuais. A forma mais rápida de entregar um primeiro ciclo completo.</p>
+      <div class="format-meta">Baixo comprometimento · ciclo curto</div>
+    </div>
+    <div class="format">
+      <div class="format-n">02</div>
+      <h4>Ciclo <em>recorrente</em></h4>
+      <p>Trilha de 3 a 5 oficinas ao longo do ano, com acesso estendido à plataforma ASCENDA, acompanhamento das soluções desenvolvidas e encontros de rede. Para órgãos com programas de equidade em curso.</p>
+      <div class="format-meta">Formação estruturada · ciclo médio</div>
+    </div>
+    <div class="format">
+      <div class="format-n">03</div>
+      <h4>Programa <em>anual</em></h4>
+      <p>CLIC Mulheres como programa institucional de formação digital feminina. Trilhas integrais, curadoria de soluções, plataforma customizada, governança e métricas de impacto. Capacidade permanente.</p>
+      <div class="format-meta">Instalação institucional · ciclo longo</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-inner">
+    <div class="cta-k">Próximo passo</div>
+    <h2>A ascensão é <em>coletiva</em> — e começa com uma conversa.</h2>
+    <div class="buttons">
+      <a class="btn primary" href="index.html#contato"><span class="dot"></span>Agendar conversa</a>
+      <a class="btn ghost" href="produtos.html"><span class="dot"></span>Ver outros produtos</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="wm">CLIC<span>.</span></div>
+    <div class="meta">
+      <span><a href="index.html" style="color:inherit">Início</a></span>
+      <span><a href="produtos.html" style="color:#E8805F">Produtos</a></span>
+      <span><a href="dados.html" style="color:inherit">Dados</a></span>
+      <span><a href="index.html#contato" style="color:inherit">Contato</a></span>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>CLIC © MMXXVI · Centro de Letramento, Inovação e Competências Digitais</span>
+    <span>CLIC Mulheres · edição I · piloto validado em MMXXV</span>
+  </div>
+</footer>
+
+</body>
+</html>

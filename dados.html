@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CLIC — Dados · O custo do analfabetismo digital no Estado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2ECE1;
+    --paper-2:#E8DFCE;
+    --ink:#141210;
+    --ink-2:#3A342B;
+    --red:#B3321A;
+    --green:#3E4A2A;
+    --rule:rgba(20,18,16,.16);
+    --grid: rgba(20,18,16,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased}
+  body{
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px);
+    background-size: calc(100%/12) 100%;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.3;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode:multiply;
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* NAV */
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:28px 40px;border-bottom:1px solid var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    position:relative;z-index:10;background:var(--paper);
+  }
+  nav .meta{display:flex;gap:28px;color:var(--ink-2);flex-wrap:wrap}
+  nav .meta span::before{content:"→ ";color:var(--red)}
+  nav .meta .active{color:var(--red)}
+  nav .meta .active::before{color:var(--red)}
+  .wordmark{font-family:'Fraunces',serif;font-weight:400;font-style:italic;font-size:22px;letter-spacing:-.02em}
+  .wordmark b{font-style:normal;font-weight:600;letter-spacing:.3em;font-size:14px;margin-right:6px;vertical-align:1px}
+
+  /* HEADER / INTRO */
+  .intro{padding:80px 40px 60px;max-width:1400px;margin:0 auto;position:relative}
+  .breadcrumb{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-2);margin-bottom:48px;display:flex;align-items:center;gap:12px;
+  }
+  .breadcrumb a{color:var(--ink-2)}
+  .breadcrumb a:hover{color:var(--red)}
+  .breadcrumb .sep{color:var(--red)}
+  .breadcrumb .current{color:var(--red)}
+
+  .intro h1{
+    font-family:'Fraunces',serif;font-weight:300;
+    font-size:clamp(48px,7vw,108px);line-height:.92;letter-spacing:-.04em;
+    max-width:1100px;
+  }
+  .intro h1 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .intro .lede{
+    margin-top:48px;max-width:720px;font-size:19px;line-height:1.55;color:var(--ink-2);font-weight:300;
+    border-top:1px solid var(--rule);padding-top:32px;
+  }
+  .intro .lede strong{color:var(--ink);font-weight:500}
+
+  .meta-bar{
+    margin-top:48px;padding:20px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    display:flex;gap:48px;flex-wrap:wrap;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  }
+  .meta-bar span b{color:var(--red);margin-right:8px}
+
+  /* SEÇÕES */
+  .section{padding:100px 40px;border-bottom:1px solid var(--rule);max-width:1400px;margin:0 auto;position:relative}
+  .section-head{display:grid;grid-template-columns:120px 1fr;gap:32px;margin-bottom:60px;align-items:start}
+  .section-roman{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:80px;color:var(--red);
+    line-height:.8;letter-spacing:-.04em;font-variation-settings:"WONK" 1;
+  }
+  .section-head .txt h2{
+    font-family:'Fraunces',serif;font-weight:300;font-size:clamp(36px,4.5vw,64px);
+    line-height:.98;letter-spacing:-.03em;margin-bottom:20px;
+  }
+  .section-head .txt h2 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .section-head .txt .sub{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-2);margin-bottom:16px;
+  }
+  .section-head .txt p{font-size:17px;line-height:1.55;color:var(--ink-2);max-width:720px;font-weight:300}
+
+  /* STATS GRID - RISCO */
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+  .stat{
+    padding:40px 32px;border-right:1px solid var(--rule);position:relative;
+    display:flex;flex-direction:column;justify-content:space-between;min-height:340px;
+  }
+  .stat:last-child{border-right:none}
+  .stat .stat-label{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--red);margin-bottom:20px;
+  }
+  .stat .stat-n{
+    font-family:'Fraunces',serif;font-weight:300;
+    font-size:clamp(72px,9vw,140px);line-height:.82;letter-spacing:-.05em;
+    color:var(--ink);margin-bottom:8px;
+  }
+  .stat .stat-n em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1;font-size:.55em;font-weight:300}
+  .stat .stat-unit{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:28px;color:var(--red);display:inline-block;margin-left:4px}
+  .stat .stat-desc{
+    font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.5;color:var(--ink);font-weight:400;
+    margin-top:16px;max-width:320px;
+  }
+  .stat .stat-desc b{font-weight:500}
+  .stat .stat-src{
+    margin-top:24px;padding-top:16px;border-top:1px dashed var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--ink-2);line-height:1.5;
+  }
+  .stat .stat-src a{color:var(--red);text-decoration:underline;text-underline-offset:3px}
+
+  /* RISCO: stat dramática (fraude TCU) */
+  .stat-dark{background:var(--ink);color:var(--paper)}
+  .stat-dark .stat-label{color:#E8805F}
+  .stat-dark .stat-n{color:var(--paper)}
+  .stat-dark .stat-desc{color:var(--paper)}
+  .stat-dark .stat-src{color:rgba(242,236,225,.6);border-color:rgba(242,236,225,.25)}
+  .stat-dark .stat-src a{color:#E8805F}
+
+  /* TABELA DE EVIDÊNCIAS */
+  .evidence{margin-top:80px}
+  .evidence h3{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:40px;letter-spacing:-.02em;
+    margin-bottom:32px;color:var(--ink);
+  }
+  .evidence-table{border-top:2px solid var(--ink)}
+  .ev-row{
+    display:grid;grid-template-columns:80px 1fr 200px;gap:24px;padding:24px 0;
+    border-bottom:1px solid var(--rule);align-items:baseline;
+    transition:padding-left .2s;
+  }
+  .ev-row:hover{padding-left:12px;border-bottom-color:var(--red)}
+  .ev-n{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:32px;color:var(--red);
+    letter-spacing:-.02em;line-height:1;
+  }
+  .ev-content h4{
+    font-family:'Fraunces',serif;font-weight:400;font-size:22px;line-height:1.2;letter-spacing:-.015em;
+    margin-bottom:8px;
+  }
+  .ev-content h4 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .ev-content p{font-size:14px;line-height:1.55;color:var(--ink-2)}
+  .ev-source{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--ink-2);line-height:1.5;text-align:right;
+  }
+  .ev-source b{color:var(--red);display:block;margin-bottom:4px}
+
+  /* ROI - GANHOS CONCRETOS */
+  .roi-section{background:var(--ink);color:var(--paper);padding:100px 40px;margin:0 -40px;position:relative;overflow:hidden}
+  .roi-section::before{
+    content:"";position:absolute;inset:0;opacity:.08;
+    background-image:
+      linear-gradient(to right, var(--paper) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--paper) 1px, transparent 1px);
+    background-size:60px 60px;
+  }
+  .roi-inner{max-width:1300px;margin:0 auto;position:relative;z-index:2}
+  .roi-section .section-head .txt h2{color:var(--paper)}
+  .roi-section .section-head .txt h2 em{color:#E8805F}
+  .roi-section .section-head .txt p{color:rgba(242,236,225,.7)}
+  .roi-section .section-head .txt .sub{color:rgba(242,236,225,.5)}
+  .roi-section .section-roman{color:#E8805F}
+
+  .roi-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid rgba(242,236,225,.25)}
+  .roi-item{
+    padding:40px 32px;border-bottom:1px solid rgba(242,236,225,.25);border-right:1px solid rgba(242,236,225,.25);
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .roi-item:nth-child(even){border-right:none}
+  .roi-item .roi-kicker{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:#E8805F;
+  }
+  .roi-item h4{
+    font-family:'Fraunces',serif;font-weight:400;font-size:34px;letter-spacing:-.02em;line-height:1.05;
+    color:var(--paper);
+  }
+  .roi-item h4 em{font-style:italic;color:#E8805F;font-variation-settings:"WONK" 1}
+  .roi-item .roi-body{font-size:14px;line-height:1.6;color:rgba(242,236,225,.75);max-width:440px}
+  .roi-item .roi-src{
+    margin-top:auto;padding-top:16px;border-top:1px dashed rgba(242,236,225,.2);
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+    color:rgba(242,236,225,.5);
+  }
+
+  /* CASES - ONDE JÁ ACONTECEU */
+  .cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+  .case{
+    border:1px solid var(--rule);padding:28px;background:rgba(255,255,255,.3);
+    display:flex;flex-direction:column;gap:14px;min-height:280px;
+    transition:all .2s;
+  }
+  .case:hover{border-color:var(--red);background:rgba(255,255,255,.5)}
+  .case .case-tag{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--red);
+  }
+  .case h4{
+    font-family:'Fraunces',serif;font-weight:400;font-size:26px;letter-spacing:-.015em;line-height:1.1;
+  }
+  .case h4 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .case p{font-size:14px;line-height:1.55;color:var(--ink-2)}
+  .case .case-meta{
+    margin-top:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--ink-2);padding-top:14px;border-top:1px dashed var(--rule);
+  }
+
+  /* SÍNTESE / ENCERRAMENTO */
+  .synthesis{
+    margin-top:100px;padding:64px 48px;border:1px solid var(--ink);background:rgba(255,255,255,.3);
+    display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;
+  }
+  .synthesis h3{
+    font-family:'Fraunces',serif;font-weight:300;font-size:56px;line-height:.98;letter-spacing:-.03em;
+  }
+  .synthesis h3 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .synthesis-txt p{font-size:16px;line-height:1.65;color:var(--ink);margin-bottom:16px}
+  .synthesis-txt p:last-child{color:var(--ink-2)}
+
+  /* CTA */
+  .cta{padding:120px 40px;text-align:center;max-width:1300px;margin:0 auto}
+  .cta-k{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--red);margin-bottom:28px;display:flex;align-items:center;justify-content:center;gap:12px;
+  }
+  .cta-k::before,.cta-k::after{content:"";width:40px;height:1px;background:var(--red)}
+  .cta h2{
+    font-family:'Fraunces',serif;font-weight:300;font-size:clamp(48px,6vw,88px);
+    line-height:.98;letter-spacing:-.035em;max-width:900px;margin:0 auto;
+  }
+  .cta h2 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .buttons{margin-top:48px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:14px;
+    padding:20px 36px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.15em;text-transform:uppercase;
+    text-decoration:none;border:1px solid var(--ink);transition:all .2s;cursor:pointer;
+  }
+  .btn.primary{background:var(--ink);color:var(--paper)}
+  .btn.primary:hover{background:var(--red);border-color:var(--red)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{background:var(--ink);color:var(--paper)}
+  .btn .dot{width:6px;height:6px;border-radius:50%;background:var(--red)}
+  .btn.primary .dot{background:var(--paper)}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:var(--paper);padding:48px 40px 28px}
+  .foot-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:24px}
+  .foot-inner .wm{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:32px;letter-spacing:-.02em}
+  .foot-inner .wm span{color:#E8805F}
+  .foot-inner nav{padding:0;border:none;background:none}
+  .foot-inner .meta{color:rgba(242,236,225,.6)}
+  .foot-inner .meta span::before{color:#E8805F}
+  .foot-bottom{
+    max-width:1400px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(242,236,225,.2);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.5);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width:900px){
+    nav{padding:20px 24px;flex-direction:column;gap:12px;align-items:flex-start}
+    nav .meta{gap:16px}
+    .intro,.section,.cta{padding-left:24px;padding-right:24px}
+    .section-head{grid-template-columns:1fr;gap:16px}
+    .section-roman{font-size:56px}
+    .stats-grid{grid-template-columns:1fr}
+    .stat{border-right:none;border-bottom:1px solid var(--rule);min-height:auto}
+    .stat:last-child{border-bottom:none}
+    .ev-row{grid-template-columns:48px 1fr;gap:16px}
+    .ev-source{grid-column:1/-1;padding-left:64px;text-align:left}
+    .roi-section{margin:0 -24px;padding:60px 24px}
+    .roi-grid{grid-template-columns:1fr}
+    .roi-item{border-right:none}
+    .cases-grid{grid-template-columns:1fr}
+    .synthesis{grid-template-columns:1fr;padding:32px;gap:32px}
+    .synthesis h3{font-size:36px}
+    .meta-bar{gap:20px;font-size:10px}
+  }
+
+  .fadeup{opacity:0;transform:translateY(20px);animation:fu 1s .1s forwards cubic-bezier(.2,.7,.2,1)}
+  @keyframes fu{to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wordmark"><a href="index.html"><b>◉ CLIC</b> <em>— Centro de letramento digital</em></a></div>
+  <div class="meta">
+    <span><a href="index.html#manifesto">Manifesto</a></span>
+    <span><a href="produtos.html">Produtos</a></span>
+    <span class="active">Dados</span>
+    <span><a href="index.html#contato">Contato</a></span>
+  </div>
+</nav>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="breadcrumb fadeup">
+    <a href="index.html">Início</a>
+    <span class="sep">/</span>
+    <span class="current">Dados · Edição I · MMXXVI</span>
+  </div>
+
+  <h1 class="fadeup">
+    O que <em>custa</em><br>
+    ao Estado <em>não</em> letrar<br>
+    digitalmente seus quadros.
+  </h1>
+
+  <p class="lede fadeup">
+    Esta página reúne evidências — do <strong>TCU</strong>, da <strong>OCDE</strong>, do <strong>BID</strong>, da <strong>McKinsey</strong>, da <strong>ENAP</strong> e do <strong>Ministério das Comunicações</strong> — para sustentar uma tese simples: sem servidores digitalmente letrados, o Estado brasileiro paga caro em três moedas ao mesmo tempo — dinheiro, tempo e autonomia.
+  </p>
+
+  <div class="meta-bar">
+    <span><b>Documento</b> Nota técnica · edição pública</span>
+    <span><b>Fontes</b> 8 institucionais</span>
+    <span><b>Última revisão</b> Abril · MMXXVI</span>
+    <span><b>Licença</b> Livre com atribuição</span>
+  </div>
+</section>
+
+<!-- I. O CUSTO DO ANALFABETISMO DIGITAL -->
+<section class="section">
+  <div class="section-head">
+    <div class="section-roman">I.</div>
+    <div class="txt">
+      <div class="sub">Risco · o que se perde sem letramento</div>
+      <h2>Três números que <em>o Estado</em> paga todo ano.</h2>
+      <p>A ausência de capacidade interna em tecnologia não é neutra. Ela se materializa em orçamento desperdiçado, decisões opacas e dependência estrutural de fornecedores externos. Abaixo, três indicadores recentes que ajudam a dimensionar o problema.</p>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+
+    <div class="stat stat-dark">
+      <div>
+        <div class="stat-label">→ TCU · contratos de TI federal</div>
+        <div class="stat-n">R$ 251<span class="stat-unit">mi</span></div>
+        <div class="stat-desc">
+          <b>em desvios identificados</b> em apenas 17 contratos de TI do governo federal. Um contrato de suporte técnico no Ministério da Saúde apresentou superfaturamento de <b>272%</b> — R$ 7,4 milhões mensais por serviço orçado em R$ 2,9 milhões.
+        </div>
+      </div>
+      <div class="stat-src">
+        Fonte: Auditoria TCU · 2019<br>
+        Contratos "carona" sem planejamento técnico interno
+      </div>
+    </div>
+
+    <div class="stat">
+      <div>
+        <div class="stat-label">→ Min. Comunicações · 2024</div>
+        <div class="stat-n">70<em>%</em></div>
+        <div class="stat-desc">
+          <b>dos brasileiros têm dificuldades significativas com letramento digital</b> — mesmo conectados. O problema não é de acesso, é de capacidade de uso crítico e produtivo.
+        </div>
+      </div>
+      <div class="stat-src">
+        Fonte: Ministério das Comunicações · 2024<br>
+        Secretaria de Telecomunicações, Hermano Tercius
+      </div>
+    </div>
+
+    <div class="stat">
+      <div>
+        <div class="stat-label">→ BID · habilidades digitais</div>
+        <div class="stat-n">28<em>%</em></div>
+        <div class="stat-desc">
+          <b>da população da América Latina</b> carece de competências digitais básicas. No Brasil, o índice é ainda maior — e o país aparece entre as piores performances da região em habilidades digitais básicas, intermediárias e avançadas.
+        </div>
+      </div>
+      <div class="stat-src">
+        Fonte: Banco Interamericano de Desenvolvimento · 2024<br>
+        Relatório sobre competências digitais na ALC
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TABELA DE EVIDÊNCIAS ADICIONAIS -->
+  <div class="evidence">
+    <h3>Outras evidências relevantes.</h3>
+    <div class="evidence-table">
+
+      <div class="ev-row">
+        <div class="ev-n">i.</div>
+        <div class="ev-content">
+          <h4>A cada <em>1%</em> a mais em competências digitais básicas, a produtividade do trabalho cresce <em>2,5%</em>.</h4>
+          <p>O multiplicador é um dos mais altos identificados pela literatura econômica sobre formação de capital humano digital — e aparece em estudos do BID aplicados à América Latina.</p>
+        </div>
+        <div class="ev-source">
+          <b>BID</b>
+          Relatório ALC · 2024
+        </div>
+      </div>
+
+      <div class="ev-row">
+        <div class="ev-n">ii.</div>
+        <div class="ev-content">
+          <h4>Em média, <em>15%</em> das funções atuais serão substituídas ou automatizadas.</h4>
+          <p>Estudo da McKinsey em 46 países aponta que 60% das ocupações têm ao menos 30% de tarefas automatizáveis. No setor público, isso significa: ou o servidor aprende a operar a automação, ou é operado por ela.</p>
+        </div>
+        <div class="ev-source">
+          <b>McKinsey Global</b>
+          Pesquisa em 46 países
+        </div>
+      </div>
+
+      <div class="ev-row">
+        <div class="ev-n">iii.</div>
+        <div class="ev-content">
+          <h4>A IA pode aumentar a produtividade em atividades específicas em até <em>40%</em>.</h4>
+          <p>A estimativa, citada pela Revista do Serviço Público (ENAP, 2023), contempla especialmente atividades intensivas em análise documental, triagem e produção de texto — exatamente o que predomina na rotina administrativa brasileira.</p>
+        </div>
+        <div class="ev-source">
+          <b>ENAP / RSP</b>
+          Revista do Serviço Público · 2023
+        </div>
+      </div>
+
+      <div class="ev-row">
+        <div class="ev-n">iv.</div>
+        <div class="ev-content">
+          <h4>Mais de <em>60%</em> dos docentes da rede pública nunca fizeram qualquer formação em tecnologia aplicada.</h4>
+          <p>Pesquisa do Movimento Todos pela Educação com mais de 4 mil professores mostra que a barreira principal não é a infraestrutura — é a capacitação. O mesmo padrão se repete em áreas administrativas do Estado.</p>
+        </div>
+        <div class="ev-source">
+          <b>Todos pela Educação</b>
+          Levantamento com 4.000 professores
+        </div>
+      </div>
+
+      <div class="ev-row">
+        <div class="ev-n">v.</div>
+        <div class="ev-content">
+          <h4>A OCDE recomenda, desde 2021, que governos tratem letramento digital como <em>investimento estratégico</em>, não como despesa de treinamento.</h4>
+          <p>Estudos da OCDE mostram que formação digital sustentada produz um "duplo dividendo": aumento de produtividade e redução de desigualdade. Países com maior maturidade digital responderam significativamente melhor a choques como a pandemia.</p>
+        </div>
+        <div class="ev-source">
+          <b>OCDE</b>
+          Digital Talent &amp; Skills Framework · 2021
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- II. ROI - O QUE SE GANHA -->
+<section class="roi-section">
+  <div class="roi-inner">
+    <div class="section-head">
+      <div class="section-roman">II.</div>
+      <div class="txt">
+        <div class="sub">Retorno · o que se devolve quando se forma</div>
+        <h2>O que o letramento <em>digital</em> devolve — em moeda corrente.</h2>
+        <p>Programas de capacitação técnica em IA e automação, quando aplicados diretamente à rotina dos servidores, geram retorno mensurável em quatro frentes. Os números abaixo sintetizam o que o CLIC propõe entregar em cada ciclo — com base em evidências da literatura e nos resultados do piloto.</p>
+      </div>
+    </div>
+
+    <div class="roi-grid">
+
+      <div class="roi-item">
+        <div class="roi-kicker">→ Frente 01 · Tempo</div>
+        <h4>Horas devolvidas <em>ao servidor</em> por semana.</h4>
+        <p class="roi-body">Triagem automatizada de demandas, geração assistida de documentos, resumos de processos SEI e classificação de peças. Tarefas de 4 horas viram tarefas de 40 minutos — e o servidor volta a ter tempo para análise, a atividade que justifica o concurso público.</p>
+        <div class="roi-src">Fonte: ENAP/RSP 2023 · casos reais do piloto CLIC</div>
+      </div>
+
+      <div class="roi-item">
+        <div class="roi-kicker">→ Frente 02 · Orçamento</div>
+        <h4>Menos <em>terceirização</em>, mais autonomia técnica.</h4>
+        <p class="roi-body">Cada sistema simples construído internamente com apoio de IA (painel de acompanhamento, triador de demandas, assistente de análise) substitui uma contratação externa — onde o TCU já identificou recorrentemente superfaturamentos acima de 200%.</p>
+        <div class="roi-src">Fonte: TCU · auditoria de contratos de TI · 2019</div>
+      </div>
+
+      <div class="roi-item">
+        <div class="roi-kicker">→ Frente 03 · Governança</div>
+        <h4>Decisões <em>auditáveis</em> em vez de caixa-preta.</h4>
+        <p class="roi-body">Servidor formado em letramento crítico consegue interrogar sistemas, verificar vieses, questionar fornecedores e documentar decisões algorítmicas — precondição para cumprir a LGPD e o Decreto nº 9.203/17 (governança da Administração Pública Federal).</p>
+        <div class="roi-src">Fonte: LGPD · Decreto 9.203/17 · Lei 14.129/21</div>
+      </div>
+
+      <div class="roi-item">
+        <div class="roi-kicker">→ Frente 04 · Capacidade instalada</div>
+        <h4>Soluções que <em>permanecem</em> depois que o consultor vai embora.</h4>
+        <p class="roi-body">66% das instituições públicas globais já usam IA para análise preditiva (Economist Impact); 38% identificam produtividade como principal vetor de investimento em TI. O diferencial não é adotar IA — é ter quem, dentro do órgão, saiba operá-la sem depender de terceiros.</p>
+        <div class="roi-src">Fonte: Economist Impact · estudo internacional</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- III. ONDE JÁ FUNCIONA -->
+<section class="section">
+  <div class="section-head">
+    <div class="section-roman">III.</div>
+    <div class="txt">
+      <div class="sub">Onde já funciona · exemplos brasileiros</div>
+      <h2>O Estado brasileiro <em>já prova</em> — pontualmente — que dá certo.</h2>
+      <p>Há iniciativas maduras no Brasil que demonstram o potencial da IA aplicada ao setor público. O problema não é técnico nem conceitual. É de escala: essas capacidades estão concentradas em poucos órgãos e poucos especialistas. O CLIC propõe justamente democratizar essa capacidade para servidores não técnicos.</p>
+    </div>
+  </div>
+
+  <div class="cases-grid">
+
+    <div class="case">
+      <div class="case-tag">→ CGU · TCU</div>
+      <h4><em>ALICE</em> — Análise de Licitações e Editais</h4>
+      <p>Sistema de IA que analisa automaticamente licitações e contratos públicos, gerando alertas para auditores. Uma das iniciativas mais conhecidas de IA aplicada ao controle público no Brasil.</p>
+      <div class="case-meta">Órgãos de controle · produção</div>
+    </div>
+
+    <div class="case">
+      <div class="case-tag">→ STF</div>
+      <h4><em>Victor</em> — classificação de processos</h4>
+      <p>Ferramenta de IA usada para classificar recursos e identificar temas de repercussão geral no Supremo Tribunal Federal. Exemplo reconhecido nacional e internacionalmente de IA na Justiça.</p>
+      <div class="case-meta">Poder Judiciário · produção</div>
+    </div>
+
+    <div class="case">
+      <div class="case-tag">→ ENAP</div>
+      <h4>Escola Virtual de Governo — tutorias com <em>IA</em></h4>
+      <p>Trilhas formativas personalizadas por IA na Escola Virtual de Governo, adaptando conteúdo ao perfil do servidor. Demonstra maturidade crescente do próprio aparato de formação federal.</p>
+      <div class="case-meta">Formação de servidores · produção</div>
+    </div>
+
+  </div>
+
+  <!-- SÍNTESE -->
+  <div class="synthesis">
+    <div>
+      <h3>A pergunta muda: <em>não é se</em> a IA vem — é <em>quem</em> dentro do órgão vai entendê-la.</h3>
+    </div>
+    <div class="synthesis-txt">
+      <p>Os dados apontam na mesma direção. O Estado brasileiro gasta bilhões em TI terceirizada, perde cerca de R$ 251 milhões só em fraudes identificadas num ciclo, e tem 70% da população com dificuldades de letramento digital — incluindo boa parte de quem opera seus próprios sistemas internos.</p>
+      <p>Ao mesmo tempo, os ganhos de produtividade documentados por OCDE, BID, McKinsey e ENAP mostram que a janela de retorno é grande e mensurável — desde que exista, dentro do órgão, gente que saiba ler, operar e auditar a tecnologia adotada. Esse é exatamente o perfil que o CLIC forma.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-k">Próximo passo</div>
+  <h2>Podemos começar pelo <em>diagnóstico</em> — sem compromisso de contratação.</h2>
+  <div class="buttons">
+    <a class="btn primary" href="index.html#contato"><span class="dot"></span>Agendar conversa</a>
+    <a class="btn ghost" href="produtos.html"><span class="dot"></span>Ver o portfólio</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="wm">CLIC<span>.</span></div>
+    <div class="meta" style="display:flex;gap:24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase">
+      <span><a href="index.html" style="color:inherit">Início</a></span>
+      <span><a href="produtos.html" style="color:inherit">Produtos</a></span>
+      <span><a href="dados.html" style="color:#E8805F">Dados</a></span>
+      <span><a href="index.html#contato" style="color:inherit">Contato</a></span>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>CLIC © MMXXVI · Centro de Letramento, Inovação e Competências Digitais</span>
+    <span>Dados · edição I · compilados em abril de MMXXVI</span>
+  </div>
+</footer>
+
+</body>
+</html>

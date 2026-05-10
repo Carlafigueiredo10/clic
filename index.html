@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CLIC — Centro de Letramento, Inovação e Competências Digitais</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2ECE1;        /* papel creme */
+    --paper-2:#E8DFCE;      /* dobra */
+    --ink:#141210;          /* tinta */
+    --ink-2:#3A342B;        /* cinza tinta */
+    --red:#B3321A;          /* carimbo */
+    --green:#3E4A2A;        /* oliva */
+    --rule:rgba(20,18,16,.16);
+    --grid: rgba(20,18,16,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased}
+  body{
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      radial-gradient(circle at 20% 10%, rgba(179,50,26,.05), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(62,74,42,.06), transparent 50%);
+    background-size: calc(100%/12) 100%, auto, auto;
+    overflow-x:hidden;
+  }
+  /* grão */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.35;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode:multiply;
+  }
+  .wrap{max-width:1400px;margin:0 auto;padding:0 40px;position:relative}
+
+  /* ============ NAV ============ */
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:28px 40px;border-bottom:1px solid var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    position:relative;z-index:10;
+  }
+  nav .meta{display:flex;gap:28px;color:var(--ink-2)}
+  nav .meta span::before{content:"→ ";color:var(--red)}
+  .wordmark{font-family:'Fraunces',serif;font-weight:400;font-style:italic;font-size:22px;letter-spacing:-.02em}
+  .wordmark b{font-style:normal;font-weight:600;letter-spacing:.3em;font-size:14px;margin-right:6px;vertical-align:1px}
+
+  /* ============ HERO ============ */
+  .hero{position:relative;padding:80px 40px 40px;min-height:92vh;display:grid;grid-template-columns:1fr 1fr;gap:60px}
+  .hero .left{position:relative}
+  .kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:40px;display:flex;align-items:center;gap:12px}
+  .kicker::before{content:"";width:40px;height:1px;background:var(--red)}
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:300;
+    font-size:clamp(64px,9vw,148px);
+    line-height:.88;
+    letter-spacing:-.045em;
+    color:var(--ink);
+    font-variation-settings:"SOFT" 50, "WONK" 0;
+  }
+  h1 .italic{font-style:italic;font-weight:300;font-variation-settings:"SOFT" 100, "WONK" 1;color:var(--red)}
+  h1 .amp{font-style:italic;font-weight:300;opacity:.5}
+  .lede{margin-top:48px;max-width:520px;font-size:19px;line-height:1.55;color:var(--ink-2);font-weight:300}
+  .lede strong{color:var(--ink);font-weight:500}
+
+  .hero .right{position:relative}
+  /* Carimbo */
+  .stamp{
+    position:absolute;top:20px;right:0;transform:rotate(-8deg);
+    border:2px solid var(--red);color:var(--red);
+    padding:14px 22px;font-family:'IBM Plex Mono',monospace;font-size:11px;
+    letter-spacing:.18em;text-transform:uppercase;line-height:1.3;text-align:center;
+    box-shadow:inset 0 0 0 1px var(--red);
+  }
+  .stamp::before,.stamp::after{content:"✶";display:block;font-size:10px;margin:2px 0}
+  /* Bloco de certidão */
+  .cert{
+    margin-top:160px;border:1px solid var(--ink);padding:32px;background:rgba(255,255,255,.3);
+    position:relative;
+  }
+  .cert h3{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:28px;margin-bottom:20px;line-height:1.15}
+  .cert dl{font-family:'IBM Plex Mono',monospace;font-size:12px;display:grid;grid-template-columns:auto 1fr;gap:8px 24px;margin-top:18px}
+  .cert dt{color:var(--ink-2);text-transform:uppercase;letter-spacing:.1em}
+  .cert dd{color:var(--ink);font-weight:500}
+  .cert .sig{margin-top:28px;padding-top:20px;border-top:1px dashed var(--rule);display:flex;justify-content:space-between;align-items:end}
+  .cert .sig span{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-2);letter-spacing:.1em;text-transform:uppercase}
+  .cert .sig b{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:22px}
+
+  /* corner markers */
+  .corner{position:absolute;width:14px;height:14px;border:1px solid var(--ink)}
+  .tl{top:-1px;left:-1px;border-right:none;border-bottom:none}
+  .tr{top:-1px;right:-1px;border-left:none;border-bottom:none}
+  .bl{bottom:-1px;left:-1px;border-right:none;border-top:none}
+  .br{bottom:-1px;right:-1px;border-left:none;border-top:none}
+
+  /* footer barra de scroll hero */
+  .hero-foot{
+    position:absolute;bottom:30px;left:40px;right:40px;
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);
+    padding-top:16px;border-top:1px solid var(--rule);
+  }
+  .hero-foot .scroll{display:flex;align-items:center;gap:10px}
+  .hero-foot .scroll::after{content:"";width:80px;height:1px;background:var(--ink);position:relative;animation:slide 2.4s ease-in-out infinite}
+  @keyframes slide{0%,100%{transform:scaleX(.2);transform-origin:left}50%{transform:scaleX(1);transform-origin:left}}
+
+  /* ============ TICKER ============ */
+  .ticker{
+    border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    background:var(--ink);color:var(--paper);
+    padding:20px 0;overflow:hidden;white-space:nowrap;
+  }
+  .ticker-inner{display:inline-block;animation:tick 40s linear infinite;font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:36px;letter-spacing:-.02em}
+  .ticker-inner span{margin:0 40px}
+  .ticker-inner span::before{content:"✦";color:var(--red);margin-right:40px;font-style:normal;font-size:20px;vertical-align:6px}
+  @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ============ PROOF ============ */
+  .proof{padding:60px 40px;border-bottom:1px solid var(--rule);background:rgba(20,18,16,.03)}
+  .proof-inner{max-width:1300px;margin:0 auto}
+  .proof-kicker{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--red);margin-bottom:28px;display:flex;align-items:center;gap:12px;
+  }
+  .proof-kicker::before{content:"";width:40px;height:1px;background:var(--red)}
+  .proof-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+  .proof-item{
+    padding:32px 24px;border-right:1px solid var(--rule);
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .proof-item:last-child{border-right:none}
+  .proof-n{
+    font-family:'Fraunces',serif;font-weight:300;font-size:88px;line-height:.8;letter-spacing:-.04em;
+    color:var(--ink);
+  }
+  .proof-n span{font-size:.45em;color:var(--red);font-style:italic;font-weight:300;vertical-align:20px}
+  .proof-lbl{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--ink);font-weight:500;line-height:1.5;
+  }
+  .proof-lbl span{display:block;color:var(--ink-2);font-weight:400;margin-top:4px}
+
+  /* ============ MANIFESTO / O QUE É ============ */
+  .section{padding:120px 40px;border-bottom:1px solid var(--rule);position:relative}
+  .section-label{
+    position:absolute;top:40px;left:40px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);
+    display:flex;gap:18px;align-items:center;
+  }
+  .section-label .num{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:28px;color:var(--red);letter-spacing:0;
+  }
+  /* Em telas pequenas, volta a ser inline pra não colidir com outras seções */
+  @media (max-width:900px){
+    .section-label{position:static;margin-bottom:28px}
+    .section{padding:72px 24px}
+  }
+
+  .manifesto{display:grid;grid-template-columns:1fr 2fr;gap:80px;max-width:1300px;margin:0 auto;padding-top:60px}
+  .manifesto .side h2{
+    font-family:'Fraunces',serif;font-weight:300;font-size:56px;line-height:.95;letter-spacing:-.03em;
+  }
+  .manifesto .side h2 em{color:var(--red);font-variation-settings:"SOFT" 100, "WONK" 1}
+  .manifesto .side p.meta{
+    margin-top:32px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-2);
+    letter-spacing:.1em;text-transform:uppercase;line-height:1.8;
+    border-top:1px solid var(--rule);padding-top:20px;max-width:260px;
+  }
+  .manifesto .body{
+    font-family:'Fraunces',serif;font-weight:300;font-size:26px;line-height:1.35;letter-spacing:-.01em;
+    column-count:2;column-gap:48px;column-rule:1px solid var(--rule);
+  }
+  .manifesto .body p{margin-bottom:24px;break-inside:avoid}
+  .manifesto .body p::first-letter{font-style:italic;color:var(--red);font-size:1.1em}
+  .manifesto .body .pullquote{
+    break-inside:avoid;column-span:all;
+    font-style:italic;font-size:42px;line-height:1.2;text-align:center;
+    padding:40px 40px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
+    margin:24px 0;font-weight:300;letter-spacing:-.02em;
+  }
+  .manifesto .body .pullquote::before,.manifesto .body .pullquote::after{
+    content:"❝";display:inline-block;color:var(--red);font-size:.6em;margin:0 12px;vertical-align:20px;
+  }
+  .manifesto .body .pullquote::after{content:"❞"}
+
+  /* ============ PILARES ============ */
+  .pillars{max-width:1300px;margin:60px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--ink)}
+  .pillar{padding:40px;border-right:1px solid var(--ink);position:relative;min-height:360px;display:flex;flex-direction:column;justify-content:space-between;background:rgba(255,255,255,.25);transition:background .3s}
+  .pillar:last-child{border-right:none}
+  .pillar:hover{background:var(--ink);color:var(--paper)}
+  .pillar:hover .pillar-num{color:var(--paper)}
+  .pillar:hover .pillar-meta{border-color:rgba(242,236,225,.3);color:rgba(242,236,225,.7)}
+  .pillar-num{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:96px;color:var(--red);line-height:.8;letter-spacing:-.05em}
+  .pillar h3{font-family:'Fraunces',serif;font-weight:400;font-size:32px;line-height:1.05;letter-spacing:-.02em;margin:24px 0 12px}
+  .pillar h3 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .pillar:hover h3 em{color:#E8805F}
+  .pillar p{font-size:15px;line-height:1.55;color:inherit;opacity:.85}
+  .pillar-meta{
+    margin-top:24px;padding-top:16px;border-top:1px dashed var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);
+    display:flex;justify-content:space-between;transition:all .3s;
+  }
+
+  /* ============ QUEM SERVIMOS ============ */
+  .served{max-width:1300px;margin:80px auto 0;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink)}
+  .served-item{padding:28px 24px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .served-item:last-child{border-right:none}
+  .served-item .n{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--red);letter-spacing:.2em}
+  .served-item h4{font-family:'Fraunces',serif;font-weight:400;font-size:22px;margin:10px 0 8px;letter-spacing:-.01em}
+  .served-item p{font-size:13px;color:var(--ink-2);line-height:1.5}
+
+  /* ============ OFERTA / CATÁLOGO ============ */
+  .catalog{background:var(--ink);color:var(--paper);padding:120px 40px;position:relative;overflow:hidden}
+  .catalog::before{
+    content:"";position:absolute;inset:0;opacity:.08;
+    background-image:
+      linear-gradient(to right, var(--paper) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--paper) 1px, transparent 1px);
+    background-size:60px 60px;
+  }
+  .catalog .section-label{color:rgba(242,236,225,.7)}
+  .catalog .section-label .num{color:#E8805F}
+  .catalog-grid{
+    max-width:1300px;margin:60px auto 0;
+    display:grid;grid-template-columns:1fr 1fr;gap:60px;position:relative;z-index:2;
+  }
+  .catalog h2{
+    font-family:'Fraunces',serif;font-weight:300;font-size:72px;line-height:.95;letter-spacing:-.035em;
+  }
+  .catalog h2 em{font-style:italic;color:#E8805F;font-variation-settings:"WONK" 1}
+  .offers{border-top:1px solid rgba(242,236,225,.25)}
+  .offer{
+    padding:28px 0;border-bottom:1px solid rgba(242,236,225,.25);
+    display:grid;grid-template-columns:48px 1fr auto;gap:24px;align-items:baseline;
+    transition:padding-left .3s;cursor:pointer;
+  }
+  .offer:hover{padding-left:16px}
+  .offer .ix{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#E8805F;letter-spacing:.15em}
+  .offer h4{font-family:'Fraunces',serif;font-weight:400;font-size:30px;letter-spacing:-.015em;line-height:1.2}
+  .offer h4 em{font-style:italic;color:#E8805F;font-variation-settings:"WONK" 1}
+  .offer .arrow{font-family:'Fraunces',serif;font-style:italic;font-size:28px;color:rgba(242,236,225,.5);transition:all .3s}
+  .offer:hover .arrow{color:#E8805F;transform:translateX(8px)}
+  .offer p{grid-column:2/3;font-size:14px;color:rgba(242,236,225,.7);line-height:1.55;margin-top:6px;max-width:520px}
+
+  /* ============ LEVELS (6 níveis progressivos) ============ */
+  .levels{display:flex;flex-direction:column;border-top:1px solid rgba(242,236,225,.25)}
+  .level{
+    padding:28px 0 24px;border-bottom:1px solid rgba(242,236,225,.25);
+    display:grid;grid-template-columns:1fr;gap:8px;
+    transition:padding-left .3s;cursor:pointer;position:relative;
+  }
+  .level::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:transparent;transition:background .3s;
+  }
+  .level:hover{padding-left:20px}
+  .level:hover::before{background:#E8805F}
+  .level-head{display:flex;justify-content:space-between;align-items:baseline}
+  .level-n{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:#E8805F;display:flex;align-items:center;gap:10px;
+  }
+  .level-hrs{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+    color:rgba(242,236,225,.5);
+  }
+  .level h4{
+    font-family:'Fraunces',serif;font-weight:400;font-size:28px;letter-spacing:-.015em;line-height:1.15;
+    color:var(--paper);
+  }
+  .level h4 em{font-style:italic;color:#E8805F;font-variation-settings:"WONK" 1}
+  .level-body{font-size:14px;color:rgba(242,236,225,.72);line-height:1.55;max-width:640px}
+  .level-meta{
+    display:flex;gap:28px;flex-wrap:wrap;margin-top:4px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:rgba(242,236,225,.5);
+  }
+  .level-meta b{color:#E8805F;font-weight:500;margin-right:8px}
+  .pill{
+    display:inline-block;padding:3px 8px;border:1px solid #E8805F;border-radius:2px;
+    font-size:9px;letter-spacing:.15em;color:#E8805F;background:rgba(232,128,95,.08);
+  }
+  .level-featured{background:linear-gradient(90deg, rgba(232,128,95,.06) 0%, transparent 80%);padding-left:20px;padding-right:20px;margin-left:-20px;margin-right:-20px}
+  .level-featured::before{background:#E8805F}
+  .level-featured h4{font-size:32px}
+
+  /* Plataforma */
+  .platform{
+    max-width:1300px;margin:100px auto 0;padding:48px;
+    border:1px solid rgba(242,236,225,.3);background:rgba(242,236,225,.04);
+    position:relative;
+  }
+  .platform-label{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:rgba(242,236,225,.6);display:flex;align-items:center;gap:14px;
+  }
+  .platform-label .num{font-family:'Fraunces',serif;font-style:italic;color:#E8805F;font-size:20px}
+  .platform h3{
+    font-family:'Fraunces',serif;font-weight:300;font-size:48px;line-height:1;letter-spacing:-.025em;
+    margin:18px 0 40px;max-width:700px;
+  }
+  .platform-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;padding-top:32px;border-top:1px solid rgba(242,236,225,.2)}
+  .platform-grid > div b{
+    display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    color:#E8805F;margin-bottom:10px;font-weight:500;
+  }
+  .platform-grid > div p{font-size:13px;color:rgba(242,236,225,.7);line-height:1.5}
+
+  /* ============ MÉTODO ============ */
+  .method{padding:120px 40px;border-bottom:1px solid var(--rule)}
+  .method-flow{max-width:1300px;margin:60px auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:40px;align-items:start}
+  .method-step{position:relative;padding-top:32px;border-top:2px solid var(--ink)}
+  .method-step::before{
+    content:"";position:absolute;top:-8px;left:0;width:14px;height:14px;background:var(--red);border-radius:50%;
+  }
+  .method-step .s-n{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--red);letter-spacing:.2em}
+  .method-step h5{font-family:'Fraunces',serif;font-weight:400;font-size:28px;line-height:1.1;margin:12px 0 16px;letter-spacing:-.015em}
+  .method-step h5 em{font-style:italic;color:var(--red)}
+  .method-step p{font-size:14px;color:var(--ink-2);line-height:1.55}
+
+  /* ============ CTA FINAL ============ */
+  .cta{padding:160px 40px;text-align:center;position:relative;overflow:hidden}
+  .cta::before{
+    content:"CLIC";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:clamp(300px,40vw,600px);
+    color:var(--red);opacity:.06;letter-spacing:-.06em;pointer-events:none;z-index:0;
+    font-variation-settings:"WONK" 1;
+  }
+  .cta-inner{position:relative;z-index:2;max-width:900px;margin:0 auto}
+  .cta .kicker{justify-content:center}
+  .cta .kicker::before{background:var(--ink);width:60px}
+  .cta .kicker{color:var(--ink)}
+  .cta h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(56px,7vw,104px);line-height:.95;letter-spacing:-.04em}
+  .cta h2 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .cta p{margin-top:32px;font-size:20px;color:var(--ink-2);max-width:600px;margin-left:auto;margin-right:auto;line-height:1.5}
+  .buttons{margin-top:56px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:14px;
+    padding:20px 36px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.15em;text-transform:uppercase;
+    text-decoration:none;border:1px solid var(--ink);transition:all .2s;cursor:pointer;
+  }
+  .btn.primary{background:var(--ink);color:var(--paper)}
+  .btn.primary:hover{background:var(--red);border-color:var(--red)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{background:var(--ink);color:var(--paper)}
+  .btn .dot{width:6px;height:6px;border-radius:50%;background:var(--red)}
+  .btn.primary .dot{background:var(--paper)}
+
+  /* ============ FOOTER ============ */
+  footer{background:var(--ink);color:var(--paper);padding:60px 40px 30px}
+  .foot-grid{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;padding-bottom:40px;border-bottom:1px solid rgba(242,236,225,.2)}
+  .foot-grid h6{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,236,225,.5);margin-bottom:20px}
+  .foot-grid .brand h2{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:56px;line-height:.9;letter-spacing:-.03em;margin-bottom:16px}
+  .foot-grid .brand p{font-size:14px;color:rgba(242,236,225,.6);max-width:320px;line-height:1.55}
+  .foot-grid ul{list-style:none;font-family:'IBM Plex Sans',sans-serif;font-size:14px}
+  .foot-grid ul li{margin-bottom:10px;color:rgba(242,236,225,.75);cursor:pointer;transition:color .2s}
+  .foot-grid ul li:hover{color:#E8805F}
+  .foot-bottom{max-width:1300px;margin:24px auto 0;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.5)}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr;min-height:auto;padding:60px 24px}
+    .wrap,.section,.catalog,.method,.cta{padding-left:24px;padding-right:24px}
+    .catalog,.method{padding-top:72px;padding-bottom:72px}
+    .catalog .section-label,.method .section-label{position:static;margin-bottom:28px}
+    nav{padding:20px 24px;flex-direction:column;gap:12px;align-items:flex-start}
+    nav .meta{gap:16px;flex-wrap:wrap}
+    .manifesto{grid-template-columns:1fr;gap:40px;padding-top:80px}
+    .manifesto .body{column-count:1}
+    .manifesto .body .pullquote{font-size:28px;padding:28px 16px}
+    .pillars{grid-template-columns:1fr}
+    .pillar{border-right:none;border-bottom:1px solid var(--ink)}
+    .pillar:last-child{border-bottom:none}
+    .served{grid-template-columns:1fr 1fr}
+    .catalog-grid{grid-template-columns:1fr;gap:40px}
+    .platform{padding:28px;margin-top:60px}
+    .platform h3{font-size:32px}
+    .platform-grid{grid-template-columns:1fr 1fr;gap:24px}
+    .level-featured{margin-left:0;margin-right:0;padding-left:16px;padding-right:16px}
+    .level h4{font-size:22px}
+    .level-featured h4{font-size:24px}
+    .method-flow{grid-template-columns:1fr 1fr;gap:32px}
+    .proof{padding:40px 24px}
+    .proof-grid{grid-template-columns:1fr 1fr}
+    .proof-item{border-bottom:1px solid var(--rule)}
+    .proof-item:nth-child(even){border-right:none}
+    .proof-n{font-size:64px}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:32px}
+    .hero-foot{position:static;margin-top:40px}
+    .cert{margin-top:60px}
+    .stamp{position:static;margin-bottom:40px;display:inline-block}
+    .preview-card[href$="#gabinete"]{grid-template-columns:1fr!important;gap:20px!important;padding:32px 24px!important}
+  }
+  /* entrada */
+  .fadeup{opacity:0;transform:translateY(20px);animation:fu 1s .1s forwards cubic-bezier(.2,.7,.2,1)}
+  .fadeup.d2{animation-delay:.3s}.fadeup.d3{animation-delay:.5s}.fadeup.d4{animation-delay:.7s}
+  @keyframes fu{to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wordmark"><b>◉ CLIC</b> <em>— Centro de letramento digital</em></div>
+  <div class="meta">
+    <span>Manifesto</span>
+    <span><a href="produtos.html" style="color:inherit;text-decoration:none">Produtos</a></span>
+    <span><a href="dados.html" style="color:inherit;text-decoration:none">Dados</a></span>
+    <span>Contato</span>
+    <span style="color:var(--red)">Edição I · MMXXVI</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="left fadeup">
+    <div class="kicker">Documento inaugural · volume um</div>
+    <h1>
+      Alfabetizar<br>
+      <span class="italic">o</span> governo<br>
+      <span class="italic">para a era</span><br>
+      algorítmica.
+    </h1>
+    <p class="lede">
+      CLIC é um centro de <strong>Letramento, Inovação e Competências Digitais</strong> dedicado a formar servidoras e servidores públicos capazes de ler, criticar e desenhar a tecnologia que já decide por eles — antes que a tecnologia decida por todos.
+    </p>
+  </div>
+
+  <div class="right fadeup d2">
+    <div class="stamp">
+      Certificado<br>
+      de Origem<br>
+      N.º 001/26
+    </div>
+
+    <div class="cert">
+      <span class="corner tl"></span><span class="corner tr"></span>
+      <span class="corner bl"></span><span class="corner br"></span>
+      <h3>Um compromisso com <em style="font-style:italic;color:var(--red)">o serviço público</em> e com a inteligência de quem o sustenta.</h3>
+      <p style="font-size:15px;color:var(--ink-2);line-height:1.55">
+        Não somos uma consultoria. Não vendemos plataforma. Formamos pessoas, documentamos práticas e devolvemos ao Estado a capacidade de decidir com autonomia técnica sobre a própria transformação digital.
+      </p>
+      <dl>
+        <dt>Fundado em</dt><dd>Brasília · 2026</dd>
+        <dt>Natureza</dt><dd>Iniciativa independente</dd>
+        <dt>Foco</dt><dd>Administração Pública</dd>
+        <dt>Orientação</dt><dd>LGPD · Lei nº 14.129 · ISO 31000</dd>
+      </dl>
+      <div class="sig">
+        <span>Assinado</span>
+        <b>CLIC</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-foot">
+    <span>S/N · Brasília · Distrito Federal</span>
+    <span class="scroll">Role para continuar</span>
+    <span>Fl. 01 / 07</span>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>Letramento em IA</span>
+    <span>Capacidade estatal</span>
+    <span>Automação de processos</span>
+    <span>Assistentes estruturados</span>
+    <span>Construção de sistemas</span>
+    <span>Soberania de dados</span>
+    <span>Letramento em IA</span>
+    <span>Capacidade estatal</span>
+    <span>Automação de processos</span>
+    <span>Assistentes estruturados</span>
+    <span>Construção de sistemas</span>
+    <span>Soberania de dados</span>
+  </div>
+</div>
+
+<!-- PROOF -->
+<section class="proof">
+  <div class="proof-inner">
+    <div class="proof-kicker">Estágio atual · piloto validado</div>
+    <div class="proof-grid">
+      <div class="proof-item">
+        <div class="proof-n">04</div>
+        <div class="proof-lbl">Oficinas realizadas<br><span>Nível I · público feminino</span></div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-n">100<span>%</span></div>
+        <div class="proof-lbl">Soluções reais<br><span>aplicadas ao trabalho</span></div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-n">alta</div>
+        <div class="proof-lbl">Adesão<br><span>das participantes</span></div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-n">06</div>
+        <div class="proof-lbl">Níveis estruturados<br><span>do letramento ao sistema</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="section" id="manifesto">
+  <div class="section-label"><span class="num">I</span> Manifesto</div>
+  <div class="manifesto">
+    <div class="side">
+      <h2>O que não se <em>compreende</em>, se <em>terceiriza</em>.</h2>
+      <p class="meta">
+        Sobre a urgência de formar o Estado antes de automatizá-lo
+        <br>—<br>
+        redigido em Brasília, abril de 2026
+      </p>
+    </div>
+    <div class="body">
+      <p>Há uma corrida — financiada, acelerada, frequentemente bem-intencionada — para implantar inteligência artificial em todos os andares do serviço público brasileiro. O problema não é a corrida. O problema é correr sem saber para onde.</p>
+      <p>Servidoras e servidores são convocados a "usar IA" sem que jamais tenham sido formados para entender o que a IA decide em seu nome. Gestores assinam contratos de plataformas cujos modelos não conseguem auditar. Cidadãos recebem respostas automatizadas sem saber que foram automatizadas.</p>
+      <div class="pullquote">Não existe Estado digital sem quadros digitalmente letrados.</div>
+      <p>CLIC nasce dessa inquietação. Não para resistir à transformação — mas para garantir que ela seja feita por quem conhece, no detalhe, o tecido institucional que está sendo transformado.</p>
+      <p>Formamos competências, publicamos métodos, abrimos código. Tratamos a administração pública como destinatária de conhecimento sofisticado, não como consumidora de soluções empacotadas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PILARES -->
+<section class="section" id="pilares">
+  <div class="section-label"><span class="num">II</span> Três pilares</div>
+  <div style="max-width:1300px;margin:60px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:40px">
+    <h2 style="font-family:'Fraunces',serif;font-weight:300;font-size:72px;line-height:.95;letter-spacing:-.035em">
+      Três palavras<br>que <em style="font-style:italic;color:var(--red);font-variation-settings:'WONK' 1">sustentam</em> um método.
+    </h2>
+    <p style="font-size:16px;color:var(--ink-2);line-height:1.55;max-width:420px;justify-self:end">
+      O nome é simples porque o trabalho é complexo. Cada letra responde a uma lacuna concreta que observamos, por dentro, no Estado brasileiro.
+    </p>
+  </div>
+
+  <div class="pillars">
+    <div class="pillar">
+      <div>
+        <div class="pillar-num">L</div>
+        <h3><em>Letramento</em></h3>
+        <p>Ler tecnologia como se lê um processo administrativo: com vocabulário, contexto e poder de questionar. Formamos quadros capazes de interrogar sistemas — não apenas operá-los.</p>
+      </div>
+      <div class="pillar-meta"><span>01 · Pilar</span><span>Capacidade crítica</span></div>
+    </div>
+    <div class="pillar">
+      <div>
+        <div class="pillar-num">I</div>
+        <h3><em>Inovação</em></h3>
+        <p>Inovação pública não é moda: é a disciplina de redesenhar serviços com método, sem abandonar legalidade, impessoalidade ou controle social. Ensinamos a diferença.</p>
+      </div>
+      <div class="pillar-meta"><span>02 · Pilar</span><span>Prática disciplinada</span></div>
+    </div>
+    <div class="pillar">
+      <div>
+        <div class="pillar-num">C</div>
+        <h3><em>Competências</em></h3>
+        <p>Trilhas formais, avaliáveis, transferíveis. Do básico ao avançado. Letramento de dados, governança, prompt crítico, desenho de processos, ética aplicada à IA no setor público.</p>
+      </div>
+      <div class="pillar-meta"><span>03 · Pilar</span><span>Formação estruturada</span></div>
+    </div>
+  </div>
+
+  <!-- quem servimos -->
+  <div class="served">
+    <div class="served-item"><div class="n">→ 01</div><h4>Alta gestão</h4><p>Secretárias, diretoras, coordenadoras que precisam decidir sobre IA sem serem capturadas pelo vendedor.</p></div>
+    <div class="served-item"><div class="n">→ 02</div><h4>Quadros técnicos</h4><p>Analistas que operam processos e querem entender o que o algoritmo está, de fato, fazendo.</p></div>
+    <div class="served-item"><div class="n">→ 03</div><h4>Áreas de inovação</h4><p>Labs, núcleos e comitês de transformação digital que precisam de método, não de deck.</p></div>
+    <div class="served-item"><div class="n">→ 04</div><h4>Órgãos de controle</h4><p>Controladorias e auditorias diante da fronteira da auditabilidade algorítmica.</p></div>
+  </div>
+</section>
+
+<!-- PRODUTOS (preview) -->
+<section class="catalog" id="produtos-preview">
+  <div class="section-label"><span class="num">III</span> Cinco produtos, cinco portas</div>
+  <div style="max-width:1300px;margin:60px auto 0">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:48px">
+      <h2 style="font-family:'Fraunces',serif;font-weight:300;font-size:72px;line-height:.95;letter-spacing:-.035em;color:var(--paper)">
+        Cinco <em style="font-style:italic;color:#E8805F;font-variation-settings:'WONK' 1">formas</em> de<br>entrar no mesmo<br>compromisso.
+      </h2>
+      <p style="font-size:17px;line-height:1.55;color:rgba(242,236,225,.75);max-width:460px;justify-self:end">
+        O programa estrutural, um piloto validado, um recorte crítico, uma porta curta de entrada e uma cadeira sob medida — para atender a diferentes ciclos de contratação e a realidades institucionais distintas.
+      </p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid rgba(242,236,225,.25);border-bottom:1px solid rgba(242,236,225,.25)">
+
+      <a href="produtos.html#programa" style="padding:36px 32px;border-right:1px solid rgba(242,236,225,.25);border-bottom:1px solid rgba(242,236,225,.25);display:flex;flex-direction:column;gap:14px;transition:background .3s;color:inherit" class="preview-card">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#E8805F">→ I · Carro-chefe</div>
+        <h4 style="font-family:'Fraunces',serif;font-weight:400;font-size:34px;letter-spacing:-.02em;line-height:1.05;color:var(--paper)">Programa em <em style="font-style:italic;color:#E8805F;font-variation-settings:'WONK' 1">seis níveis</em></h4>
+        <p style="font-size:14px;line-height:1.55;color:rgba(242,236,225,.75);max-width:440px">Do letramento inicial à construção de sistemas próprios. Cada nível entrega uma solução real aplicada ao trabalho do servidor.</p>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px dashed rgba(242,236,225,.2);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.6);display:flex;justify-content:space-between">
+          <span>04–30h por nível</span>
+          <span style="color:#E8805F">Ver detalhes →</span>
+        </div>
+      </a>
+
+      <a href="produtos.html#mulheres" style="padding:36px 32px;border-bottom:1px solid rgba(242,236,225,.25);display:flex;flex-direction:column;gap:14px;transition:background .3s;position:relative;color:inherit" class="preview-card">
+        <div style="position:absolute;top:24px;right:24px;border:1px solid #E8805F;color:#E8805F;padding:4px 10px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase">Piloto</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#E8805F">→ II · Validado · MMXXV</div>
+        <h4 style="font-family:'Fraunces',serif;font-weight:400;font-size:34px;letter-spacing:-.02em;line-height:1.05;color:var(--paper)">CLIC <em style="font-style:italic;color:#E8805F;font-variation-settings:'WONK' 1">Mulheres</em></h4>
+        <p style="font-size:14px;line-height:1.55;color:rgba(242,236,225,.75);max-width:440px">Formação em IA e automação para servidoras, com recorte de gênero e formação de rede. Quatro oficinas realizadas com alta adesão.</p>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px dashed rgba(242,236,225,.2);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.6);display:flex;justify-content:space-between">
+          <span>04–08h · pronto para escalar</span>
+          <span style="color:#E8805F">Ver detalhes →</span>
+        </div>
+      </a>
+
+      <a href="produtos.html#dh" style="padding:36px 32px;border-right:1px solid rgba(242,236,225,.25);display:flex;flex-direction:column;gap:14px;transition:background .3s;color:inherit" class="preview-card">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#E8805F">→ III · Recorte crítico</div>
+        <h4 style="font-family:'Fraunces',serif;font-weight:400;font-size:34px;letter-spacing:-.02em;line-height:1.05;color:var(--paper)">Direitos Humanos <em style="font-style:italic;color:#E8805F;font-variation-settings:'WONK' 1">&amp; Diversidade</em></h4>
+        <p style="font-size:14px;line-height:1.55;color:rgba(242,236,225,.75);max-width:440px">IA e automação em tensão com vieses, acessibilidade, raça, gênero e LGBTQIA+. Para defensorias, ouvidorias, secretarias e órgãos de controle.</p>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px dashed rgba(242,236,225,.2);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.6);display:flex;justify-content:space-between">
+          <span>08–20h · trilha temática</span>
+          <span style="color:#E8805F">Ver detalhes →</span>
+        </div>
+      </a>
+
+      <a href="produtos.html#palestras" style="padding:36px 32px;border-bottom:1px solid rgba(242,236,225,.25);display:flex;flex-direction:column;gap:14px;transition:background .3s;color:inherit" class="preview-card">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#E8805F">→ IV · Porta de entrada</div>
+        <h4 style="font-family:'Fraunces',serif;font-weight:400;font-size:34px;letter-spacing:-.02em;line-height:1.05;color:var(--paper)"><em style="font-style:italic;color:#E8805F;font-variation-settings:'WONK' 1">Palestras</em> &amp; keynotes</h4>
+        <p style="font-size:14px;line-height:1.55;color:rgba(242,236,225,.75);max-width:440px">Formato curto para abertura de ciclo, semana do servidor, congresso ou evento institucional. Ciclo comercial rápido.</p>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px dashed rgba(242,236,225,.2);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.6);display:flex;justify-content:space-between">
+          <span>45–90min · unitário ou pacote</span>
+          <span style="color:#E8805F">Ver detalhes →</span>
+        </div>
+      </a>
+
+      <a href="produtos.html#gabinete" style="grid-column:1 / -1;padding:40px 36px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;transition:background .3s;color:inherit;position:relative" class="preview-card">
+        <div style="position:absolute;top:24px;right:24px;border:1px solid #E8805F;color:#E8805F;padding:4px 10px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase">Sob medida</div>
+        <div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#E8805F;margin-bottom:14px">→ V · Alta densidade · baixo volume</div>
+          <h4 style="font-family:'Fraunces',serif;font-weight:400;font-size:38px;letter-spacing:-.02em;line-height:1.05;color:var(--paper)"><em style="font-style:italic;color:#E8805F;font-variation-settings:'WONK' 1">Gabinete</em> · cadeira ao lado</h4>
+        </div>
+        <div>
+          <p style="font-size:14px;line-height:1.55;color:rgba(242,236,225,.75);max-width:520px">Assessoria 1:1 ou para pequeno grupo — dirigente que precisa decidir sobre IA, servidor com projeto específico na mesa ou equipe de até cinco pessoas com um desafio comum. Três ritmos à escolha.</p>
+          <div style="margin-top:18px;padding-top:12px;border-top:1px dashed rgba(242,236,225,.2);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.6);display:flex;justify-content:space-between">
+            <span>3h–60h · pontual, sprint ou contínuo</span>
+            <span style="color:#E8805F">Ver detalhes →</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <div style="margin-top:40px;display:flex;justify-content:center">
+      <a href="produtos.html" style="display:inline-flex;align-items:center;gap:14px;padding:20px 36px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.15em;text-transform:uppercase;background:transparent;color:var(--paper);border:1px solid rgba(242,236,225,.5);text-decoration:none;transition:all .2s" onmouseover="this.style.background='#E8805F';this.style.borderColor='#E8805F';this.style.color='#141210'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(242,236,225,.5)';this.style.color='#F2ECE1'">
+        <span style="width:6px;height:6px;border-radius:50%;background:#E8805F"></span>
+        Ver portfólio completo
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .preview-card:hover{background:rgba(232,128,95,.06)}
+</style>
+
+
+<!-- MÉTODO -->
+<section class="method" id="metodo">
+  <div class="section-label"><span class="num">IV</span> Método em quatro tempos</div>
+  <div style="max-width:1300px;margin:60px auto 0">
+    <h2 style="font-family:'Fraunces',serif;font-weight:300;font-size:72px;line-height:.95;letter-spacing:-.035em;max-width:900px">
+      Um caminho desenhado para <em style="font-style:italic;color:var(--red);font-variation-settings:'WONK' 1">durar</em> depois que saímos da sala.
+    </h2>
+  </div>
+  <div class="method-flow">
+    <div class="method-step">
+      <div class="s-n">TEMPO · I</div>
+      <h5><em>Diagnóstico</em> institucional</h5>
+      <p>Mapeamos o ponto em que o órgão realmente está — não o ponto em que ele diz estar nos slides.</p>
+    </div>
+    <div class="method-step">
+      <div class="s-n">TEMPO · II</div>
+      <h5><em>Trilhas</em> sob medida</h5>
+      <p>Desenho de formação por público, por maturidade e por processo crítico. Sem pacote único.</p>
+    </div>
+    <div class="method-step">
+      <div class="s-n">TEMPO · III</div>
+      <h5><em>Prática</em> aplicada</h5>
+      <p>Cada turma trabalha em um problema real do órgão. Formação e entrega andam no mesmo passo.</p>
+    </div>
+    <div class="method-step">
+      <div class="s-n">TEMPO · IV</div>
+      <h5><em>Legado</em> documentado</h5>
+      <p>Publicamos métodos, modelos e decisões. O conhecimento fica na instituição, não na consultora.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-inner">
+    <div class="kicker">Fala conosco</div>
+    <h2>Há um Estado<br>inteiro <em>esperando</em><br>ser formado.</h2>
+    <p>Se você é responsável por formação, inovação ou transformação digital num órgão público, podemos começar com uma conversa de quarenta minutos — sem proposta pronta, sem deck.</p>
+    <div class="buttons">
+      <a class="btn primary" href="#"><span class="dot"></span>Agendar conversa</a>
+      <a class="btn ghost" href="#"><span class="dot"></span>Baixar catálogo em PDF</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div class="brand">
+      <h2>CLIC<span style="color:#E8805F">.</span></h2>
+      <p>Centro de Letramento, Inovação e Competências Digitais. Uma iniciativa independente, voltada à administração pública brasileira.</p>
+    </div>
+    <div>
+      <h6>Navegar</h6>
+      <ul>
+        <li>Manifesto</li>
+        <li>Pilares</li>
+        <li>Catálogo</li>
+        <li>Método</li>
+      </ul>
+    </div>
+    <div>
+      <h6>Materiais</h6>
+      <ul>
+        <li>Publicações</li>
+        <li>Biblioteca aberta</li>
+        <li>Notas técnicas</li>
+        <li>Governatech</li>
+      </ul>
+    </div>
+    <div>
+      <h6>Contato</h6>
+      <ul>
+        <li>contato@clic.gov.br</li>
+        <li>Brasília · DF</li>
+        <li>LinkedIn</li>
+        <li>WhatsApp</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>CLIC © MMXXVI — Todos os direitos do comum</span>
+    <span>Edição I · Volume I · Impressão digital</span>
+    <span>LGPD · Lei 14.129/21 · Decreto 9.203/17</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CLIC — Programa em seis níveis · Capacidade estatal em IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2ECE1;
+    --paper-2:#E8DFCE;
+    --ink:#141210;
+    --ink-2:#3A342B;
+    --red:#B3321A;
+    --red-hi:#E8805F;
+    --green:#3E4A2A;
+    --rule:rgba(20,18,16,.16);
+    --grid: rgba(20,18,16,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased}
+  body{
+    background-image:linear-gradient(to right, var(--grid) 1px, transparent 1px);
+    background-size: calc(100%/12) 100%;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.3;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode:multiply;
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* NAV */
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:28px 40px;border-bottom:1px solid var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    position:relative;z-index:10;background:var(--paper);
+  }
+  nav .meta{display:flex;gap:28px;color:var(--ink-2);flex-wrap:wrap}
+  nav .meta span::before{content:"→ ";color:var(--red)}
+  nav .meta .active{color:var(--red)}
+  .wordmark{font-family:'Fraunces',serif;font-weight:400;font-style:italic;font-size:22px;letter-spacing:-.02em}
+  .wordmark b{font-style:normal;font-weight:600;letter-spacing:.3em;font-size:14px;margin-right:6px;vertical-align:1px}
+
+  /* HERO */
+  .intro{padding:80px 40px 60px;max-width:1400px;margin:0 auto;position:relative}
+  .breadcrumb{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-2);margin-bottom:48px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  }
+  .breadcrumb a{color:var(--ink-2)}
+  .breadcrumb a:hover{color:var(--red)}
+  .breadcrumb .sep,.breadcrumb .current{color:var(--red)}
+
+  .intro .kicker{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--red);margin-bottom:32px;display:flex;align-items:center;gap:14px;
+  }
+  .intro .kicker::before{content:"";width:48px;height:1px;background:var(--red)}
+
+  .intro h1{
+    font-family:'Fraunces',serif;font-weight:300;
+    font-size:clamp(48px,8vw,128px);line-height:.9;letter-spacing:-.045em;
+    max-width:1200px;
+  }
+  .intro h1 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+
+  .hero-split{
+    margin-top:56px;display:grid;grid-template-columns:1.5fr 1fr;gap:80px;align-items:start;
+    border-top:1px solid var(--rule);padding-top:40px;
+  }
+  .hero-split .lede p{font-size:19px;line-height:1.55;color:var(--ink-2);font-weight:300;margin-bottom:14px}
+  .hero-split .lede strong{color:var(--ink);font-weight:500}
+  .hero-card{
+    border:1px solid var(--ink);padding:28px;background:rgba(255,255,255,.35);
+  }
+  .hero-card .card-k{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--red);margin-bottom:16px;
+  }
+  .hero-card dl{display:grid;grid-template-columns:auto 1fr;gap:12px 20px;font-family:'IBM Plex Mono',monospace;font-size:11px}
+  .hero-card dt{color:var(--ink-2);text-transform:uppercase;letter-spacing:.12em}
+  .hero-card dd{color:var(--ink);font-weight:500;font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;letter-spacing:0;text-transform:none;line-height:1.45}
+  .hero-card dd em{font-style:italic;color:var(--red);font-family:'Fraunces',serif;font-weight:400}
+
+  .meta-bar{
+    margin-top:48px;padding:18px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    display:flex;gap:48px;flex-wrap:wrap;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  }
+  .meta-bar span b{color:var(--red);margin-right:8px}
+
+  /* TESE */
+  .thesis{max-width:1400px;margin:0 auto;padding:80px 40px;border-bottom:1px solid var(--rule)}
+  .thesis-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:80px;align-items:start}
+  .thesis-k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+  .thesis-k::before{content:"";width:40px;height:1px;background:var(--red)}
+  .thesis h3{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(36px,4.5vw,64px);line-height:.98;letter-spacing:-.03em}
+  .thesis h3 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .thesis .body{font-size:17px;line-height:1.65;color:var(--ink)}
+  .thesis .body p{margin-bottom:14px}
+  .thesis .body strong{font-weight:500}
+
+  /* SEÇÃO BASE */
+  .section{max-width:1400px;margin:0 auto;padding:100px 40px;border-bottom:1px solid var(--rule);position:relative}
+  .section-head{display:grid;grid-template-columns:120px 1fr;gap:32px;margin-bottom:60px;align-items:start}
+  .section-roman{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:80px;color:var(--red);
+    line-height:.8;letter-spacing:-.04em;font-variation-settings:"WONK" 1;
+  }
+  .section-head .sub{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);margin-bottom:16px}
+  .section-head h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(40px,5.5vw,76px);line-height:.96;letter-spacing:-.035em;margin-bottom:20px}
+  .section-head h2 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .section-head p{font-size:17px;line-height:1.55;color:var(--ink-2);max-width:760px;font-weight:300}
+
+  /* VISÃO GERAL DOS 6 NÍVEIS - escada horizontal */
+  .ladder{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-bottom:60px;background:var(--rule);padding:2px;border:1px solid var(--ink)}
+  .rung{
+    padding:20px 14px;background:var(--paper);
+    display:flex;flex-direction:column;gap:8px;min-height:140px;
+    transition:all .3s;cursor:pointer;position:relative;
+  }
+  .rung:hover{background:var(--ink);color:var(--paper)}
+  .rung:hover .rung-n,.rung:hover .rung-name{color:var(--paper)}
+  .rung:hover .rung-title{color:var(--paper)}
+  .rung:hover .rung-hrs{color:rgba(242,236,225,.6)}
+  .rung-n{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:44px;line-height:.8;color:var(--red);letter-spacing:-.03em;font-variation-settings:"WONK" 1}
+  .rung-name{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2)}
+  .rung-title{font-family:'Fraunces',serif;font-weight:400;font-size:15px;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+  .rung-hrs{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--ink-2);margin-top:auto;padding-top:8px;border-top:1px dashed var(--rule)}
+  .rung.featured{background:rgba(179,50,26,.06)}
+  .rung.featured::before{content:"a virada";position:absolute;top:6px;right:8px;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--red);letter-spacing:.15em;text-transform:uppercase}
+
+  /* DETALHE DE CADA NÍVEL */
+  .level{
+    max-width:1400px;margin:0 auto;padding:80px 40px;
+    display:grid;grid-template-columns:160px 1fr 400px;gap:48px;
+    border-bottom:1px solid var(--rule);
+  }
+  .level-anchor{padding-top:8px}
+  .level-anchor .big-roman{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:120px;line-height:.8;color:var(--red);
+    letter-spacing:-.04em;font-variation-settings:"WONK" 1;
+  }
+  .level-anchor .a-lbl{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-2);margin-top:14px;
+  }
+  .level-main h3{
+    font-family:'Fraunces',serif;font-weight:300;font-size:clamp(32px,4vw,56px);line-height:.98;letter-spacing:-.03em;margin-bottom:14px;
+  }
+  .level-main h3 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .level-main .tag{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:14px;
+  }
+  .level-main .lead{font-size:17px;line-height:1.6;color:var(--ink-2);margin-bottom:28px;font-weight:300;max-width:640px}
+  .level-main .learn{
+    border-top:1px solid var(--rule);padding-top:20px;margin-top:20px;
+  }
+  .level-main .learn h5{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:12px;
+  }
+  .level-main .learn ul{list-style:none;padding:0;margin:0}
+  .level-main .learn li{
+    font-size:15px;line-height:1.55;color:var(--ink);padding:8px 0 8px 24px;position:relative;
+    border-bottom:1px dashed var(--rule);
+  }
+  .level-main .learn li:last-child{border-bottom:none}
+  .level-main .learn li::before{
+    content:"→";position:absolute;left:0;top:8px;color:var(--red);font-family:'Fraunces',serif;font-style:italic;
+  }
+  .level-main .learn li strong{color:var(--ink);font-weight:500}
+
+  .level-card{
+    border:1px solid var(--ink);padding:28px;background:rgba(255,255,255,.3);
+    align-self:start;position:sticky;top:20px;
+  }
+  .level-card .lc-k{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:18px}
+  .level-card dl{display:grid;grid-template-columns:100px 1fr;gap:12px 16px;font-family:'IBM Plex Mono',monospace;font-size:11px}
+  .level-card dt{color:var(--ink-2);text-transform:uppercase;letter-spacing:.12em}
+  .level-card dd{color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:13px;letter-spacing:0;text-transform:none;line-height:1.5;font-weight:400}
+  .level-card dd strong{font-weight:500}
+  .level-card dd em{font-style:italic;color:var(--red);font-family:'Fraunces',serif;font-weight:400}
+  .level-card .example{
+    margin-top:20px;padding-top:16px;border-top:1px dashed var(--rule);
+  }
+  .level-card .example b{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+  .level-card .example p{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:16px;line-height:1.4;color:var(--ink);letter-spacing:-.01em}
+
+  /* Variante escura pra Nível VI */
+  .level.dark{background:var(--ink);color:var(--paper);margin:0 -40px;padding:80px 80px;border-bottom:none}
+  .level.dark .level-anchor .big-roman{color:var(--red-hi)}
+  .level.dark .level-anchor .a-lbl{color:rgba(242,236,225,.6)}
+  .level.dark .level-main h3{color:var(--paper)}
+  .level.dark .level-main h3 em{color:var(--red-hi)}
+  .level.dark .level-main .tag{color:var(--red-hi)}
+  .level.dark .level-main .lead{color:rgba(242,236,225,.82)}
+  .level.dark .level-main .learn{border-color:rgba(242,236,225,.25)}
+  .level.dark .level-main .learn h5{color:var(--red-hi)}
+  .level.dark .level-main .learn li{color:var(--paper);border-color:rgba(242,236,225,.15)}
+  .level.dark .level-main .learn li::before{color:var(--red-hi)}
+  .level.dark .level-card{background:rgba(242,236,225,.04);border-color:rgba(242,236,225,.3)}
+  .level.dark .level-card .lc-k{color:var(--red-hi)}
+  .level.dark .level-card dt{color:rgba(242,236,225,.6)}
+  .level.dark .level-card dd{color:var(--paper)}
+  .level.dark .level-card dd em{color:var(--red-hi)}
+  .level.dark .level-card .example{border-color:rgba(242,236,225,.2)}
+  .level.dark .level-card .example b{color:var(--red-hi)}
+  .level.dark .level-card .example p{color:var(--paper)}
+
+  /* PULLQUOTE */
+  .pullquote{
+    max-width:1400px;margin:0 auto;padding:80px 40px;
+    text-align:center;
+    border-bottom:1px solid var(--rule);
+  }
+  .pullquote p{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:clamp(32px,4vw,56px);
+    line-height:1.15;letter-spacing:-.025em;color:var(--ink);max-width:1100px;margin:0 auto;
+    padding:48px 0;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
+  }
+  .pullquote p b{font-style:normal;font-weight:400;color:var(--red)}
+  .pullquote p::before,.pullquote p::after{content:"❝";color:var(--red);font-size:.5em;margin:0 14px;vertical-align:14px}
+  .pullquote p::after{content:"❞"}
+
+  /* PLATAFORMA DE CONTINUIDADE */
+  .platform-section{
+    max-width:1400px;margin:0 auto;padding:100px 40px;border-bottom:1px solid var(--rule);
+  }
+  .platform-hero{
+    padding:48px;border:1px solid var(--ink);background:rgba(255,255,255,.3);
+    display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;
+    position:relative;
+  }
+  .platform-hero::before{
+    content:"";position:absolute;top:-1px;left:-1px;right:-1px;height:4px;background:var(--red);
+  }
+  .platform-hero .ph-k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+  .platform-hero h3{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(32px,4vw,52px);line-height:1;letter-spacing:-.025em;margin-bottom:20px}
+  .platform-hero h3 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .platform-hero p{font-size:15px;line-height:1.6;color:var(--ink)}
+  .platform-feats{display:grid;grid-template-columns:1fr 1fr;gap:24px 28px}
+  .platform-feats .pf b{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--red);margin-bottom:8px;font-weight:500}
+  .platform-feats .pf p{font-size:13.5px;line-height:1.55;color:var(--ink-2)}
+
+  /* HONESTIDADE (versão compacta) */
+  .honesty-mini{
+    max-width:1400px;margin:60px auto 0;padding:32px 40px;
+    border-left:3px solid var(--red);background:var(--paper-2);
+    display:grid;grid-template-columns:180px 1fr;gap:40px;align-items:start;
+  }
+  .honesty-mini .hk{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);border:1px solid var(--red);padding:6px 10px;display:inline-block}
+  .honesty-mini .hbody{font-size:14.5px;line-height:1.65;color:var(--ink)}
+  .honesty-mini .hbody strong{color:var(--red);font-weight:500}
+
+  /* FORMATOS */
+  .formats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--ink);margin-top:20px}
+  .format{
+    padding:40px 32px;border-right:1px solid var(--ink);display:flex;flex-direction:column;gap:16px;min-height:360px;
+    background:rgba(255,255,255,.25);transition:all .3s;position:relative;
+  }
+  .format:last-child{border-right:none}
+  .format:hover{background:var(--ink);color:var(--paper)}
+  .format:hover .format-n{color:var(--paper)}
+  .format:hover .format-meta{border-color:rgba(242,236,225,.3);color:rgba(242,236,225,.7)}
+  .format:hover .format-include{border-color:rgba(242,236,225,.3)}
+  .format:hover .format-include li{color:rgba(242,236,225,.85)}
+  .format-n{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:72px;line-height:.8;color:var(--red);letter-spacing:-.04em;font-variation-settings:"WONK" 1}
+  .format h4{font-family:'Fraunces',serif;font-weight:400;font-size:30px;letter-spacing:-.015em;margin-top:8px;line-height:1.05}
+  .format h4 em{font-style:italic;color:var(--red)}
+  .format:hover h4 em{color:var(--red-hi)}
+  .format p.format-desc{font-size:14px;line-height:1.55;margin-bottom:8px}
+  .format-include{
+    border-top:1px dashed var(--rule);padding-top:14px;margin-top:4px;list-style:none;padding-left:0;
+    transition:border-color .3s;
+  }
+  .format-include li{
+    padding:6px 0 6px 18px;position:relative;font-size:13px;line-height:1.45;color:var(--ink-2);transition:color .3s;
+  }
+  .format-include li::before{content:"→";position:absolute;left:0;color:var(--red);font-family:'Fraunces',serif;font-style:italic}
+  .format:hover .format-include li::before{color:var(--red-hi)}
+  .format-meta{
+    margin-top:auto;padding-top:14px;border-top:1px dashed var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);transition:all .3s;
+  }
+
+  /* CTA */
+  .cta{padding:120px 40px;text-align:center;max-width:1300px;margin:0 auto;position:relative;overflow:hidden}
+  .cta::before{
+    content:"PROGRAMA";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:clamp(220px,28vw,400px);
+    color:var(--red);opacity:.05;letter-spacing:-.05em;pointer-events:none;z-index:0;font-variation-settings:"WONK" 1;
+  }
+  .cta-inner{position:relative;z-index:2}
+  .cta-k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:28px;display:flex;align-items:center;justify-content:center;gap:12px}
+  .cta-k::before,.cta-k::after{content:"";width:40px;height:1px;background:var(--red)}
+  .cta h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(44px,6vw,88px);line-height:.98;letter-spacing:-.035em;max-width:900px;margin:0 auto}
+  .cta h2 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .buttons{margin-top:48px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:14px;padding:20px 36px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;border:1px solid var(--ink);transition:all .2s;cursor:pointer}
+  .btn.primary{background:var(--ink);color:var(--paper)}
+  .btn.primary:hover{background:var(--red);border-color:var(--red)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{background:var(--ink);color:var(--paper)}
+  .btn .dot{width:6px;height:6px;border-radius:50%;background:var(--red)}
+  .btn.primary .dot{background:var(--paper)}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:var(--paper);padding:48px 40px 28px}
+  .foot-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:24px}
+  .foot-inner .wm{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:32px;letter-spacing:-.02em}
+  .foot-inner .wm span{color:var(--red-hi)}
+  .foot-inner .meta{color:rgba(242,236,225,.6);display:flex;gap:24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;flex-wrap:wrap}
+  .foot-inner .meta span::before{content:"→ ";color:var(--red-hi)}
+  .foot-bottom{max-width:1400px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(242,236,225,.2);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.5)}
+
+  /* RESPONSIVE */
+  @media (max-width:900px){
+    nav{padding:20px 24px;flex-direction:column;gap:12px;align-items:flex-start}
+    nav .meta{gap:14px;font-size:10px}
+    .intro,.thesis,.section,.cta,.platform-section,.pullquote{padding-left:24px;padding-right:24px}
+    .hero-split{grid-template-columns:1fr;gap:40px}
+    .thesis-grid{grid-template-columns:1fr;gap:32px}
+    .section-head{grid-template-columns:1fr;gap:16px}
+    .section-roman{font-size:56px}
+    .ladder{grid-template-columns:1fr 1fr;gap:1px;padding:1px}
+    .rung{min-height:100px}
+    .level{grid-template-columns:1fr;gap:32px;padding:48px 24px}
+    .level.dark{margin:0 -24px;padding:48px 24px}
+    .level-card{position:static}
+    .platform-hero{padding:28px;grid-template-columns:1fr;gap:32px}
+    .platform-feats{grid-template-columns:1fr}
+    .honesty-mini{grid-template-columns:1fr;gap:16px;padding:24px 20px}
+    .formats-grid{grid-template-columns:1fr}
+    .format{border-right:none;border-bottom:1px solid var(--ink);min-height:auto}
+    .format:last-child{border-bottom:none}
+    .meta-bar{gap:16px}
+  }
+  .fadeup{opacity:0;transform:translateY(20px);animation:fu 1s .1s forwards cubic-bezier(.2,.7,.2,1)}
+  @keyframes fu{to{opacity:1;transform:none}}
+  html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wordmark"><a href="index.html"><b>◉ CLIC</b> <em>— Centro de letramento digital</em></a></div>
+  <div class="meta">
+    <span><a href="index.html#manifesto">Manifesto</a></span>
+    <span class="active"><a href="produtos.html" style="color:inherit">Produtos</a></span>
+    <span><a href="dados.html">Dados</a></span>
+    <span><a href="index.html#contato">Contato</a></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="intro">
+  <div class="breadcrumb fadeup">
+    <a href="index.html">Início</a>
+    <span class="sep">/</span>
+    <a href="produtos.html">Produtos</a>
+    <span class="sep">/</span>
+    <span class="current">Programa em seis níveis · Edição I · MMXXVI</span>
+  </div>
+
+  <div class="kicker fadeup">Produto 01 · Produto carro-chefe · Estrutural</div>
+
+  <h1 class="fadeup">
+    Do <em>letramento</em><br>
+    inicial à construção<br>
+    de <em>sistemas</em>.
+  </h1>
+
+  <div class="hero-split">
+    <div class="lede">
+      <p>O <strong>Programa em seis níveis</strong> é o produto estrutural do CLIC: uma escada progressiva de capacitação em Inteligência Artificial que leva servidoras e servidores não técnicos do primeiro contato com a ferramenta até a <strong>construção autônoma de sistemas funcionais</strong> — sem passar pela dependência de fornecedor externo.</p>
+      <p>Não é um curso. É uma <strong>estratégia de capacidade estatal</strong>: cada nível entrega uma solução real aplicada ao contexto de trabalho do participante, registrada em plataforma de continuidade e disponível para reaplicação em outras áreas do órgão.</p>
+    </div>
+    <div class="hero-card">
+      <div class="card-k">→ Ficha rápida</div>
+      <dl>
+        <dt>Níveis</dt><dd>06 progressivos</dd>
+        <dt>Arco</dt><dd>Do <em>letramento</em> à <em>construção</em></dd>
+        <dt>Carga</dt><dd>04 a 30h por nível</dd>
+        <dt>Público</dt><dd>Servidoras/es não técnicos, gestão, áreas operacionais</dd>
+        <dt>Entrega</dt><dd>Uma solução real por nível, aplicada ao trabalho</dd>
+        <dt>Formatos</dt><dd>Piloto · Completo · Escala</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="meta-bar">
+    <span><b>Diretriz central</b> cada participante entrega uma solução real</span>
+    <span><b>Stack</b> IA generativa + no-code + Claude Code</span>
+    <span><b>Plataforma</b> registro e reaplicação institucional</span>
+    <span><b>Alinhamento</b> LGPD · Lei 14.129/21 · PBIA</span>
+  </div>
+</section>
+
+<!-- TESE -->
+<section class="thesis">
+  <div class="thesis-grid">
+    <div>
+      <div class="thesis-k">A tese do programa</div>
+      <h3>Capacidade <em>estatal</em> em IA não se terceiriza — constrói-se.</h3>
+    </div>
+    <div class="body">
+      <p>O Estado brasileiro está numa corrida — financiada, acelerada, frequentemente bem-intencionada — para implantar IA em todos os andares do serviço público. O problema não é a corrida: é correr sem saber pra onde.</p>
+      <p>Servidoras e servidores são convocados a "usar IA" sem jamais terem sido formados para entender o que a IA decide em seu nome. Gestores assinam contratos de plataformas cujos modelos não conseguem auditar. O resultado é previsível: <strong>superfaturamento, vendor lock-in, decisões opacas, perda de soberania sobre dados</strong>.</p>
+      <p>O Programa em seis níveis propõe outra rota: formar, de dentro, quadros capazes de <strong>ler, operar, auditar e — principalmente — construir</strong> a tecnologia que o órgão adota. Cada nível é um degrau concreto, com entregável real, em direção à autonomia técnica institucional.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VISÃO GERAL - ESCADA -->
+<section class="section" id="visao-geral">
+  <div class="section-head">
+    <div class="section-roman">I.</div>
+    <div>
+      <div class="sub">Visão geral · a escada dos seis níveis</div>
+      <h2>Seis degraus, uma <em>trajetória única</em>.</h2>
+      <p>Cada nível pressupõe o anterior e aprofunda uma camada. Do letramento mais básico (sem qualquer requisito prévio) até a construção de sistemas completos com apoio de agentes de IA — a virada que transforma servidoras em autoras de tecnologia dentro do Estado.</p>
+    </div>
+  </div>
+
+  <div class="ladder">
+    <a href="#nivel-1" class="rung">
+      <div class="rung-n">I.</div>
+      <div class="rung-name">Letramento</div>
+      <div class="rung-title">Aplicação inicial</div>
+      <div class="rung-hrs">04–08h</div>
+    </a>
+    <a href="#nivel-2" class="rung">
+      <div class="rung-n">II.</div>
+      <div class="rung-name">Dados</div>
+      <div class="rung-title">Integração com bases</div>
+      <div class="rung-hrs">08–12h</div>
+    </a>
+    <a href="#nivel-3" class="rung">
+      <div class="rung-n">III.</div>
+      <div class="rung-name">Automação</div>
+      <div class="rung-title">Fluxos de processo</div>
+      <div class="rung-hrs">12–16h</div>
+    </a>
+    <a href="#nivel-4" class="rung">
+      <div class="rung-n">IV.</div>
+      <div class="rung-name">Assistentes</div>
+      <div class="rung-title">Lógica estruturada</div>
+      <div class="rung-hrs">16–20h</div>
+    </a>
+    <a href="#nivel-5" class="rung">
+      <div class="rung-n">V.</div>
+      <div class="rung-name">Soluções</div>
+      <div class="rung-title">Múltiplos agentes</div>
+      <div class="rung-hrs">20h+</div>
+    </a>
+    <a href="#nivel-6" class="rung featured">
+      <div class="rung-n">VI.</div>
+      <div class="rung-name">Sistemas</div>
+      <div class="rung-title">Programação com IA</div>
+      <div class="rung-hrs">20–30h</div>
+    </a>
+  </div>
+</section>
+
+<!-- NÍVEL 1 -->
+<div class="level" id="nivel-1">
+  <div class="level-anchor">
+    <div class="big-roman">I.</div>
+    <div class="a-lbl">→ Nível um</div>
+  </div>
+  <div class="level-main">
+    <div class="tag">Letramento e aplicação inicial</div>
+    <h3>Primeiro <em>contato</em> prático com IA.</h3>
+    <p class="lead">Destinado a quem nunca abriu uma IA ou só conhece por ouvir falar. A meta não é dominar o campo — é <strong>desarmar o medo e usar no mesmo dia</strong>. Ao final, a pessoa consegue aplicar a IA numa tarefa real da sua rotina.</p>
+
+    <div class="learn">
+      <h5>O que aprende</h5>
+      <ul>
+        <li>Como funciona IA no trabalho, <strong>sem tecnicismo</strong> — o suficiente para operar com método.</li>
+        <li>Estrutura básica de prompt: <strong>método PTCF + Limites</strong> (persona, tarefa, contexto, formato, limites).</li>
+        <li>Criação do primeiro <strong>agente simples</strong> orientado a uma tarefa concreta.</li>
+        <li>Desenvolvimento de uma <strong>aplicação no-code</strong> funcional para uso imediato.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="level-card">
+    <div class="lc-k">→ Ficha do nível</div>
+    <dl>
+      <dt>Pré-requisito</dt><dd><strong>Nenhum.</strong> Servidor sem conhecimento prévio em IA.</dd>
+      <dt>Stack</dt><dd>ChatGPT · Microsoft Copilot · Ferramenta no-code (Glide, Bubble)</dd>
+      <dt>Entregável</dt><dd>1 agente + 1 aplicação funcional (front-end)</dd>
+      <dt>Conclusão</dt><dd>Usa o agente numa tarefa real do dia a dia.</dd>
+      <dt>Esforço</dt><dd>04 a 08 horas · uma oficina</dd>
+    </dl>
+    <div class="example">
+      <b>Exemplo aplicado</b>
+      <p>Agente para organizar e resumir processos do SEI; app simples de controle de demandas internas.</p>
+    </div>
+  </div>
+</div>
+
+<!-- NÍVEL 2 -->
+<div class="level" id="nivel-2">
+  <div class="level-anchor">
+    <div class="big-roman">II.</div>
+    <div class="a-lbl">→ Nível dois</div>
+  </div>
+  <div class="level-main">
+    <div class="tag">Integração com dados</div>
+    <h3>IA com <em>lastro</em> nos dados do órgão.</h3>
+    <p class="lead">A IA sozinha é interessante. A IA conectada aos dados do seu trabalho é útil. Neste nível, a participante aprende a <strong>estruturar dados para uso com IA</strong> — o passo que transforma curiosidade em ferramenta de rotina.</p>
+
+    <div class="learn">
+      <h5>O que aprende</h5>
+      <ul>
+        <li>Como <strong>estruturar dados</strong> para uso com IA — o que faz uma base ser útil ou inútil para análise.</li>
+        <li>Conexão de IA com <strong>planilhas e bases simples</strong> (o serviço público roda em planilha — use bem).</li>
+        <li>Introdução à <strong>lógica de backend</strong> sem programação pesada: entradas, processamento, saídas.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="level-card">
+    <div class="lc-k">→ Ficha do nível</div>
+    <dl>
+      <dt>Pré-requisito</dt><dd>Conclusão do Nível I (ou domínio básico de IA).</dd>
+      <dt>Stack</dt><dd>Google Sheets · Excel · Make · Zapier · APIs via interface visual</dd>
+      <dt>Entregável</dt><dd>Aplicação conectada a dados reais · fluxo entrada → processamento → saída</dd>
+      <dt>Conclusão</dt><dd>Alimenta dados reais e obtém saída automatizada útil.</dd>
+      <dt>Esforço</dt><dd>08 a 12 horas</dd>
+    </dl>
+    <div class="example">
+      <b>Exemplo aplicado</b>
+      <p>Sistema que organiza lista de processos e gera classificação automática; integração de planilha de controle com agente de análise.</p>
+    </div>
+  </div>
+</div>
+
+<!-- NÍVEL 3 -->
+<div class="level" id="nivel-3">
+  <div class="level-anchor">
+    <div class="big-roman">III.</div>
+    <div class="a-lbl">→ Nível três</div>
+  </div>
+  <div class="level-main">
+    <div class="tag">Automação de processos</div>
+    <h3>Tarefas manuais viram <em>fluxos automáticos</em>.</h3>
+    <p class="lead">A partir daqui, o programa começa a devolver <strong>horas concretas</strong> ao servidor. O participante mapeia atividades repetitivas da própria rotina e constrói fluxos automatizados que eliminam o trabalho manual ou reduzem retrabalho significativo.</p>
+
+    <div class="learn">
+      <h5>O que aprende</h5>
+      <ul>
+        <li>Identificação de <strong>tarefas repetitivas e automatizáveis</strong> no próprio trabalho.</li>
+        <li>Construção de <strong>fluxos automatizados completos</strong> (não apenas tarefa única).</li>
+        <li>Integração entre <strong>múltiplas etapas operacionais</strong> — e-mail, planilha, sistema interno.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="level-card">
+    <div class="lc-k">→ Ficha do nível</div>
+    <dl>
+      <dt>Pré-requisito</dt><dd>Nível II concluído.</dd>
+      <dt>Stack</dt><dd>Make · Zapier · integrações com e-mail, planilhas e sistemas internos</dd>
+      <dt>Entregável</dt><dd>Automação funcional de um processo real · redução direta de atividade manual</dd>
+      <dt>Conclusão</dt><dd>Elimina ou reduz significativamente uma tarefa manual do fluxo.</dd>
+      <dt>Esforço</dt><dd>12 a 16 horas</dd>
+    </dl>
+    <div class="example">
+      <b>Exemplo aplicado</b>
+      <p>Automação de triagem inicial de demandas; fluxo automático de organização e resposta de solicitações internas.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PULLQUOTE -->
+<div class="pullquote">
+  <p>Quem organiza o pensamento, <b>organiza a tecnologia</b>.</p>
+</div>
+
+<!-- NÍVEL 4 -->
+<div class="level" id="nivel-4">
+  <div class="level-anchor">
+    <div class="big-roman">IV.</div>
+    <div class="a-lbl">→ Nível quatro</div>
+  </div>
+  <div class="level-main">
+    <div class="tag">Assistentes estruturados</div>
+    <h3>Assistentes com <em>regras</em> e <em>critérios</em>.</h3>
+    <p class="lead">Aqui a participante sai da lógica de prompt-único para <strong>construir assistentes com lógica estruturada</strong>: com regras de decisão, padrões, contexto institucional embutido. Assistentes que apoiam análise e execução de forma recorrente — usados pela equipe, não apenas pela autora.</p>
+
+    <div class="learn">
+      <h5>O que aprende</h5>
+      <ul>
+        <li>Construção de <strong>assistentes com lógica estruturada</strong> (não mais um prompt, mas um sistema de regras).</li>
+        <li>Definição de <strong>critérios e regras de decisão</strong> reproduzíveis.</li>
+        <li>Organização de <strong>fluxos mais complexos</strong> de apoio à análise e execução de atividades.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="level-card">
+    <div class="lc-k">→ Ficha do nível</div>
+    <dl>
+      <dt>Pré-requisito</dt><dd>Nível III concluído.</dd>
+      <dt>Stack</dt><dd>ChatGPT (Custom GPTs) · prompts avançados · integração com bases e automações anteriores</dd>
+      <dt>Entregável</dt><dd>Assistente funcional com uso contínuo · apoia decisão ou análise</dd>
+      <dt>Conclusão</dt><dd>Assistente passa a ser utilizado de forma recorrente pela área.</dd>
+      <dt>Esforço</dt><dd>16 a 20 horas</dd>
+    </dl>
+    <div class="example">
+      <b>Exemplo aplicado</b>
+      <p>Assistente para apoio à análise de processos administrativos; assistente que orienta decisões com base em critérios definidos.</p>
+    </div>
+  </div>
+</div>
+
+<!-- NÍVEL 5 -->
+<div class="level" id="nivel-5">
+  <div class="level-anchor">
+    <div class="big-roman">V.</div>
+    <div class="a-lbl">→ Nível cinco</div>
+  </div>
+  <div class="level-main">
+    <div class="tag">Soluções integradas · múltiplos agentes</div>
+    <h3>De <em>solução individual</em> a sistema de área.</h3>
+    <p class="lead">Neste nível, a participante deixa de construir peças isoladas e começa a <strong>orquestrar</strong>: integra múltiplos assistentes e automações num sistema coerente, que resolve uma categoria inteira de demandas — e pode ser <strong>reaplicado por outras áreas</strong> do órgão.</p>
+
+    <div class="learn">
+      <h5>O que aprende</h5>
+      <ul>
+        <li><strong>Orquestração de múltiplos agentes</strong> trabalhando em conjunto.</li>
+        <li>Integração de <strong>diferentes soluções</strong> (agentes + automações + dados) num sistema funcional.</li>
+        <li>Estruturação de <strong>soluções reutilizáveis</strong> — a partir daqui, o que uma pessoa constrói serve a outras áreas.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="level-card">
+    <div class="lc-k">→ Ficha do nível</div>
+    <dl>
+      <dt>Pré-requisito</dt><dd>Nível IV concluído.</dd>
+      <dt>Stack</dt><dd>Combinação de IA + automação + dados · arquitetura visual de múltiplos agentes</dd>
+      <dt>Entregável</dt><dd>Sistema funcional integrando múltiplos componentes · solução replicável para outras áreas</dd>
+      <dt>Conclusão</dt><dd>A solução pode ser reaplicada em outras áreas do órgão.</dd>
+      <dt>Esforço</dt><dd>20+ horas</dd>
+    </dl>
+    <div class="example">
+      <b>Exemplo aplicado</b>
+      <p>Fluxo completo: entrada de demanda → triagem → análise → resposta. Sistema que integra dados, automação e decisão assistida.</p>
+    </div>
+  </div>
+</div>
+
+<!-- NÍVEL 6 - A VIRADA (DARK) -->
+<div class="level dark" id="nivel-6">
+  <div class="level-anchor">
+    <div class="big-roman">VI.</div>
+    <div class="a-lbl">→ A virada</div>
+  </div>
+  <div class="level-main">
+    <div class="tag">Programação com IA · construção de sistemas</div>
+    <h3>A servidora deixa de <em>montar</em>. Passa a <em>construir</em>.</h3>
+    <p class="lead">Aqui acontece a virada conceitual do programa. Com ferramentas como Claude Code, Cursor, v0 e Codex, a participante aprende a <strong>programar sem programar</strong>: descreve o sistema em linguagem natural e o agente escreve código, edita arquivos, integra sistemas, testa e corrige automaticamente. Não é mais "usar ferramenta" — é <strong>reduzir, em ato, a dependência de desenvolvimento externo</strong>.</p>
+
+    <div class="learn">
+      <h5>O que aprende</h5>
+      <ul>
+        <li>Como <strong>"programar sem programar"</strong> — descrever problema em linguagem natural e gerar sistema funcional.</li>
+        <li>Construção de <strong>sistemas completos</strong> (não mais automações): interface, lógica, dados.</li>
+        <li>Uso de <strong>agentes de código</strong> para criar, revisar e evoluir aplicações de forma iterativa.</li>
+        <li>Noções básicas de <strong>estrutura de software</strong> — sem virar dev, o suficiente pra dialogar com a TI do órgão.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="level-card">
+    <div class="lc-k">→ Ficha do nível</div>
+    <dl>
+      <dt>Pré-requisito</dt><dd>Nível V concluído · familiaridade com automações · capacidade de estruturar problema com clareza.</dd>
+      <dt>Stack</dt><dd><em>Claude Code</em> · Cursor · v0.dev · OpenAI Codex</dd>
+      <dt>Entregável</dt><dd>Sistema funcional simples (não só automação): painel interno, sistema de acompanhamento, ferramenta de apoio à decisão</dd>
+      <dt>Conclusão</dt><dd>Descreve um problema, gera aplicação funcional com IA e itera sem depender de desenvolvedor.</dd>
+      <dt>Esforço</dt><dd>20 a 30 horas</dd>
+    </dl>
+    <div class="example">
+      <b>Exemplo aplicado</b>
+      <p>Sistema que recebe demanda, classifica automaticamente, consulta base de dados e gera sugestão de encaminhamento. Ou ferramenta interna de análise de processos com interface própria.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PLATAFORMA DE CONTINUIDADE -->
+<section class="platform-section" id="plataforma">
+  <div class="section-head">
+    <div class="section-roman">II.</div>
+    <div>
+      <div class="sub">Plataforma de continuidade · além da oficina</div>
+      <h2>O que acontece <em>depois</em> que o programa termina.</h2>
+      <p>O que diferencia o Programa em seis níveis de um curso avulso é que as soluções desenvolvidas não morrem na oficina. Elas alimentam uma <strong>plataforma institucional de continuidade</strong> que transforma aprendizagem individual em capacidade organizacional.</p>
+    </div>
+  </div>
+
+  <div class="platform-hero">
+    <div>
+      <div class="ph-k">→ Plataforma de continuidade</div>
+      <h3>Aprendizagem <em>individual</em> vira<br>capacidade <em>organizacional</em>.</h3>
+      <p>Cada solução construída nos seis níveis é registrada de forma estruturada, organizada por tipo, uso e impacto, e disponibilizada para reaplicação dentro do órgão. O servidor não constrói só pra ele — constrói pra instituição.</p>
+    </div>
+    <div class="platform-feats">
+      <div class="pf">
+        <b>→ Registro estruturado</b>
+        <p>Cada solução catalogada por tipo, uso e impacto — pronta para auditoria e para réplica.</p>
+      </div>
+      <div class="pf">
+        <b>→ Reaplicação entre áreas</b>
+        <p>O que uma unidade resolveu vira insumo para as outras — sem reconstruir do zero.</p>
+      </div>
+      <div class="pf">
+        <b>→ Base institucional</b>
+        <p>Acervo vivo de conhecimento aplicado em IA, dentro do órgão — não em consultoria externa.</p>
+      </div>
+      <div class="pf">
+        <b>→ Padronização de boas práticas</b>
+        <p>Soluções registradas viram método — não folclore individual — e evoluem com o uso coletivo.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- HONESTIDADE MINI -->
+  <div class="honesty-mini">
+    <div>
+      <span class="hk">→ Nota honesta</span>
+    </div>
+    <div class="hbody">
+      O que se constrói nos seis níveis, especialmente do IV ao VI, são <strong>protótipos robustos</strong> — não software de produção. Servem como ponto de partida funcional e como repertório técnico para que o servidor dialogue com a TI do órgão em pé de igualdade. A <strong>soberania de dados</strong> é trabalhada desde o Nível I: regras explícitas sobre o que pode e o que jamais deve ir para IA aberta, distinção entre ferramentas corporativas homologadas e <em style="color:var(--ink);font-family:'Fraunces',serif;font-weight:400">shadow IT</em>, e alinhamento integral à LGPD e à Lei nº 14.129/21.
+    </div>
+  </div>
+</section>
+
+<!-- FORMATOS DE CONTRATAÇÃO -->
+<section class="section" id="formatos">
+  <div class="section-head">
+    <div class="section-roman">III.</div>
+    <div>
+      <div class="sub">Como contratar · três formatos</div>
+      <h2>Três <em>modos</em> de implantar o programa.</h2>
+      <p>A implantação acompanha a maturidade da área e o ciclo de compra do órgão. Começa onde faz sentido e evolui no ritmo que a instituição sustenta — sem pressa, mas sem inércia.</p>
+    </div>
+  </div>
+
+  <div class="formats-grid">
+    <div class="format">
+      <div class="format-n">01</div>
+      <h4>Formato <em>Piloto</em></h4>
+      <p class="format-desc">Execução dos Níveis I e II, geração inicial de soluções e avaliação de impacto. Ideal para órgãos que querem testar o método antes de comprometer orçamento anual.</p>
+      <ul class="format-include">
+        <li>Execução dos Níveis <strong>I e II</strong></li>
+        <li>Primeiras soluções reais entregues</li>
+        <li>Relatório de avaliação de impacto</li>
+        <li>Recomendação de próximos passos</li>
+      </ul>
+      <div class="format-meta">Baixo comprometimento · ciclo curto</div>
+    </div>
+
+    <div class="format">
+      <div class="format-n">02</div>
+      <h4>Programa <em>Completo</em></h4>
+      <p class="format-desc">Execução integral dos seis níveis, consolidação de portfólio de soluções e formação de quadros com autonomia do letramento à construção de sistemas. O corpo principal do programa.</p>
+      <ul class="format-include">
+        <li>Execução dos <strong>seis níveis</strong></li>
+        <li>Consolidação de portfólio institucional</li>
+        <li>Estruturação do acervo de soluções</li>
+        <li>Formação de referências internas</li>
+      </ul>
+      <div class="format-meta">Entrega integral · ciclo médio</div>
+    </div>
+
+    <div class="format">
+      <div class="format-n">03</div>
+      <h4>Implantação com <em>Escala</em></h4>
+      <p class="format-desc">Programa completo somado à plataforma de continuidade, curadoria de soluções, governança e estruturação de capacidade permanente. Para instituições que tratam transformação digital como política de longo prazo.</p>
+      <ul class="format-include">
+        <li>Programa Completo (seis níveis)</li>
+        <li><strong>Plataforma</strong> de continuidade</li>
+        <li>Curadoria contínua de soluções</li>
+        <li>Governança e capacidade permanente</li>
+      </ul>
+      <div class="format-meta">Instalação permanente · ciclo longo</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-inner">
+    <div class="cta-k">Próximo passo</div>
+    <h2>Onde seu órgão quer <em>começar</em> a subir?</h2>
+    <div class="buttons">
+      <a class="btn primary" href="index.html#contato"><span class="dot"></span>Agendar diagnóstico</a>
+      <a class="btn ghost" href="produtos.html"><span class="dot"></span>Ver outros produtos</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="wm">CLIC<span>.</span></div>
+    <div class="meta">
+      <span><a href="index.html" style="color:inherit">Início</a></span>
+      <span><a href="produtos.html" style="color:#E8805F">Produtos</a></span>
+      <span><a href="dados.html" style="color:inherit">Dados</a></span>
+      <span><a href="index.html#contato" style="color:inherit">Contato</a></span>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>CLIC © MMXXVI · Centro de letramento digital</span>
+    <span>Programa em seis níveis · edição I · abril de MMXXVI</span>
+  </div>
+</footer>
+
+</body>
+</html>

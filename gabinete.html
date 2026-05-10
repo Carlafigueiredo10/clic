@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gabinete CLIC · Assessoria sob medida em IA para o serviço público</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2ECE1;
+    --paper-2:#E8DFCE;
+    --ink:#141210;
+    --ink-2:#3A342B;
+    --red:#B3321A;
+    --red-hi:#E8805F;
+    --green:#3E4A2A;
+    --rule:rgba(20,18,16,.16);
+    --grid:rgba(20,18,16,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased}
+  body{
+    background-image:linear-gradient(to right,var(--grid) 1px,transparent 1px);
+    background-size:calc(100%/12) 100%;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.3;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode:multiply;
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* NAV */
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:28px 40px;border-bottom:1px solid var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    position:relative;z-index:10;background:var(--paper);
+  }
+  nav .meta{display:flex;gap:28px;color:var(--ink-2);flex-wrap:wrap}
+  nav .meta span::before{content:"→ ";color:var(--red)}
+  nav .meta .active{color:var(--red)}
+  .wordmark{font-family:'Fraunces',serif;font-weight:400;font-style:italic;font-size:22px;letter-spacing:-.02em}
+  .wordmark b{font-style:normal;font-weight:600;letter-spacing:.3em;font-size:14px;margin-right:6px;vertical-align:1px}
+
+  /* HERO */
+  .intro{padding:80px 40px 60px;max-width:1400px;margin:0 auto;position:relative}
+  .breadcrumb{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-2);margin-bottom:48px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  }
+  .breadcrumb a{color:var(--ink-2)}
+  .breadcrumb a:hover{color:var(--red)}
+  .breadcrumb .sep,.breadcrumb .current{color:var(--red)}
+
+  .intro .kicker{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--red);margin-bottom:32px;display:flex;align-items:center;gap:14px;
+  }
+  .intro .kicker::before{content:"";width:48px;height:1px;background:var(--red)}
+
+  .intro h1{
+    font-family:'Fraunces',serif;font-weight:300;
+    font-size:clamp(48px,8vw,128px);line-height:.9;letter-spacing:-.045em;
+    max-width:1200px;
+  }
+  .intro h1 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+
+  .hero-split{
+    margin-top:56px;display:grid;grid-template-columns:1.5fr 1fr;gap:80px;align-items:start;
+    border-top:1px solid var(--rule);padding-top:40px;
+  }
+  .hero-split .lede p{font-size:19px;line-height:1.55;color:var(--ink-2);font-weight:300;margin-bottom:14px}
+  .hero-split .lede strong{color:var(--ink);font-weight:500}
+  .hero-card{
+    border:1px solid var(--ink);padding:28px;background:rgba(255,255,255,.35);
+  }
+  .hero-card .card-k{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--red);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--rule);
+  }
+  .hero-card dl{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;font-size:13px}
+  .hero-card dt{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);padding-top:3px}
+  .hero-card dd{color:var(--ink);line-height:1.4}
+  .hero-card em{font-style:italic;font-family:'Fraunces',serif}
+
+  .meta-bar{
+    margin-top:48px;padding-top:24px;border-top:1px solid var(--rule);
+    display:flex;gap:40px;flex-wrap:wrap;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--ink-2);
+  }
+  .meta-bar span{display:flex;align-items:center;gap:8px}
+  .meta-bar b{color:var(--ink);font-weight:500}
+
+  /* TESE */
+  .thesis{padding:80px 40px;max-width:1400px;margin:0 auto;border-top:1px solid var(--rule)}
+  .thesis-grid{display:grid;grid-template-columns:1fr 2fr;gap:80px;align-items:start}
+  .thesis-k{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--red);margin-bottom:16px;
+  }
+  .thesis h3{
+    font-family:'Fraunces',serif;font-weight:300;font-size:clamp(32px,4vw,52px);line-height:1.05;letter-spacing:-.025em;
+  }
+  .thesis h3 em{font-style:italic;color:var(--red)}
+  .thesis .body p{font-size:17px;line-height:1.65;color:var(--ink-2);margin-bottom:14px;font-weight:300}
+  .thesis .body strong{color:var(--ink);font-weight:500}
+  .thesis .body em{font-style:italic;font-family:'Fraunces',serif;color:var(--ink)}
+
+  /* SECTION HEAD */
+  .section{padding:80px 40px;max-width:1400px;margin:0 auto;border-top:1px solid var(--rule)}
+  .section-head{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:end;margin-bottom:56px}
+  .section-roman{
+    font-family:'Fraunces',serif;font-weight:300;font-size:96px;line-height:.85;color:var(--red);font-style:italic;
+  }
+  .section-head .sub{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--ink-2);margin-bottom:14px;
+  }
+  .section-head h2{
+    font-family:'Fraunces',serif;font-weight:300;font-size:clamp(36px,5vw,64px);line-height:.95;letter-spacing:-.03em;margin-bottom:16px;
+  }
+  .section-head h2 em{font-style:italic;color:var(--red)}
+  .section-head p{font-size:17px;line-height:1.55;color:var(--ink-2);font-weight:300;max-width:780px}
+
+  /* TRILHAS */
+  .trilhas{
+    display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--ink);background:var(--ink);
+    gap:1px;
+  }
+  .trilha{
+    background:var(--paper);padding:40px 32px 48px;display:flex;flex-direction:column;gap:16px;
+    position:relative;
+  }
+  .trilha-n{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:48px;color:var(--red);line-height:1;
+  }
+  .trilha-tag{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-2);
+  }
+  .trilha h3{
+    font-family:'Fraunces',serif;font-weight:300;font-size:32px;line-height:1;letter-spacing:-.02em;
+  }
+  .trilha h3 em{font-style:italic;color:var(--red)}
+  .trilha .who{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    padding:10px 0;margin-top:4px;
+  }
+  .trilha p{font-size:15px;line-height:1.55;color:var(--ink-2);font-weight:300}
+  .trilha p strong{color:var(--ink);font-weight:500}
+  .trilha ul{list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:8px}
+  .trilha ul li{
+    font-size:13px;line-height:1.45;color:var(--ink-2);padding-left:16px;position:relative;
+  }
+  .trilha ul li::before{content:"→";position:absolute;left:0;color:var(--red)}
+  .trilha ul li strong{color:var(--ink);font-weight:500}
+  .trilha-out{
+    margin-top:auto;padding-top:20px;border-top:1px solid var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--ink);
+  }
+  .trilha-out b{color:var(--red);font-weight:600}
+
+  /* RITMOS */
+  .ritmos{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--ink);
+  }
+  .ritmo{
+    padding:32px 28px;border-right:1px solid var(--ink);
+    display:flex;flex-direction:column;gap:12px;min-height:240px;
+  }
+  .ritmo:last-child{border-right:none}
+  .ritmo-n{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--red);text-transform:uppercase;
+  }
+  .ritmo h4{
+    font-family:'Fraunces',serif;font-weight:300;font-size:28px;line-height:1;letter-spacing:-.02em;
+  }
+  .ritmo h4 em{font-style:italic;color:var(--red)}
+  .ritmo .ritmo-desc{font-size:14px;line-height:1.55;color:var(--ink-2);font-weight:300}
+  .ritmo-meta{
+    margin-top:auto;padding-top:16px;border-top:1px solid var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--ink-2);display:flex;justify-content:space-between;
+  }
+  .ritmo-meta b{color:var(--ink)}
+
+  /* METODO */
+  .metodo{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--ink)}
+  .metodo-step{
+    padding:32px 28px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  }
+  .metodo-step:nth-child(2n){border-right:none}
+  .metodo-step:nth-last-child(-n+2){border-bottom:none}
+  .metodo-step .step-n{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:40px;color:var(--red);line-height:1;
+    margin-bottom:12px;
+  }
+  .metodo-step h4{
+    font-family:'IBM Plex Sans',sans-serif;font-weight:500;font-size:16px;letter-spacing:-.01em;margin-bottom:8px;
+  }
+  .metodo-step p{font-size:14px;line-height:1.55;color:var(--ink-2);font-weight:300}
+
+  /* HONESTY */
+  .honesty-mini{
+    margin-top:56px;background:var(--paper-2);border:1px solid var(--ink);padding:28px 32px;
+    display:grid;grid-template-columns:200px 1fr;gap:40px;align-items:start;
+  }
+  .hk{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);
+  }
+  .hbody{font-size:15px;line-height:1.6;color:var(--ink);font-weight:300}
+  .hbody strong{font-weight:500}
+  .hbody em{font-style:italic;font-family:'Fraunces',serif}
+
+  /* DIFERENCIA */
+  .diferencia{
+    background:var(--ink);color:var(--paper);margin:0 -40px;padding:80px 40px;
+  }
+  .diferencia-inner{max-width:1400px;margin:0 auto}
+  .diferencia .section-head h2{color:var(--paper)}
+  .diferencia .section-head .sub{color:rgba(242,236,225,.6)}
+  .diferencia .section-head p{color:rgba(242,236,225,.75)}
+  .diferencia .section-roman{color:var(--red-hi)}
+  .dif-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(242,236,225,.2);margin-top:32px}
+  .dif-cell{background:var(--ink);padding:32px 28px}
+  .dif-cell .dif-k{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--red-hi);
+    margin-bottom:14px;
+  }
+  .dif-cell h4{
+    font-family:'Fraunces',serif;font-weight:300;font-size:24px;line-height:1.1;letter-spacing:-.01em;margin-bottom:12px;
+  }
+  .dif-cell h4 em{font-style:italic;color:var(--red-hi)}
+  .dif-cell p{font-size:14px;line-height:1.6;color:rgba(242,236,225,.8);font-weight:300}
+  .dif-cell p strong{color:var(--paper);font-weight:500}
+
+  /* PULLQUOTE */
+  .pullquote{
+    padding:80px 40px;max-width:1400px;margin:0 auto;border-top:1px solid var(--rule);
+    text-align:center;
+  }
+  .pullquote blockquote{
+    font-family:'Fraunces',serif;font-weight:300;font-style:italic;
+    font-size:clamp(28px,3.6vw,44px);line-height:1.15;letter-spacing:-.02em;
+    max-width:1000px;margin:0 auto;
+  }
+  .pullquote blockquote em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1;font-weight:400}
+  .pullquote cite{
+    display:block;margin-top:32px;font-style:normal;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);
+  }
+
+  /* CTA */
+  .cta{
+    padding:80px 40px;max-width:1400px;margin:0 auto;border-top:1px solid var(--rule);
+    display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;
+  }
+  .cta h2{
+    font-family:'Fraunces',serif;font-weight:300;font-size:clamp(36px,5vw,64px);line-height:.95;letter-spacing:-.03em;
+  }
+  .cta h2 em{font-style:italic;color:var(--red)}
+  .cta p{font-size:17px;line-height:1.55;color:var(--ink-2);font-weight:300;margin-bottom:24px}
+  .cta-btn{
+    display:inline-flex;align-items:center;gap:12px;padding:18px 28px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+    transition:all .25s ease;
+  }
+  .cta-btn:hover{background:var(--red);border-color:var(--red)}
+  .cta-aside{
+    border:1px solid var(--ink);padding:24px;background:rgba(255,255,255,.35);
+  }
+  .cta-aside .ak{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--red);margin-bottom:12px;
+  }
+  .cta-aside ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .cta-aside li{font-size:13px;color:var(--ink-2);padding-left:16px;position:relative;line-height:1.45}
+  .cta-aside li::before{content:"→";position:absolute;left:0;color:var(--red)}
+
+  /* FOOTER */
+  footer{
+    background:var(--ink);color:var(--paper);padding:48px 40px;
+    border-top:1px solid rgba(242,236,225,.2);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.5);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width:900px){
+    nav{padding:20px 24px;flex-direction:column;gap:12px;align-items:flex-start}
+    nav .meta{gap:14px;font-size:10px}
+    .intro,.thesis,.section,.cta,.pullquote{padding-left:24px;padding-right:24px}
+    .hero-split{grid-template-columns:1fr;gap:40px}
+    .thesis-grid{grid-template-columns:1fr;gap:32px}
+    .section-head{grid-template-columns:1fr;gap:16px}
+    .section-roman{font-size:56px}
+    .trilhas{grid-template-columns:1fr}
+    .ritmos{grid-template-columns:1fr}
+    .ritmo{border-right:none;border-bottom:1px solid var(--ink)}
+    .ritmo:last-child{border-bottom:none}
+    .metodo{grid-template-columns:1fr}
+    .metodo-step{border-right:none!important;border-bottom:1px solid var(--rule)!important}
+    .metodo-step:last-child{border-bottom:none!important}
+    .honesty-mini{grid-template-columns:1fr;gap:16px;padding:24px 20px}
+    .diferencia{margin:0 -24px;padding:56px 24px}
+    .dif-grid{grid-template-columns:1fr}
+    .cta{grid-template-columns:1fr;gap:32px}
+    .meta-bar{gap:16px}
+  }
+  .fadeup{opacity:0;transform:translateY(20px);animation:fu 1s .1s forwards cubic-bezier(.2,.7,.2,1)}
+  @keyframes fu{to{opacity:1;transform:none}}
+  html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wordmark"><a href="index.html"><b>◉ CLIC</b> <em>— Centro de letramento digital</em></a></div>
+  <div class="meta">
+    <span><a href="index.html#manifesto">Manifesto</a></span>
+    <span class="active"><a href="produtos.html" style="color:inherit">Produtos</a></span>
+    <span><a href="dados.html">Dados</a></span>
+    <span><a href="index.html#contato">Contato</a></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="intro">
+  <div class="breadcrumb fadeup">
+    <a href="index.html">Início</a>
+    <span class="sep">/</span>
+    <a href="produtos.html">Produtos</a>
+    <span class="sep">/</span>
+    <span class="current">Gabinete · Edição I · MMXXVI</span>
+  </div>
+
+  <div class="kicker fadeup">Produto 05 · Sob medida · Alta intensidade</div>
+
+  <h1 class="fadeup">
+    Uma cadeira<br>
+    ao seu lado.<br>
+    <em>Por tempo</em> determinado.
+  </h1>
+
+  <div class="hero-split">
+    <div class="lede">
+      <p>O <strong>Gabinete CLIC</strong> é o produto de menor volume e maior densidade do portfólio: assessoria técnica sob medida para quem precisa <strong>decidir, destravar ou construir</strong> uma coisa específica em IA — e não tem tempo, interesse ou mandato para passar por um programa longitudinal.</p>
+      <p>Não é curso, não é consultoria de prateleira, não é terceirização disfarçada. É <strong>uma cadeira ao seu lado</strong>, por um ciclo combinado, com alguém que lê o problema com você, traduz o que a técnica está dizendo e sai quando o órgão já sabe caminhar sozinho.</p>
+    </div>
+    <div class="hero-card">
+      <div class="card-k">→ Ficha rápida</div>
+      <dl>
+        <dt>Trilhas</dt><dd>03 · <em>Liderança</em>, <em>Técnico</em>, <em>Equipe</em></dd>
+        <dt>Formato</dt><dd>1:1 ou pequeno grupo (até 5)</dd>
+        <dt>Ritmo</dt><dd>Pontual · Sprint · Contínuo</dd>
+        <dt>Carga</dt><dd>Ajustada ao problema · 3h a 60h</dd>
+        <dt>Modo</dt><dd>Presencial em Brasília, remoto ou híbrido</dd>
+        <dt>Entrega</dt><dd>Decisão informada ou artefato funcional</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="meta-bar">
+    <span><b>Diretriz</b> problema real, não exercício</span>
+    <span><b>Postura</b> assessoria, nunca substituição</span>
+    <span><b>Sigilo</b> compromisso integral de confidencialidade</span>
+    <span><b>Saída</b> o órgão sai andando sozinho</span>
+  </div>
+</section>
+
+<!-- TESE -->
+<section class="thesis">
+  <div class="thesis-grid">
+    <div>
+      <div class="thesis-k">A tese do Gabinete</div>
+      <h3>Algumas decisões não cabem em <em>turma</em>.</h3>
+    </div>
+    <div class="body">
+      <p>O portfólio do CLIC foi desenhado em torno da formação coletiva — oficinas, programas, trilhas longitudinais que levam grupos inteiros do letramento à construção. É o caminho certo para a maior parte dos casos, porque <strong>capacidade estatal se constrói em escala</strong>, não no varejo.</p>
+      <p>Mas há situações em que a demanda não é coletiva. É <em>o dirigente</em> que precisa assinar um contrato de R$ 40 milhões em IA na semana que vem e quer entender o que está comprando. É <em>o servidor técnico</em> que está construindo uma solução sozinho e precisou de alguém que já passou por isso. É <em>a equipe de cinco pessoas</em> que herdou um sistema opaco e precisa auditá-lo antes que ele tome a próxima decisão no nome do órgão.</p>
+      <p>Para esses casos, pôr uma turma de trinta pessoas numa sala seria desperdício de todo mundo. O <strong>Gabinete</strong> existe para isso: <strong>alta densidade, baixo volume, ciclo curto</strong>. Não substitui o Programa de seis níveis — o complementa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRILHAS -->
+<section class="section" id="trilhas">
+  <div class="section-head">
+    <div class="section-roman">I.</div>
+    <div>
+      <div class="sub">Três trilhas · um princípio</div>
+      <h2>Três <em>situações</em>, três cadeiras diferentes.</h2>
+      <p>O Gabinete se organiza em três trilhas porque os públicos e os problemas são distintos. O método é o mesmo; o que muda é o que está em cima da mesa — e quem está sentado à mesa.</p>
+    </div>
+  </div>
+
+  <div class="trilhas">
+    <!-- A. LIDERANÇA -->
+    <div class="trilha">
+      <div class="trilha-n">A.</div>
+      <div class="trilha-tag">Trilha 01 · Individual</div>
+      <h3>Gabinete de <em>Liderança</em></h3>
+      <div class="who">→ Dirigente · Secretário · Diretoria</div>
+      <p>Para <strong>quem decide sobre IA sem precisar virar técnico</strong>. Preparação para assinar contratos com lucidez, fazer as perguntas certas ao fornecedor, ler pareceres e relatórios técnicos com autonomia e dialogar com a TI do órgão em pé de igualdade.</p>
+      <ul>
+        <li><strong>Leitura crítica</strong> de propostas e contratos de IA</li>
+        <li><strong>Vocabulário mínimo</strong> para reuniões técnicas</li>
+        <li><strong>Mapa de riscos</strong> institucionais da adoção</li>
+        <li><strong>Perguntas</strong> que um dirigente deve saber fazer</li>
+        <li><strong>LGPD</strong> e Lei 14.129/21 aplicadas à decisão</li>
+      </ul>
+      <div class="trilha-out"><b>Entrega →</b> Decidir com autonomia técnica</div>
+    </div>
+
+    <!-- B. TÉCNICO -->
+    <div class="trilha">
+      <div class="trilha-n">B.</div>
+      <div class="trilha-tag">Trilha 02 · Individual</div>
+      <h3>Gabinete <em>Técnico</em></h3>
+      <div class="who">→ Servidora / servidor com projeto</div>
+      <p>Para quem já tem <strong>um problema concreto na mesa</strong>: um processo para automatizar, um sistema para auditar, uma solução em construção que travou. Mentoria 1:1 aplicada ao problema real — não a caso fictício — com alguém que já passou pelo mesmo tipo de impasse.</p>
+      <ul>
+        <li><strong>Diagnóstico</strong> honesto do problema específico</li>
+        <li><strong>Arquitetura</strong> da solução sob medida</li>
+        <li><strong>Desbloqueio</strong> técnico e metodológico</li>
+        <li><strong>Revisão</strong> de prompts, fluxos e prototipação</li>
+        <li><strong>Interlocução</strong> informada com TI do órgão</li>
+      </ul>
+      <div class="trilha-out"><b>Entrega →</b> Artefato funcional ou rota clara</div>
+    </div>
+
+    <!-- C. EQUIPE -->
+    <div class="trilha">
+      <div class="trilha-n">C.</div>
+      <div class="trilha-tag">Trilha 03 · Pequeno grupo</div>
+      <h3>Gabinete de <em>Equipe</em></h3>
+      <div class="who">→ 3 a 5 pessoas · área comum</div>
+      <p>Para <strong>um núcleo pequeno que compartilha um desafio</strong>. Meio-termo entre a mentoria individual e a oficina coletiva: grupo fechado, mesma unidade, problema único. Ritmo denso, decisões tomadas em conjunto, solução construída em cima da mesa.</p>
+      <ul>
+        <li><strong>Alinhamento</strong> técnico entre perfis diversos</li>
+        <li><strong>Construção coletiva</strong> da solução do grupo</li>
+        <li><strong>Divisão de papéis</strong> na operação da ferramenta</li>
+        <li><strong>Governança mínima</strong> entre os participantes</li>
+        <li><strong>Handoff</strong> estruturado para o restante da área</li>
+      </ul>
+      <div class="trilha-out"><b>Entrega →</b> Solução do grupo pronta para rodar</div>
+    </div>
+  </div>
+
+  <!-- HONESTIDADE -->
+  <div class="honesty-mini">
+    <div>
+      <span class="hk">→ Nota honesta</span>
+    </div>
+    <div class="hbody">
+      O Gabinete <strong>não é terceirização</strong>. Não substitui a TI do órgão, não assume a execução permanente de tarefas e não fica morando dentro da casa do cliente. A cadeira ao lado é <em>temporária por desenho</em>: se ao fim do ciclo o órgão ainda depende da presença do CLIC para operar, o trabalho não foi bem feito. O sucesso se mede pela <strong>saída limpa</strong> — o cliente segue andando sozinho.
+    </div>
+  </div>
+</section>
+
+<!-- RITMOS -->
+<section class="section" id="ritmos">
+  <div class="section-head">
+    <div class="section-roman">II.</div>
+    <div>
+      <div class="sub">Três ritmos de contratação</div>
+      <h2>O cliente escolhe o <em>ritmo</em>.</h2>
+      <p>A trilha define o <em>quê</em>. O ritmo define o <em>quando</em> e o <em>quanto</em>. Três formatos padronizados, combináveis com qualquer uma das três trilhas — sem pacote fechado: o ciclo é dimensionado na primeira conversa.</p>
+    </div>
+  </div>
+
+  <div class="ritmos">
+    <div class="ritmo">
+      <div class="ritmo-n">Ritmo 01</div>
+      <h4>Pontual <em>· desbloqueio</em></h4>
+      <p class="ritmo-desc">De <strong>1 a 3 sessões</strong> concentradas para destravar uma decisão, um diagnóstico ou um impasse específico. Ideal para quando o cliente já sabe onde está o problema e só precisa de uma segunda cabeça competente por algumas horas.</p>
+      <div class="ritmo-meta"><b>3h–9h</b><span>Ciclo curto</span></div>
+    </div>
+    <div class="ritmo">
+      <div class="ritmo-n">Ritmo 02</div>
+      <h4>Sprint <em>· imersão</em></h4>
+      <p class="ritmo-desc">Uma a duas <strong>semanas de imersão</strong> focada num entregável concreto: uma solução a ser construída, um contrato a ser revisado, um sistema a ser auditado. Intensidade alta, foco único, saída com artefato pronto.</p>
+      <div class="ritmo-meta"><b>20h–40h</b><span>Ciclo compacto</span></div>
+    </div>
+    <div class="ritmo">
+      <div class="ritmo-n">Ritmo 03</div>
+      <h4>Contínuo <em>· acompanhamento</em></h4>
+      <p class="ritmo-desc">Encontros <strong>regulares por 3 a 6 meses</strong> para acompanhar uma implementação, uma gestão ou um processo que evolui mês a mês. A cadeira permanece ao lado enquanto o trabalho amadurece — e é retirada quando deixa de ser necessária.</p>
+      <div class="ritmo-meta"><b>30h–60h</b><span>Ciclo médio</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MÉTODO -->
+<section class="section" id="metodo">
+  <div class="section-head">
+    <div class="section-roman">III.</div>
+    <div>
+      <div class="sub">Como funciona, passo a passo</div>
+      <h2>Um <em>método</em> simples, em quatro tempos.</h2>
+      <p>Independente da trilha e do ritmo, todo Gabinete segue o mesmo arco: começar ouvindo, combinar antes de executar, entregar algo real, sair deixando o órgão de pé.</p>
+    </div>
+  </div>
+
+  <div class="metodo">
+    <div class="metodo-step">
+      <div class="step-n">01.</div>
+      <h4>Conversa de escuta</h4>
+      <p>Uma sessão gratuita de diagnóstico, sem compromisso. Entendemos o problema, a trilha que faz sentido, o ritmo compatível com a agenda e o grau de sigilo necessário. Se o Gabinete não for o produto certo, dizemos.</p>
+    </div>
+    <div class="metodo-step">
+      <div class="step-n">02.</div>
+      <h4>Desenho do ciclo</h4>
+      <p>Proposta escrita em até cinco dias: trilha, ritmo, carga horária, entregas combinadas, cláusulas de sigilo e critério de encerramento. Nada de escopo aberto: o ciclo tem começo, meio e fim desde o primeiro papel assinado.</p>
+    </div>
+    <div class="metodo-step">
+      <div class="step-n">03.</div>
+      <h4>Execução com cadeira ao lado</h4>
+      <p>Encontros no ritmo combinado, sempre em cima do problema real. A cada encontro, um avanço registrado e um próximo passo combinado. O cliente conduz; o Gabinete apoia, traduz, provoca e destrava.</p>
+    </div>
+    <div class="metodo-step">
+      <div class="step-n">04.</div>
+      <h4>Saída e handoff</h4>
+      <p>No fim do ciclo, um relatório curto: o que foi feito, o que ficou pronto, o que a casa já sabe fazer sozinha e o que recomendamos evoluir depois. A cadeira é retirada — se o cliente quiser reabrir outro ciclo no futuro, começa do zero, no tempo dele.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PULLQUOTE -->
+<section class="pullquote">
+  <blockquote>
+    "A melhor assessoria é aquela que sabe <em>quando parar</em> de ser necessária."
+  </blockquote>
+  <cite>— Princípio do Gabinete · CLIC</cite>
+</section>
+
+<!-- DIFERENCIAÇÃO -->
+<section class="diferencia">
+  <div class="diferencia-inner">
+    <div class="section-head">
+      <div class="section-roman">IV.</div>
+      <div>
+        <div class="sub">O que o Gabinete <em>não</em> é</div>
+        <h2>A fronteira <em>importa</em>.</h2>
+        <p>O manifesto do CLIC diz que não somos uma consultoria. O Gabinete não contradiz isso — delimita. Quatro fronteiras que deixam claro o lugar deste produto no portfólio.</p>
+      </div>
+    </div>
+    <div class="dif-grid">
+      <div class="dif-cell">
+        <div class="dif-k">→ Fronteira 01</div>
+        <h4>Não é <em>consultoria</em> que faz pelo cliente.</h4>
+        <p>Consultoria tradicional entrega o relatório; o órgão assina por baixo. O Gabinete faz <strong>junto</strong>: a decisão, o artefato e o conhecimento ficam com quem contratou — não numa pasta terceirizada.</p>
+      </div>
+      <div class="dif-cell">
+        <div class="dif-k">→ Fronteira 02</div>
+        <h4>Não é <em>curso</em> com nome chique.</h4>
+        <p>Curso tem ementa fixa e turma. O Gabinete tem <strong>problema real</strong> e cadeira única. Se o que o cliente precisa é formação estruturada, o produto certo é o Programa de seis níveis — e a gente redireciona.</p>
+      </div>
+      <div class="dif-cell">
+        <div class="dif-k">→ Fronteira 03</div>
+        <h4>Não é <em>terceirização</em> disfarçada.</h4>
+        <p>A cadeira é temporária por princípio. Se ao fim do ciclo o órgão segue dependente, o ciclo falhou. O critério de sucesso é a <strong>autonomia recuperada</strong>, não o contrato renovado.</p>
+      </div>
+      <div class="dif-cell">
+        <div class="dif-k">→ Fronteira 04</div>
+        <h4>Não é <em>plataforma</em> nem vendor.</h4>
+        <p>O Gabinete não vende software, não cobra licença, não empurra fornecedor. Trabalha com ferramentas <strong>abertas, homologadas ou já contratadas</strong> pelo órgão — o interesse é a autonomia do cliente, não a captura dele.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div>
+    <h2>Uma conversa inicial, <em>sem compromisso</em>.</h2>
+    <p>A primeira sessão de escuta é gratuita. Se o Gabinete for o produto certo, desenhamos o ciclo. Se não for, indicamos o que faz mais sentido — dentro ou fora do portfólio do CLIC.</p>
+    <a href="index.html#contato" class="cta-btn">Agendar conversa de escuta →</a>
+  </div>
+  <div class="cta-aside">
+    <div class="ak">→ Antes de agendar</div>
+    <ul>
+      <li>Tenha em mente a <strong>situação</strong> que motiva o pedido</li>
+      <li>Dê uma ideia do <strong>prazo</strong> disponível</li>
+      <li>Sinalize se há <strong>sigilo</strong> envolvido</li>
+      <li>Diga se é <strong>uma pessoa ou pequeno grupo</strong></li>
+      <li>Não é preciso ter a solução pronta — só o problema</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <span>◉ CLIC · Centro de Letramento, Inovação e Competências Digitais</span>
+  <span>Gabinete · Produto 05 · MMXXVI</span>
+  <span>Brasília · DF</span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CLIC — Produtos · Portfólio de formação para o setor público</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2ECE1;
+    --paper-2:#E8DFCE;
+    --ink:#141210;
+    --ink-2:#3A342B;
+    --red:#B3321A;
+    --green:#3E4A2A;
+    --rule:rgba(20,18,16,.16);
+    --grid: rgba(20,18,16,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased}
+  body{
+    background-image:linear-gradient(to right, var(--grid) 1px, transparent 1px);
+    background-size: calc(100%/12) 100%;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.3;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode:multiply;
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* NAV */
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:28px 40px;border-bottom:1px solid var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    position:relative;z-index:10;background:var(--paper);
+  }
+  nav .meta{display:flex;gap:28px;color:var(--ink-2);flex-wrap:wrap}
+  nav .meta span::before{content:"→ ";color:var(--red)}
+  nav .meta .active{color:var(--red)}
+  .wordmark{font-family:'Fraunces',serif;font-weight:400;font-style:italic;font-size:22px;letter-spacing:-.02em}
+  .wordmark b{font-style:normal;font-weight:600;letter-spacing:.3em;font-size:14px;margin-right:6px;vertical-align:1px}
+
+  /* HERO */
+  .intro{padding:80px 40px 60px;max-width:1400px;margin:0 auto}
+  .breadcrumb{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-2);margin-bottom:48px;display:flex;align-items:center;gap:12px;
+  }
+  .breadcrumb a{color:var(--ink-2)}
+  .breadcrumb a:hover{color:var(--red)}
+  .breadcrumb .sep,.breadcrumb .current{color:var(--red)}
+
+  .intro h1{
+    font-family:'Fraunces',serif;font-weight:300;
+    font-size:clamp(48px,7vw,108px);line-height:.92;letter-spacing:-.04em;
+    max-width:1100px;
+  }
+  .intro h1 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .intro .lede{
+    margin-top:40px;max-width:760px;font-size:19px;line-height:1.55;color:var(--ink-2);font-weight:300;
+    border-top:1px solid var(--rule);padding-top:28px;
+  }
+  .intro .lede strong{color:var(--ink);font-weight:500}
+  .meta-bar{
+    margin-top:40px;padding:18px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    display:flex;gap:48px;flex-wrap:wrap;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  }
+  .meta-bar span b{color:var(--red);margin-right:8px}
+
+  /* ÍNDICE VISUAL */
+  .toc{
+    max-width:1400px;margin:0 auto;padding:40px;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  }
+  .toc-item{
+    padding:24px 24px 24px 0;border-right:1px dashed var(--rule);
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .toc-item:last-child{border-right:none}
+  .toc-ix{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:36px;color:var(--red);
+    letter-spacing:-.02em;line-height:.9;font-variation-settings:"WONK" 1;
+  }
+  .toc-label{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-2);
+  }
+  .toc-name{
+    font-family:'Fraunces',serif;font-weight:400;font-size:18px;letter-spacing:-.01em;line-height:1.15;
+    color:var(--ink);
+  }
+
+  /* PRODUTOS */
+  .product{
+    max-width:1400px;margin:0 auto;padding:80px 40px;border-bottom:1px solid var(--rule);
+    position:relative;
+  }
+  .product-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+
+  .product-id{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--red);margin-bottom:16px;display:flex;align-items:center;gap:14px;
+  }
+  .product-id .num{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:22px;color:var(--red);
+    letter-spacing:0;
+  }
+  .product h2{
+    font-family:'Fraunces',serif;font-weight:300;font-size:clamp(44px,5.5vw,80px);
+    line-height:.95;letter-spacing:-.035em;
+  }
+  .product h2 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .product .tagline{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:22px;color:var(--ink-2);
+    margin-top:20px;letter-spacing:-.01em;max-width:500px;
+  }
+  .product .body{font-size:16px;line-height:1.6;color:var(--ink);margin-top:24px}
+  .product .body p{margin-bottom:14px}
+
+  /* card lateral — ficha técnica */
+  .product-card{
+    border:1px solid var(--ink);padding:32px;background:rgba(255,255,255,.35);
+    position:relative;
+  }
+  .product-card .card-kicker{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--red);margin-bottom:20px;
+  }
+  .product-card dl{
+    display:grid;grid-template-columns:auto 1fr;gap:14px 24px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;
+  }
+  .product-card dt{color:var(--ink-2);text-transform:uppercase;letter-spacing:.12em;font-weight:400}
+  .product-card dd{
+    color:var(--ink);font-weight:500;font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;
+    letter-spacing:0;text-transform:none;line-height:1.45;
+  }
+  .product-card dd em{font-style:italic;color:var(--red);font-family:'Fraunces',serif;font-weight:400}
+  .product-card .card-foot{
+    margin-top:28px;padding-top:20px;border-top:1px dashed var(--rule);
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .product-card .card-foot .tag{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--ink-2);
+  }
+  .product-card .card-foot .tag b{color:var(--red)}
+  .product-card .cta-link{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--red);display:inline-flex;align-items:center;gap:8px;font-weight:500;
+    padding-bottom:3px;border-bottom:1px solid var(--red);transition:all .2s;
+  }
+  .product-card .cta-link:hover{gap:14px}
+
+  /* variante destacada (Mulheres — piloto validado) */
+  .product.featured{background:linear-gradient(180deg,rgba(179,50,26,.04) 0%,transparent 60%)}
+  .product.featured .stamp{
+    position:absolute;top:40px;right:40px;transform:rotate(-6deg);
+    border:2px solid var(--red);color:var(--red);
+    padding:10px 18px;font-family:'IBM Plex Mono',monospace;font-size:10px;
+    letter-spacing:.18em;text-transform:uppercase;line-height:1.3;text-align:center;
+    background:var(--paper);z-index:3;
+  }
+  .product.featured .stamp::before,.product.featured .stamp::after{content:"✶";display:block;font-size:9px}
+
+  /* variante DARK (Direitos Humanos & Diversidade) */
+  .product.dark{background:var(--ink);color:var(--paper);margin:0 -40px;padding:80px 80px;border-bottom:none}
+  .product.dark .product-id{color:#E8805F}
+  .product.dark .product-id .num{color:#E8805F}
+  .product.dark h2{color:var(--paper)}
+  .product.dark h2 em{color:#E8805F}
+  .product.dark .tagline{color:rgba(242,236,225,.75)}
+  .product.dark .body{color:rgba(242,236,225,.85)}
+  .product.dark .product-card{background:rgba(242,236,225,.04);border-color:rgba(242,236,225,.3)}
+  .product.dark .product-card .card-kicker{color:#E8805F}
+  .product.dark .product-card dt{color:rgba(242,236,225,.6)}
+  .product.dark .product-card dd{color:var(--paper)}
+  .product.dark .product-card dd em{color:#E8805F}
+  .product.dark .product-card .card-foot{border-color:rgba(242,236,225,.25)}
+  .product.dark .product-card .card-foot .tag{color:rgba(242,236,225,.6)}
+  .product.dark .product-card .card-foot .tag b{color:#E8805F}
+  .product.dark .product-card .cta-link{color:#E8805F;border-color:#E8805F}
+
+  /* COMO CONTRATAR */
+  .formats{max-width:1400px;margin:0 auto;padding:100px 40px;border-bottom:1px solid var(--rule)}
+  .formats-head{display:grid;grid-template-columns:120px 1fr;gap:32px;margin-bottom:48px;align-items:start}
+  .formats-head .num{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:80px;color:var(--red);
+    line-height:.8;letter-spacing:-.04em;font-variation-settings:"WONK" 1;
+  }
+  .formats-head h2{
+    font-family:'Fraunces',serif;font-weight:300;font-size:clamp(36px,4.5vw,64px);
+    line-height:.98;letter-spacing:-.03em;
+  }
+  .formats-head h2 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .formats-head p{
+    margin-top:20px;font-size:17px;line-height:1.55;color:var(--ink-2);max-width:720px;font-weight:300;
+  }
+  .formats-head .sub{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-2);margin-bottom:14px;
+  }
+
+  .formats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--ink)}
+  .format{
+    padding:36px 32px;border-right:1px solid var(--ink);display:flex;flex-direction:column;gap:16px;min-height:320px;
+    background:rgba(255,255,255,.25);transition:all .3s;
+  }
+  .format:last-child{border-right:none}
+  .format:hover{background:var(--ink);color:var(--paper)}
+  .format:hover .format-n{color:var(--paper)}
+  .format:hover .format-meta{border-color:rgba(242,236,225,.3);color:rgba(242,236,225,.7)}
+  .format-n{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:72px;line-height:.8;
+    color:var(--red);letter-spacing:-.04em;font-variation-settings:"WONK" 1;
+  }
+  .format h4{font-family:'Fraunces',serif;font-weight:400;font-size:28px;letter-spacing:-.015em;margin-top:10px}
+  .format h4 em{font-style:italic;color:var(--red)}
+  .format:hover h4 em{color:#E8805F}
+  .format p{font-size:14px;line-height:1.55;opacity:.88}
+  .format .format-meta{
+    margin-top:auto;padding-top:14px;border-top:1px dashed var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--ink-2);transition:all .3s;
+  }
+
+  /* CTA */
+  .cta{padding:120px 40px;text-align:center;max-width:1300px;margin:0 auto}
+  .cta-k{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--red);margin-bottom:28px;display:flex;align-items:center;justify-content:center;gap:12px;
+  }
+  .cta-k::before,.cta-k::after{content:"";width:40px;height:1px;background:var(--red)}
+  .cta h2{
+    font-family:'Fraunces',serif;font-weight:300;font-size:clamp(44px,6vw,84px);
+    line-height:.98;letter-spacing:-.035em;max-width:900px;margin:0 auto;
+  }
+  .cta h2 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .buttons{margin-top:48px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:14px;
+    padding:20px 36px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.15em;text-transform:uppercase;
+    text-decoration:none;border:1px solid var(--ink);transition:all .2s;cursor:pointer;
+  }
+  .btn.primary{background:var(--ink);color:var(--paper)}
+  .btn.primary:hover{background:var(--red);border-color:var(--red)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{background:var(--ink);color:var(--paper)}
+  .btn .dot{width:6px;height:6px;border-radius:50%;background:var(--red)}
+  .btn.primary .dot{background:var(--paper)}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:var(--paper);padding:48px 40px 28px}
+  .foot-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:24px}
+  .foot-inner .wm{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:32px;letter-spacing:-.02em}
+  .foot-inner .wm span{color:#E8805F}
+  .foot-inner .meta{color:rgba(242,236,225,.6);display:flex;gap:24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;flex-wrap:wrap}
+  .foot-inner .meta span::before{content:"→ ";color:#E8805F}
+  .foot-bottom{
+    max-width:1400px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(242,236,225,.2);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.5);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width:900px){
+    nav{padding:20px 24px;flex-direction:column;gap:12px;align-items:flex-start}
+    nav .meta{gap:14px;font-size:10px}
+    .intro,.product,.formats,.cta{padding-left:24px;padding-right:24px}
+    .toc{grid-template-columns:1fr 1fr;padding:24px}
+    .toc-item{border-right:none;border-bottom:1px dashed var(--rule);padding-bottom:16px;padding-top:16px}
+    .toc-item:nth-child(even){border-right:none}
+    .toc-item:nth-child(2n-1){border-right:1px dashed var(--rule);padding-right:24px}
+    .toc-item:nth-last-child(-n+2){border-bottom:none}
+    .product-grid{grid-template-columns:1fr;gap:40px}
+    .product.dark{margin:0 -24px;padding:60px 24px}
+    .product.featured .stamp{position:static;transform:none;display:inline-block;margin-bottom:20px}
+    .formats-head{grid-template-columns:1fr;gap:16px}
+    .formats-head .num{font-size:56px}
+    .formats-grid{grid-template-columns:1fr}
+    .format{border-right:none;border-bottom:1px solid var(--ink);min-height:auto}
+    .format:last-child{border-bottom:none}
+    .meta-bar{gap:16px}
+  }
+  .fadeup{opacity:0;transform:translateY(20px);animation:fu 1s .1s forwards cubic-bezier(.2,.7,.2,1)}
+  @keyframes fu{to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wordmark"><a href="index.html"><b>◉ CLIC</b> <em>— Centro de letramento digital</em></a></div>
+  <div class="meta">
+    <span><a href="index.html#manifesto">Manifesto</a></span>
+    <span class="active">Produtos</span>
+    <span><a href="dados.html">Dados</a></span>
+    <span><a href="index.html#contato">Contato</a></span>
+  </div>
+</nav>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="breadcrumb fadeup">
+    <a href="index.html">Início</a>
+    <span class="sep">/</span>
+    <span class="current">Produtos · Edição I · MMXXVI</span>
+  </div>
+
+  <h1 class="fadeup">
+    Cinco <em>portas</em><br>
+    para entrar em<br>
+    um mesmo <em>compromisso</em>.
+  </h1>
+
+  <p class="lede fadeup">
+    O CLIC se organiza em <strong>cinco produtos distintos</strong>, que atendem a ciclos de contratação e necessidades diferentes — do programa longitudinal de seis níveis à cadeira de assessoria ao lado do dirigente. Todos partem do mesmo princípio: <strong>capacidade estatal se constrói dentro do Estado</strong>, com servidoras e servidores como protagonistas da sua própria formação digital.
+  </p>
+
+  <div class="meta-bar">
+    <span><b>Produtos</b> 05</span>
+    <span><b>Piloto validado</b> CLIC Mulheres (04 oficinas)</span>
+    <span><b>Formatos</b> 03 modos de contratação</span>
+    <span><b>Edição</b> MMXXVI · I</span>
+  </div>
+</section>
+
+<!-- ÍNDICE VISUAL -->
+<div class="toc">
+  <a href="#programa" class="toc-item">
+    <div class="toc-ix">I.</div>
+    <div class="toc-label">→ Produto carro-chefe</div>
+    <div class="toc-name">Programa em seis níveis</div>
+  </a>
+  <a href="#mulheres" class="toc-item">
+    <div class="toc-ix">II.</div>
+    <div class="toc-label">→ Piloto validado</div>
+    <div class="toc-name">CLIC Mulheres</div>
+  </a>
+  <a href="#dh" class="toc-item">
+    <div class="toc-ix">III.</div>
+    <div class="toc-label">→ Recorte crítico</div>
+    <div class="toc-name">Direitos Humanos &amp; Diversidade</div>
+  </a>
+  <a href="#palestras" class="toc-item">
+    <div class="toc-ix">IV.</div>
+    <div class="toc-label">→ Porta de entrada</div>
+    <div class="toc-name">Palestras &amp; keynotes</div>
+  </a>
+  <a href="#gabinete" class="toc-item">
+    <div class="toc-ix">V.</div>
+    <div class="toc-label">→ Sob medida</div>
+    <div class="toc-name">Gabinete · 1:1 ou pequeno grupo</div>
+  </a>
+</div>
+
+<!-- I. PROGRAMA 6 NÍVEIS -->
+<section class="product" id="programa">
+  <div class="product-grid">
+    <div>
+      <div class="product-id"><span class="num">I.</span> Produto 01 · Carro-chefe</div>
+      <h2>Programa em <em>seis níveis</em></h2>
+      <div class="tagline">Do letramento inicial à construção de sistemas próprios — uma escada completa.</div>
+      <div class="body">
+        <p>O produto estrutural do CLIC. Seis níveis progressivos que levam servidoras e servidores não técnicos do primeiro contato com IA até a construção autônoma de sistemas funcionais — sem passar por dependência de fornecedor.</p>
+        <p>Cada nível entrega uma <strong>solução real aplicada ao contexto de trabalho do participante</strong>, registrada na plataforma de continuidade e disponível para reaplicação em outras áreas do órgão.</p>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="card-kicker">→ Ficha técnica · Programa 6 níveis</div>
+      <dl>
+        <dt>Público</dt><dd>Servidoras e servidores, gestão, áreas operacionais e de inovação</dd>
+        <dt>Níveis</dt><dd>06 níveis progressivos, do <em>letramento</em> à <em>construção de sistemas</em></dd>
+        <dt>Carga horária</dt><dd>04 a 30 horas por nível, conforme a profundidade</dd>
+        <dt>Formato</dt><dd>Oficinas presenciais, remotas ou híbridas</dd>
+        <dt>Entrega</dt><dd>Solução real aplicada ao trabalho, em cada nível</dd>
+        <dt>Plataforma</dt><dd>Registro e reaplicação das soluções no próprio órgão</dd>
+        <dt>Contratação</dt><dd>Piloto, Programa Completo ou Escala institucional</dd>
+      </dl>
+      <div class="card-foot">
+        <div class="tag"><b>Estrutural</b> · contrato longitudinal</div>
+        <a class="cta-link" href="programa.html">Ver detalhes →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- II. CLIC MULHERES (featured) -->
+<section class="product featured" id="mulheres">
+  <div class="stamp">
+    Piloto<br>
+    Validado<br>
+    MMXXV
+  </div>
+  <div class="product-grid">
+    <div>
+      <div class="product-id"><span class="num">II.</span> Produto 02 · Piloto validado</div>
+      <h2>CLIC <em>Mulheres</em></h2>
+      <div class="tagline">Formação em IA e automação para servidoras públicas — com método, rede e soluções reais.</div>
+      <div class="body">
+        <p>O produto com maior maturidade do portfólio. <strong>Quatro oficinas já realizadas</strong>, com alta adesão e soluções reais entregues por servidoras de diferentes áreas. Demonstrou que, quando o recorte é pensado a partir da realidade de quem está na sala, o letramento digital deixa de ser abstrato.</p>
+        <p>Mais que capacitação técnica: CLIC Mulheres forma também <strong>rede entre servidoras</strong>, cria referência interna em IA dentro dos órgãos e aborda vieses algorítmicos a partir da perspectiva de quem é estatisticamente mais afetada por eles.</p>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="card-kicker">→ Ficha técnica · CLIC Mulheres</div>
+      <dl>
+        <dt>Público</dt><dd>Servidoras públicas de todos os níveis e áreas</dd>
+        <dt>Estágio</dt><dd><em>Piloto validado</em> · 04 oficinas realizadas</dd>
+        <dt>Carga horária</dt><dd>04 a 08 horas por oficina, com possibilidade de trilha estendida</dd>
+        <dt>Método</dt><dd>Oficina prática · cada participante sai com uma solução própria funcionando</dd>
+        <dt>Diferencial</dt><dd>Recorte de gênero no conteúdo e na formação de <em>rede</em> institucional</dd>
+        <dt>Aplicação</dt><dd>Secretarias de mulheres, áreas de equidade, redes de servidoras</dd>
+        <dt>Contratação</dt><dd>Oficina avulsa, ciclo recorrente ou programa anual</dd>
+      </dl>
+      <div class="card-foot">
+        <div class="tag"><b>Pronto para escalar</b> · ciclo curto</div>
+        <a class="cta-link" href="mulheres.html">Ver detalhes →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- III. DIREITOS HUMANOS & DIVERSIDADE (dark) -->
+<section class="product dark" id="dh">
+  <div class="product-grid">
+    <div>
+      <div class="product-id"><span class="num">III.</span> Produto 03 · Recorte crítico</div>
+      <h2>Direitos Humanos <em>&amp;</em> Diversidade</h2>
+      <div class="tagline">IA, dados e automação em tensão produtiva com vieses, acessibilidade, raça, gênero e orientação sexual.</div>
+      <div class="body">
+        <p>Oficinas que ensinam as mesmas ferramentas técnicas — IA generativa, automação, dados, sistemas — mas lidas sob uma chave crítica: <strong>quem é afetado quando o algoritmo erra?</strong> E como construir sistemas públicos que não reproduzam, em escala automatizada, as desigualdades que a Constituição manda reduzir.</p>
+        <p>Voltadas a <strong>defensorias, ouvidorias, ministérios e secretarias de direitos humanos, órgãos de controle social e coordenações de equidade</strong>. Conteúdo técnico real — não palestra sobre "IA ética". Servidora sai com solução funcionando <em>e</em> com repertório para tensionar vieses dentro do seu próprio órgão.</p>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="card-kicker">→ Ficha técnica · DH &amp; Diversidade</div>
+      <dl>
+        <dt>Público</dt><dd>Defensorias, ouvidorias, secretarias de DH, coordenações de equidade, controle social</dd>
+        <dt>Eixo</dt><dd>IA &amp; automação com chave crítica — <em>vieses</em>, acessibilidade, raça, gênero, LGBTQIA+</dd>
+        <dt>Carga horária</dt><dd>08 a 20 horas, conforme o recorte escolhido</dd>
+        <dt>Entrega</dt><dd>Solução técnica funcional <em>+</em> repertório crítico para uso institucional</dd>
+        <dt>Diferencial</dt><dd>Não é "IA ética" teórica — é formação técnica com tensão política</dd>
+        <dt>Contratação</dt><dd>Oficina temática ou trilha de 03 módulos</dd>
+      </dl>
+      <div class="card-foot">
+        <div class="tag"><b>Para órgãos</b> <em style="font-family:Fraunces,serif">com missão constitucional</em></div>
+        <a class="cta-link" href="direitos-humanos.html">Ver detalhes →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IV. PALESTRAS -->
+<section class="product" id="palestras">
+  <div class="product-grid">
+    <div>
+      <div class="product-id"><span class="num">IV.</span> Produto 04 · Porta de entrada</div>
+      <h2><em>Palestras</em> &amp; keynotes</h2>
+      <div class="tagline">Formato curto, abertura de ciclo, semana do servidor, congresso. Ciclo comercial rápido.</div>
+      <div class="body">
+        <p>Formato mais enxuto do portfólio — de 45 a 90 minutos. Serve para <strong>abrir ciclos formativos, ativar semanas do servidor, compor programações de congressos e eventos institucionais</strong> ou introduzir um órgão aos temas do CLIC antes de um programa maior.</p>
+        <p>Temas alinhados ao posicionamento da casa: letramento digital no Estado, capacidade estatal e IA, vieses algorítmicos e serviço público, o que servidoras podem construir sozinhas com IA, dependência tecnológica e autonomia institucional.</p>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="card-kicker">→ Ficha técnica · Palestras</div>
+      <dl>
+        <dt>Formato</dt><dd>Keynote de 45 a 90 minutos · presencial, remoto ou híbrido</dd>
+        <dt>Aplicação</dt><dd>Abertura de ciclo, semana do servidor, congresso, evento institucional</dd>
+        <dt>Temas</dt><dd>Letramento digital, capacidade estatal, IA crítica, automação no trabalho público, vieses algorítmicos</dd>
+        <dt>Perfil</dt><dd>Alta gestão, servidoras, áreas de inovação, comunicação, imprensa institucional</dd>
+        <dt>Função comercial</dt><dd>Porta de entrada — frequentemente precede contratação de oficina ou programa</dd>
+        <dt>Contratação</dt><dd>Evento único ou pacote de 03 / 05 palestras</dd>
+      </dl>
+      <div class="card-foot">
+        <div class="tag"><b>Ciclo curto</b> · alta frequência</div>
+        <a class="cta-link" href="palestras.html">Ver detalhes →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- V. GABINETE -->
+<section class="product" id="gabinete">
+  <div class="product-grid">
+    <div>
+      <div class="product-id"><span class="num">V.</span> Produto 05 · Sob medida</div>
+      <h2><em>Gabinete</em> · uma cadeira ao seu lado</h2>
+      <div class="tagline">Assessoria 1:1 ou para pequeno grupo — alta densidade, baixo volume, ciclo com fim combinado.</div>
+      <div class="body">
+        <p>O produto de menor volume e maior intensidade do portfólio. Para <strong>quem precisa decidir, destravar ou construir uma coisa específica em IA</strong> — e não tem tempo ou mandato para passar por um programa longitudinal coletivo.</p>
+        <p>Três trilhas: <em>Liderança</em>, para dirigentes que precisam decidir sobre IA sem virar técnicos; <em>Técnico</em>, para servidor(a) com um problema concreto na mesa; e <em>Equipe</em>, para até cinco pessoas de uma mesma área com desafio comum. Ritmo escolhido pelo cliente — pontual, sprint ou contínuo.</p>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="card-kicker">→ Ficha técnica · Gabinete</div>
+      <dl>
+        <dt>Público</dt><dd>Dirigente individual, servidor(a) técnico ou equipe de até 05</dd>
+        <dt>Trilhas</dt><dd>03 · <em>Liderança</em>, <em>Técnico</em>, <em>Equipe</em></dd>
+        <dt>Ritmos</dt><dd>Pontual (3–9h) · Sprint (20–40h) · Contínuo (30–60h)</dd>
+        <dt>Formato</dt><dd>Presencial em Brasília, remoto ou híbrido</dd>
+        <dt>Entrega</dt><dd>Decisão informada, artefato funcional ou rota clara</dd>
+        <dt>Critério de saída</dt><dd>O cliente segue andando sozinho</dd>
+        <dt>Contratação</dt><dd>Ciclo com início, meio e fim combinados</dd>
+      </dl>
+      <div class="card-foot">
+        <div class="tag"><b>Alta densidade</b> · baixo volume</div>
+        <a class="cta-link" href="gabinete.html">Ver detalhes →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VI. COMO CONTRATAR -->
+<section class="formats">
+  <div class="formats-head">
+    <div class="num">VI.</div>
+    <div>
+      <div class="sub">Como contratar · três formatos</div>
+      <h2>Três <em>modos</em> de trabalhar junto.</h2>
+      <p>Os cinco produtos podem ser contratados em três formatos comerciais, alinhados ao ritmo real das compras públicas. Todos partem do mesmo princípio: o conhecimento fica na instituição, não na consultora.</p>
+    </div>
+  </div>
+
+  <div class="formats-grid">
+    <div class="format">
+      <div class="format-n">01</div>
+      <h4><em>Piloto</em></h4>
+      <p>Execução dos níveis iniciais ou de uma oficina temática. Gera primeiras soluções e serve para avaliar impacto antes de escalar. Ideal para órgãos que querem começar sem comprometer orçamento anual.</p>
+      <div class="format-meta">Baixo comprometimento · ciclo curto</div>
+    </div>
+    <div class="format">
+      <div class="format-n">02</div>
+      <h4>Programa <em>completo</em></h4>
+      <p>Execução integral do produto contratado — seja o programa em 6 níveis, o ciclo CLIC Mulheres ou uma trilha de DH. Consolida portfólio de soluções e estrutura capacidade institucional.</p>
+      <div class="format-meta">Entrega completa · ciclo médio</div>
+    </div>
+    <div class="format">
+      <div class="format-n">03</div>
+      <h4>Implantação com <em>escala</em></h4>
+      <p>Programa completo somado à plataforma de continuidade, curadoria de soluções e governança. Instala capacidade contínua no órgão. Para instituições que tratam transformação digital como política de longo prazo.</p>
+      <div class="format-meta">Instalação permanente · ciclo longo</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-k">Próximo passo</div>
+  <h2>Qual porta faz mais sentido <em>para o seu órgão</em> agora?</h2>
+  <div class="buttons">
+    <a class="btn primary" href="index.html#contato"><span class="dot"></span>Agendar conversa</a>
+    <a class="btn ghost" href="dados.html"><span class="dot"></span>Ver os dados</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="wm">CLIC<span>.</span></div>
+    <div class="meta">
+      <span><a href="index.html" style="color:inherit">Início</a></span>
+      <span><a href="produtos.html" style="color:#E8805F">Produtos</a></span>
+      <span><a href="dados.html" style="color:inherit">Dados</a></span>
+      <span><a href="index.html#contato" style="color:inherit">Contato</a></span>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>CLIC © MMXXVI · Centro de Letramento, Inovação e Competências Digitais</span>
+    <span>Portfólio · edição I · abril de MMXXVI</span>
+  </div>
+</footer>
+
+</body>
+</html>

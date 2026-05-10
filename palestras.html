@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CLIC — Palestras &amp; keynotes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2ECE1;
+    --paper-2:#E8DFCE;
+    --ink:#141210;
+    --ink-2:#3A342B;
+    --red:#B3321A;
+    --red-hi:#E8805F;
+    --rule:rgba(20,18,16,.16);
+    --grid:rgba(20,18,16,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased}
+  body{background-image:linear-gradient(to right, var(--grid) 1px, transparent 1px);background-size: calc(100%/12) 100%;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.3;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");mix-blend-mode:multiply}
+  a{color:inherit;text-decoration:none}
+
+  /* NAV */
+  nav{display:flex;justify-content:space-between;align-items:center;padding:28px 40px;border-bottom:1px solid var(--rule);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;position:relative;z-index:10;background:var(--paper)}
+  nav .meta{display:flex;gap:28px;color:var(--ink-2);flex-wrap:wrap}
+  nav .meta span::before{content:"→ ";color:var(--red)}
+  nav .meta .active{color:var(--red)}
+  .wordmark{font-family:'Fraunces',serif;font-weight:400;font-style:italic;font-size:22px;letter-spacing:-.02em}
+  .wordmark b{font-style:normal;font-weight:600;letter-spacing:.3em;font-size:14px;margin-right:6px;vertical-align:1px}
+
+  /* HERO */
+  .intro{padding:80px 40px 60px;max-width:1400px;margin:0 auto;position:relative}
+  .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);margin-bottom:48px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .breadcrumb a{color:var(--ink-2)}
+  .breadcrumb a:hover{color:var(--red)}
+  .breadcrumb .sep,.breadcrumb .current{color:var(--red)}
+  .intro .kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--red);margin-bottom:32px;display:flex;align-items:center;gap:14px}
+  .intro .kicker::before{content:"";width:48px;height:1px;background:var(--red)}
+  .intro h1{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(48px,8vw,124px);line-height:.9;letter-spacing:-.045em;max-width:1200px}
+  .intro h1 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+
+  .hero-split{margin-top:56px;display:grid;grid-template-columns:1.5fr 1fr;gap:80px;align-items:start;border-top:1px solid var(--rule);padding-top:40px}
+  .hero-split .lede p{font-size:19px;line-height:1.55;color:var(--ink-2);font-weight:300;margin-bottom:14px}
+  .hero-split .lede strong{color:var(--ink);font-weight:500}
+  .hero-card{border:1px solid var(--ink);padding:28px;background:rgba(255,255,255,.35)}
+  .hero-card .card-k{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:16px}
+  .hero-card dl{display:grid;grid-template-columns:auto 1fr;gap:12px 20px;font-family:'IBM Plex Mono',monospace;font-size:11px}
+  .hero-card dt{color:var(--ink-2);text-transform:uppercase;letter-spacing:.12em}
+  .hero-card dd{color:var(--ink);font-weight:500;font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;letter-spacing:0;text-transform:none;line-height:1.45}
+  .hero-card dd em{font-style:italic;color:var(--red);font-family:'Fraunces',serif;font-weight:400}
+  .meta-bar{margin-top:48px;padding:18px 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);display:flex;gap:48px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase}
+  .meta-bar span b{color:var(--red);margin-right:8px}
+
+  /* PRÓXIMO COMPROMISSO */
+  .next-event{max-width:1400px;margin:0 auto;padding:60px 40px 80px;border-bottom:1px solid var(--rule)}
+  .next-card{
+    padding:0;border:2px solid var(--ink);background:var(--paper-2);position:relative;overflow:hidden;
+  }
+  .next-card::before{content:"";position:absolute;top:-1px;left:-1px;right:-1px;height:6px;background:repeating-linear-gradient(135deg,var(--red) 0 8px,transparent 8px 16px)}
+  .next-grid{display:grid;grid-template-columns:260px 1fr auto;gap:0;align-items:stretch}
+  .next-date{padding:40px 32px;border-right:1px dashed var(--rule);display:flex;flex-direction:column;justify-content:center}
+  .next-date .nlbl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+  .next-date .ndate{font-family:'Fraunces',serif;font-weight:300;font-size:68px;line-height:.85;letter-spacing:-.04em;color:var(--ink)}
+  .next-date .ndate em{font-style:italic;color:var(--red);font-size:.5em;display:block;margin-top:4px;font-variation-settings:"WONK" 1}
+  .next-date .ndate-when{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);margin-top:16px}
+  .next-body{padding:40px 36px}
+  .next-body .nk{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:12px}
+  .next-body h3{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(28px,3.5vw,44px);line-height:1.05;letter-spacing:-.025em;margin-bottom:14px}
+  .next-body h3 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .next-body .nev{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:18px;color:var(--ink-2);margin-bottom:14px}
+  .next-body p{font-size:14px;line-height:1.6;color:var(--ink);max-width:620px}
+  .next-tag{padding:36px 32px;display:flex;align-items:center;border-left:1px dashed var(--rule);background:var(--paper)}
+  .next-tag .stamp{
+    border:2px solid var(--red);color:var(--red);padding:14px 22px;transform:rotate(-6deg);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;line-height:1.3;text-align:center;
+  }
+  .next-tag .stamp::before,.next-tag .stamp::after{content:"✶";display:block;font-size:10px;margin:2px 0}
+
+  /* SEÇÃO BASE */
+  .section{max-width:1400px;margin:0 auto;padding:100px 40px;border-bottom:1px solid var(--rule);position:relative}
+  .section-head{display:grid;grid-template-columns:120px 1fr;gap:32px;margin-bottom:60px;align-items:start}
+  .section-roman{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:80px;color:var(--red);line-height:.8;letter-spacing:-.04em;font-variation-settings:"WONK" 1}
+  .section-head .sub{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);margin-bottom:16px}
+  .section-head h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(40px,5.5vw,76px);line-height:.96;letter-spacing:-.035em;margin-bottom:20px}
+  .section-head h2 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .section-head p{font-size:17px;line-height:1.55;color:var(--ink-2);max-width:760px;font-weight:300}
+
+  /* REPERTÓRIO DE PALESTRAS */
+  .talks{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--ink)}
+  .talk{
+    padding:44px 40px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    display:flex;flex-direction:column;gap:20px;background:rgba(255,255,255,.25);transition:background .3s;
+    min-height:520px;position:relative;
+  }
+  .talk:nth-child(2n){border-right:none}
+  .talk:nth-last-child(-n+2){border-bottom:none}
+  .talk:hover{background:rgba(255,255,255,.5)}
+  .talk-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+  .talk-n{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+  .talk-n b{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:22px;color:var(--red);letter-spacing:0;text-transform:none;margin-right:6px}
+  .talk-duration{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2)}
+  .talk h3{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(28px,3.2vw,40px);line-height:1;letter-spacing:-.025em}
+  .talk h3 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .talk .thesis{
+    padding:20px 24px;border-left:3px solid var(--red);background:var(--paper-2);
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:18px;line-height:1.35;letter-spacing:-.01em;color:var(--ink);
+  }
+  .talk .thesis::before{content:"❝";color:var(--red);font-size:1.3em;margin-right:8px;vertical-align:-4px}
+  .talk .talk-body{font-size:15px;line-height:1.6;color:var(--ink-2);max-width:560px}
+  .talk .context-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;margin-top:auto;padding-top:18px;border-top:1px dashed var(--rule)}
+  .talk .cx b{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--red);margin-bottom:4px;font-weight:500}
+  .talk .cx p{font-size:12.5px;line-height:1.45;color:var(--ink-2)}
+
+  /* FORMATOS */
+  .formats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--ink);margin-top:20px}
+  .format{padding:40px 32px;border-right:1px solid var(--ink);display:flex;flex-direction:column;gap:16px;min-height:360px;background:rgba(255,255,255,.25);transition:all .3s;position:relative}
+  .format:last-child{border-right:none}
+  .format:hover{background:var(--ink);color:var(--paper)}
+  .format:hover .format-n{color:var(--paper)}
+  .format:hover .format-meta{border-color:rgba(242,236,225,.3);color:rgba(242,236,225,.7)}
+  .format:hover .format-inc{border-color:rgba(242,236,225,.3)}
+  .format:hover .format-inc li{color:rgba(242,236,225,.85)}
+  .format:hover .format-inc li::before{color:var(--red-hi)}
+  .format-n{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:72px;line-height:.8;color:var(--red);letter-spacing:-.04em;font-variation-settings:"WONK" 1}
+  .format h4{font-family:'Fraunces',serif;font-weight:400;font-size:28px;letter-spacing:-.015em;margin-top:8px;line-height:1.05}
+  .format h4 em{font-style:italic;color:var(--red)}
+  .format:hover h4 em{color:var(--red-hi)}
+  .format p.fd{font-size:14px;line-height:1.55;margin-bottom:4px}
+  .format-inc{list-style:none;padding:0;border-top:1px dashed var(--rule);padding-top:14px;margin-top:4px;transition:border-color .3s}
+  .format-inc li{padding:5px 0 5px 18px;position:relative;font-size:13px;line-height:1.45;color:var(--ink-2);transition:color .3s}
+  .format-inc li::before{content:"→";position:absolute;left:0;color:var(--red);font-family:'Fraunces',serif;font-style:italic;transition:color .3s}
+  .format-meta{margin-top:auto;padding-top:14px;border-top:1px dashed var(--rule);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);transition:all .3s}
+
+  /* BIO CURTA */
+  .bio{max-width:1400px;margin:0 auto;padding:80px 40px;border-bottom:1px solid var(--rule)}
+  .bio-card{
+    padding:40px 48px;border:1px solid var(--ink);background:rgba(255,255,255,.3);
+    display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:start;position:relative;
+  }
+  .bio-card::before{content:"";position:absolute;top:-1px;left:-1px;right:-1px;height:4px;background:var(--red)}
+  .bio-head .bk{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+  .bio-head h4{font-family:'Fraunces',serif;font-weight:300;font-size:48px;line-height:.95;letter-spacing:-.03em}
+  .bio-head h4 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .bio-body p{font-size:15px;line-height:1.65;color:var(--ink);margin-bottom:12px}
+  .bio-body p strong{font-weight:500}
+  .bio-body p em{font-style:italic;color:var(--red);font-family:'Fraunces',serif}
+
+  /* CTA */
+  .cta{padding:120px 40px;text-align:center;max-width:1300px;margin:0 auto;position:relative;overflow:hidden}
+  .cta::before{content:"PALESTRAS";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:clamp(200px,24vw,360px);color:var(--red);opacity:.05;letter-spacing:-.05em;pointer-events:none;z-index:0;font-variation-settings:"WONK" 1}
+  .cta-inner{position:relative;z-index:2}
+  .cta-k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:28px;display:flex;align-items:center;justify-content:center;gap:12px}
+  .cta-k::before,.cta-k::after{content:"";width:40px;height:1px;background:var(--red)}
+  .cta h2{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(44px,6vw,84px);line-height:.98;letter-spacing:-.035em;max-width:900px;margin:0 auto}
+  .cta h2 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .buttons{margin-top:48px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:14px;padding:20px 36px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;border:1px solid var(--ink);transition:all .2s;cursor:pointer}
+  .btn.primary{background:var(--ink);color:var(--paper)}
+  .btn.primary:hover{background:var(--red);border-color:var(--red)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{background:var(--ink);color:var(--paper)}
+  .btn .dot{width:6px;height:6px;border-radius:50%;background:var(--red)}
+  .btn.primary .dot{background:var(--paper)}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:var(--paper);padding:48px 40px 28px}
+  .foot-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:24px}
+  .foot-inner .wm{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:32px;letter-spacing:-.02em}
+  .foot-inner .wm span{color:var(--red-hi)}
+  .foot-inner .meta{color:rgba(242,236,225,.6);display:flex;gap:24px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;flex-wrap:wrap}
+  .foot-inner .meta span::before{content:"→ ";color:var(--red-hi)}
+  .foot-bottom{max-width:1400px;margin:28px auto 0;padding-top:20px;border-top:1px solid rgba(242,236,225,.2);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.5)}
+
+  /* RESPONSIVE */
+  @media (max-width:900px){
+    nav{padding:20px 24px;flex-direction:column;gap:12px;align-items:flex-start}
+    nav .meta{gap:14px;font-size:10px}
+    .intro,.next-event,.section,.cta,.bio{padding-left:24px;padding-right:24px}
+    .hero-split{grid-template-columns:1fr;gap:40px}
+    .section-head{grid-template-columns:1fr;gap:16px}
+    .section-roman{font-size:56px}
+    .next-grid{grid-template-columns:1fr;gap:0}
+    .next-date{border-right:none;border-bottom:1px dashed var(--rule);padding:28px 24px}
+    .next-body{padding:28px 24px}
+    .next-tag{border-left:none;border-top:1px dashed var(--rule);padding:24px;justify-content:center}
+    .next-date .ndate{font-size:48px}
+    .talks{grid-template-columns:1fr}
+    .talk{border-right:none;min-height:auto;padding:32px 24px}
+    .talk .context-grid{grid-template-columns:1fr}
+    .formats-grid{grid-template-columns:1fr}
+    .format{border-right:none;border-bottom:1px solid var(--ink);min-height:auto}
+    .format:last-child{border-bottom:none}
+    .bio-card{grid-template-columns:1fr;gap:24px;padding:28px}
+    .bio-head h4{font-size:32px}
+    .meta-bar{gap:16px}
+  }
+  .fadeup{opacity:0;transform:translateY(20px);animation:fu 1s .1s forwards cubic-bezier(.2,.7,.2,1)}
+  @keyframes fu{to{opacity:1;transform:none}}
+  html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wordmark"><a href="index.html"><b>◉ CLIC</b> <em>— Centro de letramento digital</em></a></div>
+  <div class="meta">
+    <span><a href="index.html#manifesto">Manifesto</a></span>
+    <span class="active"><a href="produtos.html" style="color:inherit">Produtos</a></span>
+    <span><a href="dados.html">Dados</a></span>
+    <span><a href="index.html#contato">Contato</a></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="intro">
+  <div class="breadcrumb fadeup">
+    <a href="index.html">Início</a>
+    <span class="sep">/</span>
+    <a href="produtos.html">Produtos</a>
+    <span class="sep">/</span>
+    <span class="current">Palestras &amp; keynotes · Edição I · MMXXVI</span>
+  </div>
+
+  <div class="kicker fadeup">Produto 04 · Porta de entrada · Formato curto</div>
+
+  <h1 class="fadeup">
+    Quatro <em>palestras</em>,<br>
+    quatro <em>portas</em><br>
+    de entrada.
+  </h1>
+
+  <div class="hero-split">
+    <div class="lede">
+      <p>Palestras de <strong>45 a 90 minutos</strong>, pensadas para abrir ciclos formativos, ativar semanas do servidor, compor programações de congressos e eventos institucionais — ou introduzir uma instituição aos temas do CLIC antes de um programa mais longo.</p>
+      <p>Cada palestra parte de uma tese forte e chega em formato aplicável. São os recortes principais do trabalho do CLIC, <strong>traduzidos para o tempo curto</strong> de um evento — sem perder densidade, mas respeitando o ritmo de uma plateia que não veio para uma oficina.</p>
+    </div>
+    <div class="hero-card">
+      <div class="card-k">→ Ficha rápida</div>
+      <dl>
+        <dt>Repertório</dt><dd>04 palestras ativas</dd>
+        <dt>Duração</dt><dd>45 a 90 minutos</dd>
+        <dt>Formato</dt><dd>Presencial, remoto ou híbrido</dd>
+        <dt>Função</dt><dd><em>Porta de entrada</em> — frequentemente precede oficina ou programa</dd>
+        <dt>Contratação</dt><dd>Unitária ou em pacote (03 ou 05)</dd>
+        <dt>Customização</dt><dd>Recortes adaptados ao evento contratante</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="meta-bar">
+    <span><b>Público</b> alta gestão · áreas técnicas · eventos institucionais</span>
+    <span><b>Tom</b> editorial-crítico, com base prática</span>
+    <span><b>Ciclo comercial</b> curto · alta frequência</span>
+  </div>
+</section>
+
+<!-- PRÓXIMO COMPROMISSO -->
+<section class="next-event">
+  <div class="next-card">
+    <div class="next-grid">
+      <div class="next-date">
+        <div class="nlbl">→ Próximo compromisso</div>
+        <div class="ndate">Em breve<em>a confirmar</em></div>
+        <div class="ndate-when">Calendário MMXXVI</div>
+      </div>
+      <div class="next-body">
+        <div class="nk">→ Encontro Nacional de Laboratórios de Inovação · ENAP</div>
+        <h3>Letramento digital como <em>infraestrutura</em>:<br>por que o Estado precisa <em>formar</em> antes de <em>contratar</em>.</h3>
+        <div class="nev">Encontro Nacional de Laboratórios de Inovação em Governo</div>
+        <p>Palestra dirigida a labs de inovação pública: o letramento digital como camada de infraestrutura institucional — não como treinamento corporativo. Apresenta o modelo do CLIC como resposta prática ao desafio de formar quadros técnicos antes de contratar soluções de IA, reduzindo dependência de fornecedor e ampliando autonomia crítica dentro do órgão.</p>
+      </div>
+      <div class="next-tag">
+        <div class="stamp">
+          Próxima<br>
+          aparição
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REPERTÓRIO -->
+<section class="section" id="repertorio">
+  <div class="section-head">
+    <div class="section-roman">I.</div>
+    <div>
+      <div class="sub">Repertório · quatro palestras ativas</div>
+      <h2>Quatro <em>recortes</em>, quatro <em>públicos</em>.</h2>
+      <p>Cada palestra nasce de um dos eixos centrais do CLIC e chega em linguagem e ritmo de evento. O contratante escolhe o recorte que dialoga com o momento da sua instituição — e nós adaptamos o tom, o exemplo e o estudo de caso ao vocabulário do órgão.</p>
+    </div>
+  </div>
+
+  <div class="talks">
+
+    <!-- PALESTRA 01 -->
+    <div class="talk" id="t1">
+      <div class="talk-head">
+        <div class="talk-n"><b>I.</b> Capacidade estatal &amp; IA</div>
+        <div class="talk-duration">60–90 min</div>
+      </div>
+      <h3>Não existe <em>Estado digital</em> sem quadros digitalmente letrados.</h3>
+      <div class="thesis">
+        O que não se compreende, se terceiriza — e o Estado que terceiriza o que decide por ele deixa de decidir.
+      </div>
+      <p class="talk-body">
+        O argumento central do CLIC, em versão keynote. Por que a corrida do Estado brasileiro para adotar IA, sem formação crítica prévia dos próprios quadros, gera dependência de fornecedor, superfaturamento e decisões opacas — e qual o caminho para construir capacidade estatal de verdade, de dentro pra fora.
+      </p>
+      <div class="context-grid">
+        <div class="cx"><b>Público ideal</b><p>Alta gestão, áreas de inovação pública, controladorias, órgãos de controle social</p></div>
+        <div class="cx"><b>Aplicação típica</b><p>Abertura de programa anual, seminários de transformação digital, encontros de gestores</p></div>
+      </div>
+    </div>
+
+    <!-- PALESTRA 02 -->
+    <div class="talk" id="t2">
+      <div class="talk-head">
+        <div class="talk-n"><b>II.</b> Mulheres &amp; IA no Estado</div>
+        <div class="talk-duration">45–60 min</div>
+      </div>
+      <h3>Quem constrói a tecnologia <em>decide</em> o futuro — mulheres e IA no setor público.</h3>
+      <div class="thesis">
+        Diversidade não é pauta social. É requisito técnico para que a IA funcione direito no serviço público.
+      </div>
+      <p class="talk-body">
+        A palestra apresenta a relação entre mulheres e IA no setor público a partir de uma perspectiva prática. Parte do reconhecimento de que a baixa participação feminina na tecnologia não é apenas uma questão de acesso — é resultado de barreiras estruturais. Mostra, por meio da experiência das oficinas, como servidoras estão deixando o papel de usuárias de sistemas para se tornarem autoras de tecnologia.
+      </p>
+      <div class="context-grid">
+        <div class="cx"><b>Público ideal</b><p>Eventos de mulheres em STEM, secretarias de mulheres, redes de servidoras, programas de equidade</p></div>
+        <div class="cx"><b>Aplicação típica</b><p>Congressos de diversidade, Dia Internacional da Mulher, semanas de equidade, aberturas de ciclos formativos femininos</p></div>
+      </div>
+    </div>
+
+    <!-- PALESTRA 03 -->
+    <div class="talk" id="t3">
+      <div class="talk-head">
+        <div class="talk-n"><b>III.</b> Usuárias &gt; autoras</div>
+        <div class="talk-duration">45–60 min</div>
+      </div>
+      <h3>De <em>usuárias</em> a <em>autoras</em>: letramento digital como política pública.</h3>
+      <div class="thesis">
+        A transformação digital no serviço público não começa com um edital de licitação. Começa com a autoria de quem está dentro.
+      </div>
+      <p class="talk-body">
+        Uma palestra inspiracional, mas não vazia. Articula a trajetória da idealizadora do CLIC — mulher negra, vinda das humanidades, que migrou para tecnologia a partir do serviço público — com a experiência da plataforma Ascenda e da oficina Servidoras no Comando. Fala a quem precisa começar, não a quem já começou.
+      </p>
+      <div class="context-grid">
+        <div class="cx"><b>Público ideal</b><p>Servidoras e servidores em início de trajetória digital, semanas do servidor, eventos institucionais amplos</p></div>
+        <div class="cx"><b>Aplicação típica</b><p>Abertura de programas formativos, semanas temáticas, eventos internos de transformação digital</p></div>
+      </div>
+    </div>
+
+    <!-- PALESTRA 04 -->
+    <div class="talk" id="t4">
+      <div class="talk-head">
+        <div class="talk-n"><b>IV.</b> IA, direitos &amp; governança</div>
+        <div class="talk-duration">60–90 min</div>
+      </div>
+      <h3>IA, <em>Direitos Humanos</em> e atuação pública.</h3>
+      <div class="thesis">
+        Como usar IA no trabalho público sem automatizar vieses, opacidade e exclusões?
+      </div>
+      <p class="talk-body">
+        Leitura crítica e aplicada da IA no Estado: por que sistemas algorítmicos automatizam desigualdades históricas quando mal desenhados, e quais são os princípios e marcos regulatórios que o servidor público precisa dominar — Human-in-Command, matriz de risco do EU AI Act, LGPD Art. 20, engenharia de prompts para accountability. Casos documentados (Indiana, Los Angeles, Pittsburgh) como espelho do que pode acontecer aqui.
+      </p>
+      <div class="context-grid">
+        <div class="cx"><b>Público ideal</b><p>Defensorias, ouvidorias, secretarias de DH, órgãos de controle, coordenações de equidade</p></div>
+        <div class="cx"><b>Aplicação típica</b><p>Seminários de governança algorítmica, semanas de DH, eventos de controle social, capacitações de risco</p></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BIO -->
+<section class="bio">
+  <div class="bio-card">
+    <div class="bio-head">
+      <div class="bk">→ Quem fala</div>
+      <h4>Sobre a <em>palestrante</em></h4>
+    </div>
+    <div class="bio-body">
+      <p><strong>Coordenadora-Geral de Riscos e Controle no Ministério da Gestão e da Inovação em Serviços Públicos</strong>, com atuação em transformação digital, governança e gestão de riscos por meio do uso de dados para a tomada de decisão no Estado.</p>
+      <p>Mulher negra, com formação em História e formações complementares em Análise e Desenvolvimento de Sistemas, Inteligência Artificial e Automação Digital. Liderou a transformação dos serviços de previdência e assistência nas regiões Norte e Centro-Oeste, viabilizando o atendimento remoto por meio da adoção do processo eletrônico.</p>
+      <p>Criadora da plataforma <em>Ascenda</em> e da oficina <em>Servidoras no Comando</em>, que capacita mulheres em letramento digital por meio da criação de soluções aplicadas ao setor público, promovendo autonomia tecnológica e uso estratégico no trabalho.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FORMATOS -->
+<section class="section" id="formatos">
+  <div class="section-head">
+    <div class="section-roman">II.</div>
+    <div>
+      <div class="sub">Como contratar · três formatos</div>
+      <h2>Três <em>modos</em> de trazer uma palestra para o seu evento.</h2>
+      <p>Escolha o formato que faz sentido para o momento da instituição — da participação pontual num evento específico até uma agenda anual que conecta palestra, oficina e programa.</p>
+    </div>
+  </div>
+
+  <div class="formats-grid">
+    <div class="format">
+      <div class="format-n">01</div>
+      <h4>Palestra <em>unitária</em></h4>
+      <p class="fd">Uma aparição pontual com palestra escolhida do repertório, adaptada ao contexto do evento contratante.</p>
+      <ul class="format-inc">
+        <li>Uma palestra de 45 a 90 min</li>
+        <li>Reunião prévia de alinhamento</li>
+        <li>Adaptação ao vocabulário do órgão</li>
+        <li>Presencial, remoto ou híbrido</li>
+      </ul>
+      <div class="format-meta">Baixo comprometimento · aparição única</div>
+    </div>
+
+    <div class="format">
+      <div class="format-n">02</div>
+      <h4>Pacote de <em>três</em></h4>
+      <p class="fd">Três palestras contratadas em bloco — mesmo ou diferentes recortes — para compor agenda ao longo do ano ou cobrir ciclo de eventos da instituição.</p>
+      <ul class="format-inc">
+        <li>Três palestras à escolha</li>
+        <li>Agenda planejada em conjunto</li>
+        <li>Desconto de volume</li>
+        <li>Continuidade temática opcional</li>
+      </ul>
+      <div class="format-meta">Recorrência · valor agregado</div>
+    </div>
+
+    <div class="format">
+      <div class="format-n">03</div>
+      <h4>Palestra <em>+</em> oficina</h4>
+      <p class="fd">Combinação estratégica: palestra como porta de entrada para o órgão, seguida de oficina CLIC Mulheres ou DH no mesmo ciclo — ou como piloto antes de contratar o Programa em seis níveis.</p>
+      <ul class="format-inc">
+        <li>Palestra escolhida do repertório</li>
+        <li>Oficina aplicada (temática à escolha)</li>
+        <li>Diagnóstico de próximos passos</li>
+        <li>Caminho claro para escalar</li>
+      </ul>
+      <div class="format-meta">Porta de entrada estratégica · maior retorno</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-inner">
+    <div class="cta-k">Próximo passo</div>
+    <h2>Qual <em>palestra</em> faz sentido para o seu próximo evento?</h2>
+    <div class="buttons">
+      <a class="btn primary" href="index.html#contato"><span class="dot"></span>Conversar sobre evento</a>
+      <a class="btn ghost" href="produtos.html"><span class="dot"></span>Ver outros produtos</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="wm">CLIC<span>.</span></div>
+    <div class="meta">
+      <span><a href="index.html" style="color:inherit">Início</a></span>
+      <span><a href="produtos.html" style="color:#E8805F">Produtos</a></span>
+      <span><a href="dados.html" style="color:inherit">Dados</a></span>
+      <span><a href="index.html#contato" style="color:inherit">Contato</a></span>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>CLIC © MMXXVI · Centro de letramento digital</span>
+    <span>Palestras &amp; keynotes · edição I · abril de MMXXVI</span>
+  </div>
+</footer>
+
+</body>
+</html>

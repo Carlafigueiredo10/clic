@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CLIC — Curadoria de ferramentas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2ECE1;
+    --paper-2:#E8DFCE;
+    --ink:#141210;
+    --ink-2:#3A342B;
+    --red:#B3321A;
+    --green:#3E4A2A;
+    --coral:#E8805F;
+    --rule:rgba(20,18,16,.16);
+    --grid:rgba(20,18,16,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  html,body{background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased}
+  body{
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      radial-gradient(circle at 20% 10%, rgba(179,50,26,.05), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(62,74,42,.06), transparent 50%);
+    background-size: calc(100%/12) 100%, auto, auto;
+    overflow-x:hidden;min-height:100vh;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.35;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .35 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode:multiply;
+  }
+
+  /* ======= NAV ======= */
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:28px 40px;border-bottom:1px solid var(--rule);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    position:relative;z-index:10;
+  }
+  nav a{color:inherit;text-decoration:none}
+  nav .meta{display:flex;gap:28px;color:var(--ink-2);flex-wrap:wrap}
+  nav .meta span::before{content:"→ ";color:var(--red)}
+  nav .meta .active{color:var(--ink);font-weight:500}
+  .wordmark{font-family:'Fraunces',serif;font-weight:400;font-style:italic;font-size:22px;letter-spacing:-.02em}
+  .wordmark b{font-style:normal;font-weight:600;letter-spacing:.3em;font-size:14px;margin-right:6px;vertical-align:1px}
+
+  /* ======= HERO ======= */
+  .page-hero{
+    padding:80px 40px 40px;display:grid;grid-template-columns:1.2fr 1fr;gap:60px;
+    border-bottom:1px solid var(--rule);position:relative;
+  }
+  .kicker{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:32px;display:flex;align-items:center;gap:12px}
+  .kicker::before{content:"";width:40px;height:1px;background:var(--red)}
+  .page-hero h1{
+    font-family:'Fraunces',serif;font-weight:300;
+    font-size:clamp(48px,7vw,108px);line-height:.92;letter-spacing:-.04em;
+    font-variation-settings:"SOFT" 50, "WONK" 0;
+  }
+  .page-hero h1 em{font-style:italic;font-weight:300;color:var(--red);font-variation-settings:"SOFT" 100,"WONK" 1}
+  .page-hero .lede{margin-top:36px;max-width:560px;font-size:18px;line-height:1.55;color:var(--ink-2);font-weight:300}
+  .page-hero .lede strong{color:var(--ink);font-weight:500}
+
+  .hero-side{position:relative}
+  .stamp{
+    position:absolute;top:0;right:0;transform:rotate(-6deg);
+    border:2px solid var(--red);color:var(--red);
+    padding:14px 22px;font-family:'IBM Plex Mono',monospace;font-size:11px;
+    letter-spacing:.18em;text-transform:uppercase;line-height:1.3;text-align:center;
+    box-shadow:inset 0 0 0 1px var(--red);
+  }
+  .stamp::before,.stamp::after{content:"✶";display:block;font-size:10px;margin:2px 0}
+  .meta-block{
+    margin-top:140px;border:1px solid var(--ink);padding:28px;background:rgba(255,255,255,.3);position:relative;
+  }
+  .meta-block h3{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:24px;margin-bottom:14px;line-height:1.2}
+  .meta-block dl{font-family:'IBM Plex Mono',monospace;font-size:12px;display:grid;grid-template-columns:auto 1fr;gap:8px 24px;margin-top:14px}
+  .meta-block dt{color:var(--ink-2);text-transform:uppercase;letter-spacing:.1em}
+  .meta-block dd{color:var(--ink);font-weight:500}
+  .corner{position:absolute;width:14px;height:14px;border:1px solid var(--ink)}
+  .tl{top:-1px;left:-1px;border-right:none;border-bottom:none}
+  .tr{top:-1px;right:-1px;border-left:none;border-bottom:none}
+  .bl{bottom:-1px;left:-1px;border-right:none;border-top:none}
+  .br{bottom:-1px;right:-1px;border-left:none;border-top:none}
+
+  /* ======= GUIA / LEGENDA ======= */
+  .guide{padding:80px 40px;border-bottom:1px solid var(--rule);position:relative}
+  .section-label{
+    position:absolute;top:32px;left:40px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);
+    display:flex;gap:18px;align-items:center;
+  }
+  .section-label .num{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:28px;color:var(--red);letter-spacing:0}
+
+  .guide-grid{
+    max-width:1300px;margin:60px auto 0;display:grid;grid-template-columns:repeat(3,1fr);
+    border:1px solid var(--ink);
+  }
+  .guide-card{padding:32px;border-right:1px solid var(--ink);background:rgba(255,255,255,.3)}
+  .guide-card:last-child{border-right:none}
+  .guide-card h4{
+    font-family:'Fraunces',serif;font-weight:400;font-size:24px;line-height:1.1;letter-spacing:-.015em;margin-bottom:16px;
+  }
+  .guide-card h4 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .guide-card p{font-size:14px;line-height:1.6;color:var(--ink-2)}
+  .guide-card p + p{margin-top:10px}
+  .guide-card ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:12px}
+  .guide-card ul li{display:flex;gap:14px;color:var(--ink-2);align-items:baseline}
+  .guide-card ul li b{color:var(--ink);font-weight:500;min-width:88px;letter-spacing:.05em}
+  .star-fill{color:var(--red)}
+  .star-empty{color:var(--rule)}
+  .note{
+    margin-top:16px;padding:14px;border:1px dashed var(--red);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.6;color:var(--red);letter-spacing:.02em;
+  }
+
+  /* ======= CONTROLES ======= */
+  .controls{padding:60px 40px 32px;border-bottom:1px solid var(--rule);max-width:1300px;margin:0 auto;width:100%}
+  .controls-row{
+    display:flex;gap:20px;align-items:center;margin-bottom:32px;flex-wrap:wrap;
+  }
+  .search-wrap{flex:1;min-width:280px;position:relative;border:1px solid var(--ink);background:rgba(255,255,255,.4)}
+  .search-wrap svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-2);opacity:.5}
+  .search-wrap input{
+    width:100%;padding:18px 20px 18px 46px;background:transparent;border:none;outline:none;
+    font-family:'IBM Plex Sans',sans-serif;font-size:15px;color:var(--ink);
+  }
+  .search-wrap input::placeholder{color:var(--ink-2);opacity:.5}
+  .counter{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--red);padding:14px 20px;border:1px solid var(--red);white-space:nowrap;
+  }
+
+  .filter-group{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:18px}
+  .filter-label{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);
+    min-width:88px;padding-top:10px;
+  }
+  .filter-label .num{color:var(--red);margin-right:6px;font-family:'Fraunces',serif;font-style:italic;font-size:14px}
+  .pills{display:flex;gap:0;flex-wrap:wrap;border:1px solid var(--rule)}
+  .pill{
+    padding:9px 16px;border-right:1px solid var(--rule);background:transparent;color:var(--ink-2);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    cursor:pointer;transition:all .2s;white-space:nowrap;
+  }
+  .pill:last-child{border-right:none}
+  .pill:hover{background:rgba(20,18,16,.06);color:var(--ink)}
+  .pill.active{background:var(--ink);color:var(--paper)}
+
+  /* ======= GRID ======= */
+  .tools{padding:48px 40px 80px;max-width:1300px;margin:0 auto;width:100%}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:0;border-top:1px solid var(--ink);border-left:1px solid var(--ink)}
+  .card{
+    padding:24px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    background:rgba(255,255,255,.25);display:flex;flex-direction:column;gap:14px;
+    transition:background .25s;position:relative;
+  }
+  .card:hover{background:rgba(232,128,95,.08)}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .card h5{
+    font-family:'Fraunces',serif;font-weight:400;font-size:24px;line-height:1.1;letter-spacing:-.015em;
+    color:var(--ink);
+  }
+  .card-tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;flex-shrink:0;max-width:55%}
+  .tag{
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+    padding:3px 7px;border:1px solid var(--ink-2);color:var(--ink-2);white-space:nowrap;
+  }
+  .tag-cat{border-color:var(--ink-2);color:var(--ink-2)}
+  .tag-br{border-color:var(--green);color:var(--green)}
+  .tag-cn{border-color:var(--red);color:var(--red)}
+  .tag-os{border-color:var(--ink);color:var(--ink);background:var(--ink);color:var(--paper)}
+  .card-desc{font-size:14px;line-height:1.55;color:var(--ink-2);flex:1}
+  .card-meta{
+    display:flex;justify-content:space-between;align-items:center;gap:8px;
+    padding-top:14px;border-top:1px dashed var(--rule);
+  }
+  .meta-left{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .stars{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.05em;color:var(--red);line-height:1}
+  .stars .empty{color:var(--rule)}
+  .stars-unknown{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);opacity:.6;font-style:italic}
+  .data-yes{
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+    padding:2px 7px;border:1px solid var(--green);color:var(--green);
+  }
+  .data-no{
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+    padding:2px 7px;border:1px solid var(--rule);color:var(--ink-2);opacity:.6;
+  }
+  .card-link{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--red);text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+    transition:gap .2s;white-space:nowrap;
+  }
+  .card-link:hover{gap:10px}
+
+  .empty{
+    grid-column:1/-1;text-align:center;padding:80px 24px;
+    border:1px solid var(--rule);background:rgba(255,255,255,.2);
+    color:var(--ink-2);font-family:'Fraunces',serif;font-style:italic;font-size:22px;display:none;
+  }
+
+  /* ======= FOOTER ======= */
+  footer{background:var(--ink);color:var(--paper);padding:60px 40px 30px;margin-top:40px}
+  .foot-grid{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;padding-bottom:40px;border-bottom:1px solid rgba(242,236,225,.2)}
+  .foot-grid h6{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(242,236,225,.5);margin-bottom:20px}
+  .foot-grid .brand h2{font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:56px;line-height:.9;letter-spacing:-.03em;margin-bottom:16px}
+  .foot-grid .brand p{font-size:14px;color:rgba(242,236,225,.6);max-width:320px;line-height:1.55}
+  .foot-grid ul{list-style:none;font-family:'IBM Plex Sans',sans-serif;font-size:14px}
+  .foot-grid ul li{margin-bottom:10px;color:rgba(242,236,225,.75)}
+  .foot-grid ul li a{color:inherit;text-decoration:none;transition:color .2s}
+  .foot-grid ul li a:hover{color:var(--coral)}
+  .foot-bottom{max-width:1300px;margin:24px auto 0;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(242,236,225,.5);flex-wrap:wrap;gap:12px}
+
+  /* ======= RESPONSIVE ======= */
+  @media (max-width:900px){
+    nav{padding:20px 24px;flex-direction:column;gap:12px;align-items:flex-start}
+    nav .meta{gap:14px}
+    .page-hero{grid-template-columns:1fr;padding:60px 24px;gap:40px}
+    .meta-block{margin-top:60px}
+    .stamp{position:static;display:inline-block;margin-bottom:24px}
+    .guide{padding:60px 24px}
+    .guide-grid{grid-template-columns:1fr}
+    .guide-card{border-right:none;border-bottom:1px solid var(--ink)}
+    .guide-card:last-child{border-bottom:none}
+    .controls{padding:40px 24px 24px}
+    .tools{padding:32px 24px 60px}
+    .grid{grid-template-columns:1fr}
+    .section-label{position:static;margin-bottom:24px}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:32px}
+  }
+
+  /* ======= ANIM ======= */
+  .fadeup{opacity:0;transform:translateY(20px);animation:fu 1s .1s forwards cubic-bezier(.2,.7,.2,1)}
+  .fadeup.d2{animation-delay:.25s}
+  .fadeup.d3{animation-delay:.4s}
+  @keyframes fu{to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="wordmark" href="index.html"><b>◉ CLIC</b> <em>— Centro de letramento digital</em></a>
+  <div class="meta">
+    <span><a href="index.html#manifesto">Manifesto</a></span>
+    <span><a href="produtos.html">Produtos</a></span>
+    <span class="active"><a href="ferramentas.html">Ferramentas</a></span>
+    <span><a href="dados.html">Dados</a></span>
+    <span><a href="index.html#cta">Contato</a></span>
+    <span style="color:var(--red)">Edição I · MMXXVI</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="fadeup">
+    <div class="kicker">Volume II · Curadoria pública</div>
+    <h1>
+      Curadoria <em>CLIC</em><br>
+      de ferramentas<br>
+      <em>pra você</em>.
+    </h1>
+    <p class="lede">
+      Mais de <strong>cem ferramentas de IA</strong> organizadas por categoria, nível de gratuidade e possibilidade de controle dos seus dados. Lista viva, em revisão contínua, montada para servidoras e servidores que precisam <strong>escolher antes de usar</strong>.
+    </p>
+  </div>
+
+  <div class="hero-side fadeup d2">
+    <div class="stamp">
+      Curadoria<br>
+      Verificada<br>
+      Edição I
+    </div>
+    <div class="meta-block">
+      <span class="corner tl"></span><span class="corner tr"></span>
+      <span class="corner bl"></span><span class="corner br"></span>
+      <h3>Critérios <em style="font-style:italic;color:var(--red)">declarados</em>, fontes oficiais.</h3>
+      <p style="font-size:14px;color:var(--ink-2);line-height:1.55">
+        Cada ferramenta foi avaliada com base na documentação oficial vigente. Quando a informação não foi encontrada em fonte primária, marcamos <b>?</b> em vez de presumir.
+      </p>
+      <dl>
+        <dt>Volume</dt><dd>100+ ferramentas</dd>
+        <dt>Categorias</dt><dd>10 trilhas de uso</dd>
+        <dt>Origem</dt><dd>Brasil · China · Open Source</dd>
+        <dt>Atualização</dt><dd>Contínua · 2026</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- GUIA -->
+<section class="guide">
+  <div class="section-label"><span class="num">I</span> Como ler esta lista</div>
+  <div class="guide-grid">
+    <div class="guide-card">
+      <h4>Nível de <em>gratuidade</em></h4>
+      <p>Avaliamos cada ferramenta pelo que está disponível sem pagar:</p>
+      <ul>
+        <li><b><span class="star-fill">★★★★★</span></b> Open source ou grátis forte e contínuo</li>
+        <li><b><span class="star-fill">★★★★</span><span class="star-empty">★</span></b> Plano grátis contínuo e bem utilizável</li>
+        <li><b><span class="star-fill">★★★</span><span class="star-empty">★★</span></b> Plano grátis com limites relevantes</li>
+        <li><b><span class="star-fill">★★</span><span class="star-empty">★★★</span></b> Só teste grátis ou créditos</li>
+        <li><b><span class="star-fill">★</span><span class="star-empty">★★★★</span></b> Sem plano gratuito</li>
+        <li><b>?</b> Não confirmado em fonte oficial</li>
+      </ul>
+    </div>
+
+    <div class="guide-card">
+      <h4>Controle de <em>dados</em></h4>
+      <p>Marcamos <b style="color:var(--green)">CONTROLE</b> apenas quando a documentação oficial menciona pelo menos uma destas opções: exclusão de dados, controle de retenção, opt-out de treinamento, isolamento enterprise ou self-host.</p>
+      <p>Quando aparece <b>S/INFO</b>, significa que não encontramos a informação nas fontes oficiais — não que a ferramenta seja insegura.</p>
+      <div class="note">
+        No serviço público, nunca insira CPF, RG, dados de saúde ou segredos de justiça em ferramentas de IA. Anonimize sempre. A IA é copiloto, não comandante.
+      </div>
+    </div>
+
+    <div class="guide-card">
+      <h4>Como <em>filtrar</em></h4>
+      <p>Use a <b>busca</b> para localizar uma ferramenta pelo nome ou descrição. Os filtros por <b>categoria</b>, <b>gratuidade</b> e <b>origem</b> funcionam combinados — refinam a busca em camadas.</p>
+      <p>Para ver apenas ferramentas <b style="color:var(--green)">brasileiras</b>, <b style="color:var(--ink)">open source</b> ou <b style="color:var(--red)">chinesas</b>, use o filtro de Origem.</p>
+      <p style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.05em;color:var(--ink-2)">
+        → A curadoria é viva. Tem sugestão? Escreva para <b style="color:var(--red)">contato@clic.gov.br</b>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTROLES -->
+<div class="controls">
+  <div class="controls-row">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="catSearch" placeholder="Buscar ferramenta por nome ou descrição…" autocomplete="off">
+    </div>
+    <div class="counter" id="catCounter">100+ ferramentas</div>
+  </div>
+
+  <div class="filter-group">
+    <div class="filter-label"><span class="num">i</span>Categoria</div>
+    <div class="pills" data-group="cat">
+      <button class="pill active" data-filter="all">Todas</button>
+      <button class="pill" data-filter="assistente">Chat / Texto</button>
+      <button class="pill" data-filter="escrita">Escrita</button>
+      <button class="pill" data-filter="imagem">Imagem / Design</button>
+      <button class="pill" data-filter="audio">Áudio / Vídeo</button>
+      <button class="pill" data-filter="apps">Aplicativos</button>
+      <button class="pill" data-filter="dados">Produtividade</button>
+      <button class="pill" data-filter="apresentacao">Apresentações</button>
+      <button class="pill" data-filter="prompts">Prompts</button>
+      <button class="pill" data-filter="codigo">Programar</button>
+      <button class="pill" data-filter="multi">Multi-uso</button>
+    </div>
+  </div>
+
+  <div class="filter-group">
+    <div class="filter-label"><span class="num">ii</span>Gratuidade</div>
+    <div class="pills" data-group="gratis">
+      <button class="pill active" data-filter="all">Todas</button>
+      <button class="pill" data-filter="5">★★★★★</button>
+      <button class="pill" data-filter="4">★★★★ +</button>
+      <button class="pill" data-filter="3">★★★ +</button>
+      <button class="pill" data-filter="pago">Só pago</button>
+    </div>
+  </div>
+
+  <div class="filter-group">
+    <div class="filter-label"><span class="num">iii</span>Origem</div>
+    <div class="pills" data-group="origem">
+      <button class="pill active" data-filter="all">Todas</button>
+      <button class="pill" data-filter="br">Brasil</button>
+      <button class="pill" data-filter="cn">China</button>
+      <button class="pill" data-filter="os">Open Source</button>
+    </div>
+  </div>
+</div>
+
+<!-- GRID -->
+<section class="tools">
+  <div class="grid" id="catGrid"></div>
+  <div class="empty" id="catEmpty">Nenhuma ferramenta encontrada com esses filtros.</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div class="brand">
+      <h2>CLIC<span style="color:var(--coral)">.</span></h2>
+      <p>Centro de Letramento, Inovação e Competências Digitais. Curadoria de ferramentas verificada em fontes oficiais.</p>
+    </div>
+    <div>
+      <h6>Navegar</h6>
+      <ul>
+        <li><a href="index.html#manifesto">Manifesto</a></li>
+        <li><a href="produtos.html">Produtos</a></li>
+        <li><a href="ferramentas.html">Ferramentas</a></li>
+        <li><a href="dados.html">Dados</a></li>
+      </ul>
+    </div>
+    <div>
+      <h6>Materiais</h6>
+      <ul>
+        <li>Publicações</li>
+        <li>Biblioteca aberta</li>
+        <li>Notas técnicas</li>
+      </ul>
+    </div>
+    <div>
+      <h6>Contato</h6>
+      <ul>
+        <li>contato@clic.gov.br</li>
+        <li>Brasília · DF</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>CLIC © MMXXVI — Todos os direitos do comum</span>
+    <span>Curadoria · Volume II · Edição contínua</span>
+    <span>LGPD · Lei 14.129/21</span>
+  </div>
+</footer>
+
+<script>
+const DATA = [
+  // Assistentes / Chat / Texto
+  {n:"ChatGPT",d:"Assistente multimodal para chat, escrita, análise e criação de conteúdo.",c:"assistente",g:4,data:"sim",url:"https://chatgpt.com",tags:[]},
+  {n:"Claude",d:"Assistente focado em escrita, análise e produtividade com raciocínio avançado.",c:"assistente",g:3,data:"sim",url:"https://claude.ai",tags:[]},
+  {n:"Gemini",d:"Assistente do Google para texto e produtividade, integrado ao ecossistema Google.",c:"assistente",g:4,data:"?",url:"https://gemini.google.com",tags:[]},
+  {n:"Perplexity",d:"Busca inteligente com respostas baseadas em fontes e citações.",c:"assistente",g:4,data:"sim",url:"https://www.perplexity.ai",tags:[]},
+  {n:"Microsoft Copilot",d:"Assistente integrado ao ecossistema Microsoft 365.",c:"assistente",g:0,data:"sim",url:"https://copilot.microsoft.com",tags:[]},
+  {n:"Meta AI",d:"Assistente da Meta para perguntas e geração de imagens.",c:"assistente",g:4,data:"?",url:"https://www.meta.ai",tags:[]},
+  {n:"Poe",d:"Hub de múltiplos modelos de IA com pontos diários gratuitos.",c:"assistente",g:3,data:"?",url:"https://poe.com",tags:[]},
+  {n:"You.com",d:"Assistente e suíte de IA com funcionalidades de busca.",c:"assistente",g:4,data:"?",url:"https://you.com",tags:[]},
+  {n:"Le Chat (Mistral)",d:"Assistente da Mistral para chat e trabalho.",c:"assistente",g:3,data:"?",url:"https://chat.mistral.ai",tags:[]},
+  {n:"DeepSeek",d:"Assistente com acesso gratuito e opt-out de uso para treinamento.",c:"assistente",g:4,data:"sim",url:"https://www.deepseek.com",tags:["cn"]},
+  {n:"Doubao (豆包)",d:"Assistente da ByteDance com uso gratuito ao fazer login.",c:"assistente",g:4,data:"?",url:"https://www.doubao.com",tags:["cn"]},
+  {n:"Kimi (Moonshot AI)",d:"Assistente chinês para produtividade e análise de conteúdo longo.",c:"assistente",g:0,data:"?",url:"https://www.moonshot.cn",tags:["cn"]},
+  {n:"ERNIE Bot (文心一言)",d:"Assistente chinês da Baidu para chat, escrita e tradução.",c:"assistente",g:0,data:"?",url:"https://yiyan.baidu.com",tags:["cn"]},
+  {n:"Qwen (通义千问)",d:"Assistente da Alibaba para escrita, código e documentos.",c:"assistente",g:0,data:"?",url:"https://www.qianwen.com",tags:["cn"]},
+  {n:"iFlytek Spark (讯飞星火)",d:"Assistente chinês da iFlytek com foco em produtividade.",c:"assistente",g:0,data:"?",url:"https://xinghuo.xfyun.cn",tags:["cn"]},
+  {n:"Tencent Yuanbao (腾讯元宝)",d:"Assistente baseado no modelo Hunyuan para escrita e resumo.",c:"assistente",g:0,data:"?",url:"https://yuanbao.tencent.com",tags:["cn"]},
+  {n:"ChatGLM (智谱清言)",d:"Assistente chinês baseado em GLM para chat e programação.",c:"assistente",g:0,data:"?",url:"https://chatglm.cn",tags:["cn"]},
+  {n:"Character.AI",d:"Plataforma de chat com personagens de IA personalizáveis.",c:"assistente",g:0,data:"sim",url:"https://character.ai",tags:[]},
+  {n:"Comet",d:"Navegador agêntico da Perplexity que executa tarefas na web autonomamente.",c:"assistente",g:4,data:"?",url:"https://perplexity.ai/comet",tags:[]},
+  {n:"Manus",d:"Agente autônomo que planeja, pesquisa e executa tarefas de ponta a ponta.",c:"assistente",g:2,data:"?",url:"https://manus.im",tags:["cn"]},
+
+  // Criar Aplicativos
+  {n:"Glide",d:"Transforma planilhas em aplicativos mobile funcionais sem código.",c:"apps",g:4,data:"?",url:"https://glideapps.com",tags:[]},
+  {n:"Lovable",d:"Gera aplicativos web completos a partir de prompt: frontend, banco e deploy.",c:"apps",g:3,data:"?",url:"https://lovable.dev",tags:[]},
+  {n:"v0 (Vercel)",d:"Gera interfaces e componentes React/Next.js a partir de prompts.",c:"apps",g:3,data:"?",url:"https://v0.dev",tags:[]},
+  {n:"Bolt.new",d:"Cria aplicativos full-stack completos via conversa com IA.",c:"apps",g:3,data:"?",url:"https://bolt.new",tags:[]},
+  {n:"Base44",d:"Gera MVPs com backend, autenticação e deploy. Foco em não-programadores.",c:"apps",g:2,data:"?",url:"https://base44.com",tags:[]},
+  {n:"Replit AI",d:"Cria projetos completos conversando com IA. Iteração rápida no navegador.",c:"apps",g:3,data:"?",url:"https://replit.com",tags:[]},
+  {n:"Create.xyz",d:"Gera aplicativos web com frontend e backend a partir de descrição.",c:"apps",g:3,data:"?",url:"https://create.xyz",tags:[]},
+  {n:"Softr",d:"Converte Airtable ou Google Sheets em aplicativos completos sem código.",c:"apps",g:3,data:"?",url:"https://softr.io",tags:[]},
+  {n:"Bubble AI",d:"Plataforma no-code com recursos de IA para gerar workflows e páginas.",c:"apps",g:2,data:"?",url:"https://bubble.io",tags:[]},
+
+  // Escrita
+  {n:"Grammarly",d:"Correção gramatical, estilo e sugestões por IA.",c:"escrita",g:4,data:"?",url:"https://www.grammarly.com",tags:[]},
+  {n:"QuillBot",d:"Parafraseador, resumidor e reescritor de textos.",c:"escrita",g:3,data:"?",url:"https://quillbot.com",tags:[]},
+  {n:"DeepL Write",d:"Assistente de escrita e revisão do DeepL.",c:"escrita",g:4,data:"?",url:"https://www.deepl.com/write",tags:[]},
+  {n:"LanguageTool",d:"Corretor gramatical com versão gratuita e suporte a português.",c:"escrita",g:4,data:"?",url:"https://languagetool.org",tags:[]},
+  {n:"Wordtune",d:"Reescrita e sugestões de texto com plano básico gratuito.",c:"escrita",g:3,data:"?",url:"https://www.wordtune.com",tags:[]},
+  {n:"Jasper",d:"Plataforma de copywriting e marketing com IA.",c:"escrita",g:2,data:"?",url:"https://www.jasper.ai",tags:[]},
+  {n:"Writesonic",d:"Assistente de escrita e marketing com teste oficial.",c:"escrita",g:2,data:"?",url:"https://writesonic.com",tags:[]},
+  {n:"Sudowrite",d:"Ferramenta de escrita criativa com IA.",c:"escrita",g:2,data:"?",url:"https://www.sudowrite.com",tags:[]},
+  {n:"Copy.ai",d:"Geração de conteúdo e copy para equipes.",c:"escrita",g:0,data:"?",url:"https://www.copy.ai",tags:[]},
+
+  // Imagem / Design
+  {n:"Canva",d:"Design com recursos de IA (Magic Studio) e plano gratuito.",c:"imagem",g:4,data:"sim",url:"https://www.canva.com",tags:[]},
+  {n:"Adobe Firefly",d:"Geração de imagens e vídeos por IA baseada em créditos.",c:"imagem",g:3,data:"?",url:"https://www.adobe.com/products/firefly.html",tags:[]},
+  {n:"Figma",d:"Design colaborativo com plano Starter gratuito e IA.",c:"imagem",g:4,data:"sim",url:"https://www.figma.com",tags:[]},
+  {n:"Midjourney",d:"Geração de imagens por assinatura com qualidade premium.",c:"imagem",g:1,data:"?",url:"https://www.midjourney.com",tags:[]},
+  {n:"Leonardo.Ai",d:"Gerador de imagens com tokens diários para usuários free.",c:"imagem",g:4,data:"?",url:"https://leonardo.ai",tags:[]},
+  {n:"Ideogram",d:"Geração de imagens com plano gratuito permanente.",c:"imagem",g:4,data:"?",url:"https://ideogram.ai",tags:[]},
+  {n:"Clipdrop",d:"Recorte, upscale e edição de imagens com IA.",c:"imagem",g:3,data:"?",url:"https://clipdrop.co",tags:[]},
+  {n:"PhotoRoom",d:"Edição de fotos com IA e plano Free mensal.",c:"imagem",g:4,data:"?",url:"https://www.photoroom.com",tags:[]},
+  {n:"remove.bg",d:"Removedor de fundo de imagens automático.",c:"imagem",g:4,data:"sim",url:"https://www.remove.bg",tags:[]},
+  {n:"Stable Diffusion",d:"Modelo open-source para geração de imagens.",c:"imagem",g:5,data:"sim",url:"https://github.com/CompVis/stable-diffusion",tags:["os"]},
+  {n:"AUTOMATIC1111",d:"Interface open-source para rodar Stable Diffusion localmente.",c:"imagem",g:5,data:"sim",url:"https://github.com/AUTOMATIC1111/stable-diffusion-webui",tags:["os"]},
+  {n:"ComfyUI",d:"Pipeline visual open-source para geração de imagem/vídeo.",c:"imagem",g:5,data:"sim",url:"https://github.com/Comfy-Org/ComfyUI",tags:["os"]},
+  {n:"Microsoft Designer",d:"Design com IA integrado ao ecossistema Microsoft.",c:"imagem",g:0,data:"?",url:"https://designer.microsoft.com",tags:[]},
+  {n:"Framer",d:"Criação de sites e protótipos com IA integrada.",c:"imagem",g:3,data:"?",url:"https://www.framer.com",tags:[]},
+  {n:"Uizard",d:"Geração de interfaces e wireframes a partir de esboços ou texto.",c:"imagem",g:3,data:"?",url:"https://uizard.io",tags:[]},
+  {n:"AutoDraw",d:"Ferramenta do Google que transforma rabiscos em desenhos com IA.",c:"imagem",g:5,data:"sim",url:"https://www.autodraw.com",tags:[]},
+
+  // Áudio / Vídeo
+  {n:"ElevenLabs",d:"Síntese de voz realista com múltiplos idiomas e vozes.",c:"audio",g:3,data:"?",url:"https://elevenlabs.io",tags:[]},
+  {n:"Otter",d:"Transcrição e notas de reunião automáticas.",c:"audio",g:4,data:"?",url:"https://otter.ai",tags:[]},
+  {n:"Descript",d:"Editor de vídeo/podcast com edição por texto.",c:"audio",g:4,data:"?",url:"https://www.descript.com",tags:[]},
+  {n:"Runway",d:"Criação e edição de vídeo com IA generativa.",c:"audio",g:3,data:"?",url:"https://runwayml.com",tags:[]},
+  {n:"CapCut",d:"Editor de vídeo com recursos de IA e eliminação de dados sob solicitação.",c:"audio",g:0,data:"sim",url:"https://www.capcut.com",tags:[]},
+  {n:"VEED",d:"Editor de vídeo online com legendas e recursos de IA.",c:"audio",g:3,data:"?",url:"https://www.veed.io",tags:[]},
+  {n:"OpusClip",d:"Recorte automático de vídeos em clipes curtos virais.",c:"audio",g:4,data:"?",url:"https://www.opus.pro",tags:[]},
+  {n:"Suno",d:"Geração de músicas completas por IA com plano Free.",c:"audio",g:4,data:"?",url:"https://suno.com",tags:[]},
+  {n:"Udio",d:"Geração de música por IA com alta qualidade.",c:"audio",g:0,data:"?",url:"https://www.udio.com",tags:[]},
+  {n:"Whisper (OpenAI)",d:"Modelo open-source para transcrição de áudio em múltiplos idiomas.",c:"audio",g:5,data:"sim",url:"https://github.com/openai/whisper",tags:["os"]},
+  {n:"whisper.cpp",d:"Port do Whisper para uso local/offline em múltiplas plataformas.",c:"audio",g:5,data:"sim",url:"https://github.com/ggml-org/whisper.cpp",tags:["os"]},
+  {n:"Invideo AI",d:"Criação de vídeos completos a partir de texto ou roteiro.",c:"audio",g:3,data:"?",url:"https://invideo.io",tags:[]},
+  {n:"Luma AI",d:"Geração de vídeos realistas e cenas 3D por IA.",c:"audio",g:3,data:"?",url:"https://lumalabs.ai",tags:[]},
+  {n:"Krea AI",d:"Geração e edição de imagens e vídeos em tempo real.",c:"audio",g:3,data:"?",url:"https://www.krea.ai",tags:[]},
+  {n:"Synthesia",d:"Criação de vídeos com avatares de IA a partir de texto.",c:"audio",g:2,data:"?",url:"https://synthesia.io",tags:[]},
+  {n:"D-ID",d:"Geração de avatares falantes e vídeos animados a partir de fotos.",c:"audio",g:2,data:"?",url:"https://d-id.com",tags:[]},
+  {n:"Soundraw",d:"Geração de músicas originais e royalty-free por IA.",c:"audio",g:1,data:"?",url:"https://soundraw.io",tags:[]},
+  {n:"Krisp",d:"Remoção de ruído de fundo em chamadas em tempo real. Free com 60 min/dia.",c:"audio",g:4,data:"?",url:"https://krisp.ai",tags:[]},
+  {n:"Kling",d:"Geração de vídeos com simulação física e hiper-realismo.",c:"audio",g:3,data:"?",url:"https://klingai.com",tags:["cn"]},
+  {n:"Seedance",d:"Geração de vídeos com transições fluidas e consistência cinematográfica.",c:"audio",g:3,data:"?",url:"https://seedance.ai",tags:["cn"]},
+
+  // Produtividade / Dados
+  {n:"Notion",d:"Produtividade com IA, wiki e gerenciamento de projetos.",c:"dados",g:4,data:"sim",url:"https://www.notion.com",tags:[]},
+  {n:"Zapier",d:"Automação entre apps com IA e plano gratuito limitado.",c:"dados",g:3,data:"sim",url:"https://zapier.com",tags:[]},
+  {n:"Make",d:"Automação visual com cenários e plano Free.",c:"dados",g:3,data:"?",url:"https://www.make.com",tags:[]},
+  {n:"Airtable",d:"Base de dados + planilha com automações e plano Free.",c:"dados",g:4,data:"?",url:"https://airtable.com",tags:[]},
+  {n:"ClickUp",d:"Gestão de tarefas e projetos com recursos de IA.",c:"dados",g:0,data:"?",url:"https://clickup.com",tags:[]},
+  {n:"n8n",d:"Automação self-hosted com controle total de dados.",c:"dados",g:5,data:"sim",url:"https://n8n.io",tags:["os"]},
+  {n:"Pipefy",d:"Plataforma brasileira para processos e fluxos de trabalho.",c:"dados",g:0,data:"?",url:"https://pipefy.com",tags:["br"]},
+  {n:"Plataforma Blip",d:"Criação e gestão de chatbots e atendimento digital.",c:"dados",g:3,data:"?",url:"https://www.blip.ai",tags:["br"]},
+  {n:"Huggy",d:"Atendimento digital omnichannel com plano Starter gratuito.",c:"dados",g:4,data:"?",url:"https://www.huggy.io",tags:["br"]},
+  {n:"Zenvia",d:"Customer Cloud com automação e atendimento por IA.",c:"dados",g:1,data:"?",url:"https://www.zenvia.com",tags:["br"]},
+  {n:"Weni",d:"Plataforma de automação conversacional com IA.",c:"dados",g:0,data:"?",url:"https://weni.ai",tags:["br"]},
+  {n:"Maritaca AI",d:"Modelos e serviços em português com opção on-premise.",c:"dados",g:2,data:"sim",url:"https://www.maritaca.ai",tags:["br"]},
+  {n:"Integrately",d:"Automação entre apps com configuração em um clique.",c:"dados",g:3,data:"?",url:"https://integrately.com",tags:[]},
+  {n:"Monday.com",d:"Gestão de projetos e fluxos de trabalho com IA.",c:"dados",g:3,data:"?",url:"https://monday.com",tags:[]},
+  {n:"Wrike",d:"Plataforma de gestão de trabalho com automações e IA.",c:"dados",g:3,data:"?",url:"https://www.wrike.com",tags:[]},
+  {n:"Gumloop",d:"Automação de fluxos com IA no-code. SOC 2 + GDPR, não treina com seus dados.",c:"dados",g:3,data:"sim",url:"https://gumloop.com",tags:[]},
+  {n:"TLDV",d:"Gravação e resumo automático de reuniões. Free forever, GDPR + SOC2.",c:"dados",g:5,data:"sim",url:"https://tldv.io",tags:[]},
+
+  // Programar
+  {n:"GitHub Copilot",d:"Assistente de código com autocompletar e sugestões.",c:"codigo",g:3,data:"?",url:"https://github.com/features/copilot",tags:[]},
+  {n:"Amazon Q Developer",d:"Assistente de código da AWS com Free tier.",c:"codigo",g:3,data:"?",url:"https://aws.amazon.com/q/developer/",tags:[]},
+  {n:"Gemini Code Assist",d:"Assistente de código do Google com plano gratuito.",c:"codigo",g:4,data:"sim",url:"https://cloud.google.com/gemini/docs/codeassist/overview",tags:[]},
+  {n:"Cursor",d:"Editor/IDE com IA integrada para programação.",c:"codigo",g:3,data:"?",url:"https://cursor.com",tags:[]},
+  {n:"Codeium",d:"Assistente de código gratuito para desenvolvedores.",c:"codigo",g:4,data:"?",url:"https://codeium.com",tags:[]},
+  {n:"Replit",d:"Ambiente de desenvolvimento online com IA.",c:"codigo",g:0,data:"?",url:"https://replit.com",tags:[]},
+  {n:"Tabnine",d:"Autocompletar de código com versão Basic gratuita.",c:"codigo",g:3,data:"?",url:"https://www.tabnine.com",tags:[]},
+  {n:"Tabby",d:"Assistente de código open-source e self-hosted.",c:"codigo",g:5,data:"sim",url:"https://github.com/TabbyML/tabby",tags:["os"]},
+  {n:"Ollama",d:"Execução local de modelos abertos com interface/CLI.",c:"codigo",g:5,data:"sim",url:"https://ollama.com",tags:["os"]},
+  {n:"Askcodi",d:"Assistente de código com explicações, refatoração e geração de testes.",c:"codigo",g:3,data:"?",url:"https://askcodi.com",tags:[]},
+  {n:"Windsurf",d:"IDE agêntico com IA integrada (Cascade), zero data retention nos planos pagos.",c:"codigo",g:3,data:"?",url:"https://windsurf.com",tags:[]},
+  {n:"OpenAI Codex",d:"Agente de engenharia de software da OpenAI integrado ao ChatGPT.",c:"codigo",g:2,data:"?",url:"https://openai.com/codex",tags:[]},
+  {n:"Claude Code",d:"Agente de codificação da Anthropic. Não usa dados para treinar modelos.",c:"codigo",g:2,data:"sim",url:"https://claude.ai/code",tags:[]},
+
+  // Apresentações
+  {n:"Gamma",d:"Criação de apresentações e documentos com IA a partir de texto ou tópicos.",c:"apresentacao",g:3,data:"sim",url:"https://gamma.app",tags:[]},
+  {n:"NotebookLM",d:"Geração de apresentações, áudio e resumos a partir dos seus documentos.",c:"apresentacao",g:4,data:"sim",url:"https://notebooklm.google.com",tags:[]},
+  {n:"Beautiful.AI",d:"Apresentações com design automático e layouts inteligentes.",c:"apresentacao",g:2,data:"?",url:"https://www.beautiful.ai",tags:[]},
+  {n:"Pitch",d:"Criação colaborativa de apresentações com IA e templates modernos.",c:"apresentacao",g:3,data:"?",url:"https://pitch.com",tags:[]},
+  {n:"Tome",d:"Apresentações narrativas geradas por IA com texto e imagens.",c:"apresentacao",g:3,data:"?",url:"https://tome.app",tags:[]},
+  {n:"Slidesgo",d:"Templates prontos para Google Slides e PowerPoint com geração por IA.",c:"apresentacao",g:4,data:"?",url:"https://slidesgo.com",tags:[]},
+  {n:"Presentation.AI",d:"Geração automática de slides a partir de prompts de texto.",c:"apresentacao",g:2,data:"?",url:"https://www.presentation.ai",tags:[]},
+
+  // Prompts & Templates
+  {n:"Prompt Cowboy",d:"Transforma prompts vagos em prompts estruturados de alta performance.",c:"prompts",g:5,data:"?",url:"https://promptcowboy.ai",tags:[]},
+  {n:"AIPRM",d:"Extensão Chrome com biblioteca de prompts curados por categoria.",c:"prompts",g:4,data:"?",url:"https://www.aiprm.com",tags:[]},
+  {n:"FlowGPT",d:"Comunidade aberta de prompts compartilhados em tempo real.",c:"prompts",g:5,data:"?",url:"https://flowgpt.com",tags:[]},
+  {n:"PromptPerfect",d:"Otimiza e reescreve prompts automaticamente para diferentes modelos.",c:"prompts",g:3,data:"?",url:"https://promptperfect.jina.ai",tags:[]},
+  {n:"PromptVibes",d:"Biblioteca e construtor de prompts com templates organizados por uso.",c:"prompts",g:4,data:"?",url:"https://www.promptvibes.com",tags:[]},
+
+  // Multi-uso
+  {n:"Dify",d:"Plataforma open-source para construir apps com LLM.",c:"multi",g:5,data:"sim",url:"https://dify.ai",tags:["os"]},
+  {n:"Hugging Face",d:"Hub de modelos, datasets e espaços para ML.",c:"multi",g:4,data:"?",url:"https://huggingface.co",tags:["os"]},
+  {n:"OpenAI API",d:"Plataforma de API com controles de dados e privacidade.",c:"multi",g:2,data:"sim",url:"https://platform.openai.com",tags:[]},
+  {n:"Gemini Developer API",d:"API do Gemini com Free tier para desenvolvedores.",c:"multi",g:4,data:"?",url:"https://ai.google.dev",tags:[]},
+  {n:"Replicate",d:"Execução de modelos via API com pricing pay-as-you-go.",c:"multi",g:3,data:"?",url:"https://replicate.com",tags:[]},
+];
+
+const CAT_LABELS = {
+  assistente:'Chat / Texto', escrita:'Escrita', imagem:'Design',
+  audio:'Áudio / Vídeo', apps:'Aplicativos', dados:'Produtividade',
+  codigo:'Programar', multi:'Multi-uso', apresentacao:'Apresentações', prompts:'Prompts'
+};
+
+function stars(g){
+  if (g === 0) return '<span class="stars-unknown">? não confirmado</span>';
+  const filled = '★'.repeat(g);
+  const empty = '★'.repeat(5-g);
+  return `<span class="stars">${filled}<span class="empty">${empty}</span></span>`;
+}
+
+function dataBadge(d){
+  return d === 'sim'
+    ? '<span class="data-yes">Controle</span>'
+    : '<span class="data-no">S/Info</span>';
+}
+
+function tags(t){
+  let h = `<span class="tag tag-cat">${CAT_LABELS[t.c]}</span>`;
+  if (t.tags.includes('br')) h += '<span class="tag tag-br">BR</span>';
+  if (t.tags.includes('cn')) h += '<span class="tag tag-cn">CN</span>';
+  if (t.tags.includes('os')) h += '<span class="tag tag-os">Open Source</span>';
+  return h;
+}
+
+function render(list){
+  const grid = document.getElementById('catGrid');
+  const empty = document.getElementById('catEmpty');
+  const counter = document.getElementById('catCounter');
+
+  if (!list.length){
+    grid.innerHTML = '';
+    grid.style.display = 'none';
+    empty.style.display = 'block';
+    counter.textContent = '0 ferramentas';
+    return;
+  }
+
+  grid.style.display = 'grid';
+  empty.style.display = 'none';
+  counter.textContent = `${list.length} ferramenta${list.length > 1 ? 's' : ''}`;
+
+  grid.innerHTML = list.map(t => `
+    <article class="card">
+      <div class="card-top">
+        <h5>${t.n}</h5>
+        <div class="card-tags">${tags(t)}</div>
+      </div>
+      <p class="card-desc">${t.d}</p>
+      <div class="card-meta">
+        <div class="meta-left">
+          ${stars(t.g)}
+          ${dataBadge(t.data)}
+        </div>
+        <a class="card-link" href="${t.url}" target="_blank" rel="noopener">
+          Acessar →
+        </a>
+      </div>
+    </article>
+  `).join('');
+}
+
+function getActive(group){
+  return document.querySelector(`.pills[data-group="${group}"] .pill.active`)?.dataset.filter || 'all';
+}
+
+function filter(){
+  const q = (document.getElementById('catSearch').value || '').toLowerCase();
+  const cat = getActive('cat');
+  const gr = getActive('gratis');
+  const or = getActive('origem');
+
+  render(DATA.filter(t => {
+    if (q && !t.n.toLowerCase().includes(q) && !t.d.toLowerCase().includes(q)) return false;
+    if (cat !== 'all' && t.c !== cat) return false;
+    if (gr === '5' && t.g !== 5) return false;
+    if (gr === '4' && t.g < 4) return false;
+    if (gr === '3' && t.g < 3) return false;
+    if (gr === 'pago' && t.g !== 1) return false;
+    if (or === 'br' && !t.tags.includes('br')) return false;
+    if (or === 'cn' && !t.tags.includes('cn')) return false;
+    if (or === 'os' && !t.tags.includes('os')) return false;
+    return true;
+  }));
+}
+
+render(DATA);
+document.getElementById('catSearch').addEventListener('input', filter);
+document.querySelectorAll('.pills').forEach(group => {
+  group.querySelectorAll('.pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      group.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      filter();
+    });
+  });
+});
+</script>
+</body>
+</html>

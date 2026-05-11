@@ -240,6 +240,103 @@
   .fadeup.d2{animation-delay:.25s}
   .fadeup.d3{animation-delay:.4s}
   @keyframes fu{to{opacity:1;transform:none}}
+
+  /* ======= DORINA (assistente) ======= */
+  .dorina-strip{
+    max-width:1300px;margin:0 auto;padding:24px 40px;
+    display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;
+    border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    background:rgba(255,255,255,.35);position:relative;
+  }
+  .dorina-seal{
+    width:64px;height:64px;border:1.5px solid var(--red);color:var(--red);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:32px;
+    transform:rotate(-4deg);box-shadow:inset 0 0 0 1px var(--red);flex-shrink:0;
+  }
+  .dorina-text h4{
+    font-family:'Fraunces',serif;font-weight:400;font-size:24px;line-height:1.15;letter-spacing:-.015em;
+  }
+  .dorina-text h4 em{font-style:italic;color:var(--red);font-variation-settings:"WONK" 1}
+  .dorina-text p{
+    margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.05em;
+    color:var(--ink-2);line-height:1.55;max-width:560px;
+  }
+  .dorina-btn{
+    display:inline-flex;align-items:center;gap:12px;
+    padding:16px 24px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    cursor:pointer;transition:all .2s;white-space:nowrap;text-decoration:none;
+  }
+  .dorina-btn:hover{background:var(--red);border-color:var(--red)}
+  .dorina-btn .dot{width:6px;height:6px;border-radius:50%;background:var(--paper)}
+
+  .dorina-chat{
+    max-width:1300px;margin:0 auto;border-left:1px solid var(--ink);border-right:1px solid var(--ink);
+    border-bottom:1px solid var(--ink);background:rgba(255,255,255,.4);display:none;
+  }
+  .dorina-chat.open{display:block;animation:fu .35s ease both}
+  .dorina-chat-head{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 32px;border-bottom:1px solid var(--rule);
+    background:var(--paper-2);
+  }
+  .dorina-chat-head .who{
+    display:flex;align-items:center;gap:14px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);
+  }
+  .dorina-chat-head .who b{color:var(--red);font-family:'Fraunces',serif;font-style:italic;font-size:18px;font-weight:400;letter-spacing:0;text-transform:none}
+  .dorina-close{
+    background:transparent;border:1px solid var(--rule);color:var(--ink-2);
+    width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono',monospace;font-size:14px;transition:all .2s;
+  }
+  .dorina-close:hover{border-color:var(--red);color:var(--red)}
+
+  .dorina-msgs{
+    padding:24px 32px;min-height:200px;max-height:420px;overflow-y:auto;
+    display:flex;flex-direction:column;gap:16px;
+  }
+  .msg{max-width:80%;display:flex;flex-direction:column;gap:6px}
+  .msg-bot{align-self:flex-start}
+  .msg-user{align-self:flex-end;align-items:flex-end}
+  .msg .who{
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);
+  }
+  .msg-bot .who{color:var(--red)}
+  .msg p{
+    padding:14px 18px;font-size:14px;line-height:1.55;
+    border:1px solid var(--rule);
+  }
+  .msg-bot p{background:rgba(179,50,26,.04);border-color:rgba(179,50,26,.2);color:var(--ink)}
+  .msg-user p{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .msg.typing p{font-style:italic;color:var(--ink-2);background:transparent;border-style:dashed}
+
+  .dorina-input{
+    display:flex;gap:0;padding:16px 24px 20px;border-top:1px solid var(--rule);
+  }
+  .dorina-input input{
+    flex:1;padding:14px 18px;background:rgba(255,255,255,.4);
+    border:1px solid var(--ink);border-right:none;outline:none;
+    font-family:'IBM Plex Sans',sans-serif;font-size:14px;color:var(--ink);
+  }
+  .dorina-input input::placeholder{color:var(--ink-2);opacity:.5}
+  .dorina-input input:focus{background:rgba(255,255,255,.6)}
+  .dorina-input button{
+    padding:0 24px;background:var(--ink);color:var(--paper);border:1px solid var(--ink);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    cursor:pointer;transition:background .2s;
+  }
+  .dorina-input button:hover{background:var(--red);border-color:var(--red)}
+  .dorina-input button:disabled{opacity:.5;cursor:not-allowed}
+
+  @media (max-width:900px){
+    .dorina-strip{grid-template-columns:1fr;padding:24px;gap:16px;text-align:center}
+    .dorina-seal{margin:0 auto}
+    .dorina-btn{justify-content:center}
+    .dorina-chat-head, .dorina-msgs, .dorina-input{padding-left:20px;padding-right:20px}
+    .msg{max-width:95%}
+  }
 </style>
 </head>
 <body>
@@ -328,6 +425,35 @@
       </p>
     </div>
   </div>
+</section>
+
+<!-- DORINA · assistente -->
+<aside class="dorina-strip" id="dorinaStrip">
+  <div class="dorina-seal">D</div>
+  <div class="dorina-text">
+    <h4>Conversar com <em>Dorina</em>, assistente da curadoria</h4>
+    <p>Em homenagem a Dorina Nowill (1919–2010), pioneira da tecnologia assistiva no Brasil. Conte o que precisa fazer — ela indica 2 ou 3 ferramentas do catálogo.</p>
+  </div>
+  <button class="dorina-btn" id="dorinaToggle" onclick="toggleDorina()">
+    <span class="dot"></span>Abrir conversa
+  </button>
+</aside>
+
+<section class="dorina-chat" id="dorinaChat" aria-hidden="true">
+  <header class="dorina-chat-head">
+    <div class="who">Conversando com <b>Dorina</b></div>
+    <button class="dorina-close" onclick="toggleDorina()" aria-label="Fechar">×</button>
+  </header>
+  <div class="dorina-msgs" id="dorinaMsgs">
+    <div class="msg msg-bot">
+      <span class="who">Dorina · assistente CLIC</span>
+      <p>Olá. Sou Dorina, em homenagem a Dorina Nowill, que abriu caminho para a tecnologia que serve às pessoas. Me conte o que você precisa fazer no trabalho — uma apresentação, gravar uma reunião, automatizar uma planilha — e eu indico as ferramentas certas do catálogo.</p>
+    </div>
+  </div>
+  <form class="dorina-input" onsubmit="event.preventDefault();sendDorina()">
+    <input type="text" id="dorinaInput" placeholder="Ex.: preciso transcrever uma audiência…" autocomplete="off">
+    <button type="submit" id="dorinaSend">Enviar</button>
+  </form>
 </section>
 
 <!-- CONTROLES -->
@@ -425,6 +551,79 @@
 </footer>
 
 <script>
+// ===== Dorina · chat =====
+let dorinaOpen = false;
+const dorinaHistory = [];
+
+function toggleDorina(){
+  dorinaOpen = !dorinaOpen;
+  const chat = document.getElementById('dorinaChat');
+  const btn = document.getElementById('dorinaToggle');
+  chat.classList.toggle('open', dorinaOpen);
+  chat.setAttribute('aria-hidden', String(!dorinaOpen));
+  btn.innerHTML = dorinaOpen
+    ? '<span class="dot"></span>Encerrar'
+    : '<span class="dot"></span>Abrir conversa';
+  if (dorinaOpen){
+    setTimeout(() => document.getElementById('dorinaInput').focus(), 100);
+  }
+}
+
+function addDorinaMsg(text, role, opts = {}){
+  const cont = document.getElementById('dorinaMsgs');
+  const wrap = document.createElement('div');
+  wrap.className = `msg msg-${role}${opts.typing ? ' typing' : ''}`;
+  if (opts.id) wrap.id = opts.id;
+  const who = role === 'bot' ? 'Dorina · assistente CLIC' : 'Você';
+  const safe = String(text).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+  wrap.innerHTML = `<span class="who">${who}</span><p>${safe.replace(/\n/g,'<br>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</p>`;
+  cont.appendChild(wrap);
+  cont.scrollTop = cont.scrollHeight;
+}
+
+async function sendDorina(){
+  const input = document.getElementById('dorinaInput');
+  const sendBtn = document.getElementById('dorinaSend');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  addDorinaMsg(text, 'user');
+  dorinaHistory.push({ role: 'user', content: text });
+
+  const typingId = 'typing-' + Date.now();
+  addDorinaMsg('pensando…', 'bot', { typing: true, id: typingId });
+  sendBtn.disabled = true;
+
+  try {
+    const res = await fetch('/.netlify/functions/dorina-chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: dorinaHistory })
+    });
+
+    document.getElementById(typingId)?.remove();
+
+    if (!res.ok){
+      const err = await res.json().catch(() => ({}));
+      addDorinaMsg(err.error || 'Tive um problema para responder agora. Tente novamente em instantes.', 'bot');
+      return;
+    }
+
+    const data = await res.json();
+    const reply = data.reply || 'Não consegui formular uma resposta agora.';
+    addDorinaMsg(reply, 'bot');
+    dorinaHistory.push({ role: 'assistant', content: reply });
+  } catch (e){
+    document.getElementById(typingId)?.remove();
+    addDorinaMsg('Erro de conexão. Verifique sua rede e tente de novo.', 'bot');
+  } finally {
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+
+// ===== Catálogo =====
 const DATA = [
   // Assistentes / Chat / Texto
   {n:"ChatGPT",d:"Assistente multimodal para chat, escrita, análise e criação de conteúdo.",c:"assistente",g:4,data:"sim",url:"https://chatgpt.com",tags:[]},

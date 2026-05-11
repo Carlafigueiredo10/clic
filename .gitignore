@@ -1,0 +1,22 @@
+# Segredos — nunca commitar
+.env
+.env.local
+.env.*.local
+
+# Netlify
+.netlify/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+*.swp
